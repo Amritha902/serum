@@ -1,6 +1,6 @@
 """Experiment harness: reproducible multi-trial policy comparison."""
 
-from argus.experiments.harness import (
+from serum.experiments.harness import (
     build_episode,
     evaluate_policy,
     compare_policies,

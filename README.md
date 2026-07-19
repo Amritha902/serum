@@ -1,13 +1,18 @@
-# Argus — Content-Aware Agentic Containment of Malware Propagation
+# SERUM — Content-Aware Agentic Containment of Malware Propagation
+
+*SERUM — **S**emantic **E**pidemic **R**esponse under **U**nknown **M**alware.*
+Like an immune system that reads a pathogen's signature before it responds,
+SERUM identifies *what* is spreading and defends only the hosts that can
+actually catch it.
 
 > **Thesis.** A defender that reasons about *what* is spreading — the payload's
 > target vulnerability — contains a network worm far more efficiently than one
 > that only sees network *structure*, because malware can only traverse hosts
-> whose software is actually exploitable. Argus makes that reasoning work even
+> whose software is actually exploitable. SERUM makes that reasoning work even
 > when the payload is **never observed**, by inferring it from the shape of the
 > outbreak.
 
-Argus is a research testbed at the intersection of **network science**,
+SERUM is a research testbed at the intersection of **network science**,
 **cyber-defense**, and **agentic AI**. It models a worm spreading across a
 heterogeneous host network and pits *structure-only* containment heuristics
 against a *content-aware* agent that maintains a Bayesian belief over the
@@ -51,7 +56,7 @@ this; the content-aware agent defends the subgraph that can actually spread.
 The twist that makes it PhD-shaped: **the defender never sees the payload.**
 It observes only who is infected. Because spread is vulnerability-gated, every
 host infected *by propagation* is a hard constraint on which CVE is loose — so
-Argus runs Bayesian inference over the exploit (a POMDP) and acts under that
+SERUM runs Bayesian inference over the exploit (a POMDP) and acts under that
 belief, hedging early and sharpening as the outbreak reveals its target.
 
 ---
@@ -59,7 +64,7 @@ belief, hedging early and sharpening as the outbreak reveals its target.
 ## Architecture
 
 ```
-argus/
+serum/
 ├── sim/           heterogeneous networks + vulnerability-gated SI spread
 │   ├── network.py      hosts with heavy-tailed CVE profiles; vulnerable subgraphs
 │   ├── payload.py      the attacker's exploit (target CVE + transmissibility)
@@ -116,7 +121,7 @@ layers learning and adversaries on top of this testbed:
 
 ## Responsible use
 
-Argus is a **defensive** research tool: it studies how to *contain* outbreaks
+SERUM is a **defensive** research tool: it studies how to *contain* outbreaks
 faster and with less collateral disruption. The simulator models propagation
 abstractly (a probability over an exploitability graph) and contains no
 weaponizable attack code.

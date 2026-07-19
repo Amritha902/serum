@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from argus.sim.network import cve_prevalence
+from serum.sim.network import cve_prevalence
 
 
 class CVEBelief:

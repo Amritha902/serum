@@ -22,7 +22,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from argus.experiments.harness import TrialSpec, compare_policies  # noqa: E402
+from serum.experiments.harness import TrialSpec, compare_policies  # noqa: E402
 
 GRID = {
     "topology": ["ba", "ws", "rgg"],

@@ -3,7 +3,7 @@
 A payload is deliberately minimal here -- a single target CVE plus a
 per-contact transmission probability. The defender does *not* observe the
 payload; it must be inferred from the shape of the outbreak (see
-``argus.inference``). Richer payloads (multi-CVE, polymorphic, dwell-time)
+``serum.inference``). Richer payloads (multi-CVE, polymorphic, dwell-time)
 are a planned extension and slot in behind this interface.
 """
 
@@ -13,7 +13,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from argus.sim.network import cve_prevalence
+from serum.sim.network import cve_prevalence
 
 
 @dataclass(frozen=True)

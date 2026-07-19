@@ -12,7 +12,7 @@ from __future__ import annotations
 import networkx as nx
 import numpy as np
 
-from argus.sim.environment import Action, Status
+from serum.sim.environment import Action, Status
 
 
 def frontier(env) -> list:

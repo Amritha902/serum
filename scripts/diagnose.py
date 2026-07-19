@@ -3,10 +3,10 @@
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np, networkx as nx
-from argus.sim.network import generate_network, cve_prevalence, vulnerable_subgraph
-from argus.sim.payload import sample_payload
-from argus.sim.environment import ContainmentEnv
-from argus.baselines.heuristics import NoDefense
+from serum.sim.network import generate_network, cve_prevalence, vulnerable_subgraph
+from serum.sim.payload import sample_payload
+from serum.sim.environment import ContainmentEnv
+from serum.baselines.heuristics import NoDefense
 
 for lam, alpha, ncve, beta, strat in [
     (3.0, 1.3, 24, 0.35, "stealth"),

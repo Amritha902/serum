@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "argus-malware-containment"
+name = "serum"
 version = "0.1.0"
 description = "Content-aware agentic containment of malware propagation on networks"
 readme = "README.md"
@@ -25,7 +25,7 @@ dependencies = [
 dev = ["pytest>=8.0"]
 
 [tool.setuptools.packages.find]
-include = ["argus*"]
+include = ["serum*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

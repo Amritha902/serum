@@ -14,16 +14,16 @@ from typing import Callable
 
 import numpy as np
 
-from argus.agents.content_aware import ContentAwareAgent, OracleContentAware
-from argus.baselines.heuristics import (
+from serum.agents.content_aware import ContentAwareAgent, OracleContentAware
+from serum.baselines.heuristics import (
     BetweennessDefense,
     DegreeDefense,
     NoDefense,
     RandomDefense,
 )
-from argus.sim.environment import ContainmentEnv
-from argus.sim.network import generate_network
-from argus.sim.payload import sample_payload
+from serum.sim.environment import ContainmentEnv
+from serum.sim.network import generate_network
+from serum.sim.payload import sample_payload
 
 
 @dataclass

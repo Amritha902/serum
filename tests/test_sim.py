@@ -8,12 +8,12 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from argus.agents.content_aware import ContentAwareAgent, OracleContentAware
-from argus.baselines.heuristics import DegreeDefense, NoDefense
-from argus.inference.belief import CVEBelief
-from argus.sim.environment import Action, ContainmentEnv, Status
-from argus.sim.network import cve_prevalence, generate_network, vulnerable_subgraph
-from argus.sim.payload import sample_payload
+from serum.agents.content_aware import ContentAwareAgent, OracleContentAware
+from serum.baselines.heuristics import DegreeDefense, NoDefense
+from serum.inference.belief import CVEBelief
+from serum.sim.environment import Action, ContainmentEnv, Status
+from serum.sim.network import cve_prevalence, generate_network, vulnerable_subgraph
+from serum.sim.payload import sample_payload
 
 
 def make_env(seed=0, **kw):

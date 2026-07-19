@@ -1,6 +1,6 @@
 """Structure-only interveners -- blind to the payload semantics."""
 
-from argus.baselines.heuristics import (
+from serum.baselines.heuristics import (
     NoDefense,
     RandomDefense,
     DegreeDefense,

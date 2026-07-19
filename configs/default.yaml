@@ -1,4 +1,4 @@
-# Default experiment configuration for Argus.
+# Default experiment configuration for SERUM.
 # The "take-off" regime: the target vulnerability covers ~45% of the fleet,
 # its vulnerable subgraph is connected, and the worm spreads gradually -- the
 # setting where reactive containment (and content-awareness) actually matters.

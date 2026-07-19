@@ -20,9 +20,9 @@ from __future__ import annotations
 
 import numpy as np
 
-from argus.baselines.heuristics import frontier
-from argus.inference.belief import CVEBelief
-from argus.sim.environment import Action, Status
+from serum.baselines.heuristics import frontier
+from serum.inference.belief import CVEBelief
+from serum.sim.environment import Action, Status
 
 
 class ContentAwareAgent:

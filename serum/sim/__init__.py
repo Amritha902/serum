@@ -1,8 +1,8 @@
 """Simulation layer: heterogeneous networks and vulnerability-gated spread."""
 
-from argus.sim.network import generate_network, cve_prevalence
-from argus.sim.payload import Payload, sample_payload
-from argus.sim.environment import ContainmentEnv, Action, Status
+from serum.sim.network import generate_network, cve_prevalence
+from serum.sim.payload import Payload, sample_payload
+from serum.sim.environment import ContainmentEnv, Action, Status
 
 __all__ = [
     "generate_network",

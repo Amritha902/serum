@@ -27,7 +27,7 @@ from typing import Callable, Optional
 import networkx as nx
 import numpy as np
 
-from argus.sim.payload import Payload
+from serum.sim.payload import Payload
 
 
 class Status(IntEnum):

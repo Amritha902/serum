@@ -41,6 +41,22 @@ def test_spread_is_vulnerability_gated():
             assert pl.cve in env.g.nodes[v]["vuln"], "infected a non-vulnerable host!"
 
 
+def test_sir_recovery_makes_hosts_immune():
+    """Under SIR, an infected host recovers after recovery_time steps, stops
+    spreading, and cannot be reinfected; the outbreak size still counts it."""
+    env, _ = make_env(recovery_time=2)
+    env.reset()
+    seed = env.seeds[0]
+    env.step([]); env.step([])          # two steps -> seeds should recover
+    assert env.status[seed] == Status.RECOVERED
+    assert seed not in env._infected
+    assert seed in env._ever            # still counted in the outbreak size
+    # a recovered host is immune: it never re-enters the infected set
+    for _ in range(5):
+        env.step([])
+        assert env.status[seed] == Status.RECOVERED
+
+
 def test_isolate_removes_from_spread():
     env, _ = make_env()
     env.reset()

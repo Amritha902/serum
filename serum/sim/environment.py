@@ -34,6 +34,7 @@ class Status(IntEnum):
     SUSCEPTIBLE = 0
     INFECTED = 1
     ISOLATED = 2   # removed by the defender (unavailable but safe)
+    RECOVERED = 3  # cleaned/patched after infection (immune, back online)
 
 
 @dataclass(frozen=True)
@@ -90,6 +91,7 @@ class ContainmentEnv:
         budget_per_step: int = 5,
         horizon: int = 40,
         isolation_penalty: float = 1.0,
+        recovery_time: int = 0,
         rng: np.random.Generator | None = None,
     ):
         self.g0 = g
@@ -98,6 +100,9 @@ class ContainmentEnv:
         self.budget_per_step = int(budget_per_step)
         self.horizon = int(horizon)
         self.isolation_penalty = float(isolation_penalty)
+        # recovery_time == 0 -> SI (no recovery); > 0 -> SIR (a host that has been
+        # infected for this many steps is cleaned and becomes immune).
+        self.recovery_time = int(recovery_time)
         self.rng = rng or np.random.default_rng()
         self.reset()
 
@@ -116,6 +121,8 @@ class ContainmentEnv:
             self.status[s] = Status.INFECTED
         self._infected = set(self.seeds)
         self._newly = set(self.seeds)
+        self._ever = set(self.seeds)               # every host ever infected
+        self._age = {s: 0 for s in self.seeds}     # steps since infection (SIR)
         self.trace.append(len(self._infected))
         return self._observe()
 
@@ -182,7 +189,19 @@ class ContainmentEnv:
         for v in newly:
             self.status[v] = Status.INFECTED
             self._infected.add(v)
+            self._ever.add(v)
+            self._age[v] = 0
         return newly
+
+    def _recover(self) -> None:
+        """SIR: hosts infected for >= recovery_time are cleaned and made immune."""
+        if self.recovery_time <= 0:
+            return
+        for v in list(self._infected):
+            self._age[v] = self._age.get(v, 0) + 1
+            if self._age[v] >= self.recovery_time:
+                self.status[v] = Status.RECOVERED
+                self._infected.discard(v)
 
     def step(self, actions: list) -> Observation:
         budget = self.budget_per_step
@@ -193,6 +212,7 @@ class ContainmentEnv:
                 budget -= 1
                 self.budget_spent += 1
         self._newly = self._spread_once()
+        self._recover()
         self.t += 1
         self.trace.append(len(self._infected))
         return self._observe()
@@ -209,12 +229,9 @@ class ContainmentEnv:
             obs = self.step(actions)
             if len(self._newly) == 0 and containment_step == self.horizon:
                 containment_step = self.t
-        ever_infected = sum(
-            1 for v in self.g.nodes()
-            if self.status[v] == Status.INFECTED
-        )
-        # seeds count as infected; isolated-but-previously-infected also count
-        ever_infected = max(ever_infected, len(self._infected))
+        # every host that was ever infected (spreading, recovered, or isolated
+        # while infected) -- the true outbreak size, robust to SIR and isolation.
+        ever_infected = len(self._ever)
         return EpisodeResult(
             infected_fraction=ever_infected / self.n,
             final_infected=len(self._infected),

@@ -47,6 +47,7 @@ class TrialSpec:
     n_seeds: int = 3
     budget_per_step: int = 5
     horizon: int = 40
+    recovery_time: int = 0        # 0 = SI; >0 = SIR (hosts cleaned after k steps)
     n_products: int = 80          # real-data: software-universe size
     n_segments: int = 12          # real-data: network zones (subnets/VLANs)
     homophily: float = 0.5        # real-data: software monoculture within a zone
@@ -99,6 +100,7 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
             seeds=seeds,
             budget_per_step=spec.budget_per_step,
             horizon=spec.horizon,
+            recovery_time=spec.recovery_time,
             rng=dyn_rng,
         )
 

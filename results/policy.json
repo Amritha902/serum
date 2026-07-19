@@ -1,0 +1,16 @@
+{
+  "weights": {
+    "exposed_vuln_degree": 2.4534944121317874,
+    "degree/10": 0.11225288014052025,
+    "infected_neighbours": 0.26337178139674766,
+    "susceptible_neighbours": -0.07496350986836978,
+    "vuln_to_MAP_cve": 1.1672786849279657,
+    "bias": 1.3876401719815383
+  },
+  "held_out_infection": {
+    "learned": 0.010937500000000001,
+    "content_aware": 0.010416666666666666,
+    "degree": 0.016458333333333335,
+    "betweenness": 0.021145833333333336
+  }
+}

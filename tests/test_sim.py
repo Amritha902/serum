@@ -165,6 +165,22 @@ def test_content_aware_beats_no_defense():
     assert np.mean(inf_ours) < np.mean(inf_none)
 
 
+def test_learned_policy_runs_and_beats_no_defense():
+    """The learned linear policy (belief-augmented features) runs end-to-end and,
+    with the content-aware-like weight vector, contains better than no defense."""
+    import numpy as np
+    from serum.agents.learned import LearnedPolicy, N_FEATURES
+    from serum.baselines.heuristics import NoDefense
+    w = np.zeros(N_FEATURES); w[0] = 1.0        # weight the exposed-vuln-degree feature
+    ours, none = [], []
+    for s in range(5):
+        env, _ = make_env(seed=s)
+        ours.append(env.run(LearnedPolicy(env.g, weights=w)).infected_fraction)
+        env2, _ = make_env(seed=s)
+        none.append(env2.run(NoDefense()).infected_fraction)
+    assert np.mean(ours) <= np.mean(none)
+
+
 def test_oracle_preserves_availability():
     env, _ = make_env()
     res = env.run(OracleContentAware(patch=True))

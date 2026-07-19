@@ -62,7 +62,31 @@ full. All of the above is achieved while the agent **infers** the payload rather
 than being told it, landing close to the full-observability oracle.
 
 See [`docs/RESEARCH.md`](docs/RESEARCH.md) for the full design and the 12-point
-novelty register.
+novelty register, and [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) for a
+verified prior-art audit and honest novelty verdicts.
+
+## Real-data grounding (NVD/CVE)
+
+SERUM is not confined to synthetic vulnerabilities. A proper ingestion pipeline
+pulls real CVEs from the **NVD 2.0 API**, cleans and validates them across CVSS
+generations, and derives host vulnerability profiles from real CPE products and
+CVSS scores:
+
+```bash
+python scripts/ingest_nvd.py --limit 6000        # fetch recent CVEs -> data/clean/cves.csv
+python scripts/run_experiment.py --trials 40 --real   # run on real-data networks
+```
+
+- `serum/data/nvd.py` — cached, rate-limited, retrying NVD client (date-windowed).
+- `serum/data/clean.py` — parse/validate/dedup ragged NVD JSON into typed records.
+- `serum/data/profiles.py` — real CPE-product co-deployment → correlated host
+  vulnerabilities; per-CVE transmissibility from CVSS.
+
+**An honest finding this surfaced:** with *independent* software assignment, a
+CVE's vulnerable hosts scatter across the topology, the vulnerable subgraph
+fragments, and worms barely propagate — real fleets spread via **software
+monoculture within network segments**. Modeling that topology-correlated
+vulnerability is the next step (tracked in `docs/RESEARCH.md`).
 
 ---
 

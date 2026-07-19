@@ -43,23 +43,35 @@ class TrialSpec:
     n_seeds: int = 3
     budget_per_step: int = 5
     horizon: int = 40
+    n_products: int = 80          # real-data: software-universe size
 
 
-def build_episode(spec: TrialSpec, seed: int):
+def build_episode(spec: TrialSpec, seed: int, records=None):
     """Construct one fully-specified outbreak (network + payload + seeds).
+
+    If ``records`` (cleaned CVERecords) are supplied, the network is built from
+    real NVD-derived vulnerability profiles and transmissibility is grounded in
+    each CVE's CVSS; otherwise the synthetic Zipf model is used.
 
     Returns a factory that yields a *fresh* env with identical dynamics RNG for
     each policy, so every policy faces the same stochastic outbreak."""
     gen_rng = np.random.default_rng(seed)
-    g = generate_network(
-        n=spec.n,
-        topology=spec.topology,
-        m=spec.m,
-        n_cves=spec.n_cves,
-        vuln_lambda=spec.vuln_lambda,
-        popularity_alpha=spec.popularity_alpha,
-        rng=gen_rng,
-    )
+    if records is not None:
+        from serum.data.profiles import generate_real_network
+        g = generate_real_network(
+            records, n=spec.n, topology=spec.topology, m=spec.m,
+            n_cves=spec.n_cves, n_products=spec.n_products, rng=gen_rng,
+        )
+    else:
+        g = generate_network(
+            n=spec.n,
+            topology=spec.topology,
+            m=spec.m,
+            n_cves=spec.n_cves,
+            vuln_lambda=spec.vuln_lambda,
+            popularity_alpha=spec.popularity_alpha,
+            rng=gen_rng,
+        )
     payload = sample_payload(g, beta=spec.beta, strategy=spec.payload_strategy,
                              rng=gen_rng, band=spec.prev_band)
     # Seed the outbreak among hosts that actually carry the payload's CVE,
@@ -119,13 +131,16 @@ class PolicyStats:
         }
 
 
-def compare_policies(spec: TrialSpec, n_trials: int = 20, base_seed: int = 0, verbose=True):
-    """Run all policies over ``n_trials`` paired outbreaks; return per-policy stats."""
+def compare_policies(spec: TrialSpec, n_trials: int = 20, base_seed: int = 0,
+                     verbose=True, records=None):
+    """Run all policies over ``n_trials`` paired outbreaks; return per-policy stats.
+
+    Pass ``records`` (cleaned CVERecords) to run on real NVD-derived networks."""
     stats: dict[str, PolicyStats] = {}
     curves: dict[str, list] = {}
     for t in range(n_trials):
         seed = base_seed + t
-        factory, payload = build_episode(spec, seed)
+        factory, payload = build_episode(spec, seed, records=records)
         # policies constructed against this trial's graph
         probe_env = factory()
         pol_rng = np.random.default_rng(seed + 777)

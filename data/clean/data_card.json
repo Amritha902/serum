@@ -1,0 +1,86 @@
+{
+  "n_records": 5816,
+  "n_worm_relevant": 2281,
+  "worm_relevant_frac": 0.392,
+  "attack_vector": {
+    "NETWORK": 4541,
+    "LOCAL": 1125,
+    "ADJACENT": 113,
+    "PHYSICAL": 37
+  },
+  "cvss_version": {
+    "3.1": 5763,
+    "3.0": 53
+  },
+  "severity": {
+    "CRITICAL": 602,
+    "HIGH": 2358,
+    "MEDIUM": 2606,
+    "LOW": 247,
+    "NONE": 3
+  },
+  "base_score_mean": 6.85,
+  "unique_products_worm": 1028,
+  "top_products": [
+    [
+      "openclaw:openclaw",
+      94
+    ],
+    [
+      "wwbn:avideo",
+      65
+    ],
+    [
+      "mozilla:firefox",
+      44
+    ],
+    [
+      "endian:firewall_community",
+      34
+    ],
+    [
+      "apple:macos",
+      30
+    ],
+    [
+      "dlink:di-8003_firmware",
+      28
+    ],
+    [
+      "chamilo:chamilo_lms",
+      27
+    ],
+    [
+      "ci4-cms-erp:ci4ms",
+      23
+    ],
+    [
+      "vikunja:vikunja",
+      21
+    ],
+    [
+      "parseplatform:parse-server",
+      21
+    ],
+    [
+      "praison:praisonai",
+      19
+    ],
+    [
+      "linux:linux_kernel",
+      18
+    ],
+    [
+      "gitlab:gitlab",
+      17
+    ],
+    [
+      "churchcrm:churchcrm",
+      17
+    ],
+    [
+      "discourse:discourse",
+      16
+    ]
+  ]
+}

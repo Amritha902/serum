@@ -39,6 +39,8 @@ def parse_args():
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--outdir", default="results")
     p.add_argument("--no-plot", action="store_true")
+    p.add_argument("--real", action="store_true",
+                   help="use real NVD data (data/clean/cves.csv) instead of synthetic")
     return p.parse_args()
 
 
@@ -116,10 +118,16 @@ def main():
         budget_per_step=args.budget,
         horizon=args.horizon,
     )
+    records = None
+    if args.real:
+        from serum.data.clean import load_clean_csv
+        records = load_clean_csv("data/clean/cves.csv")
+        print(f"[real NVD data: {len(records)} cleaned CVEs from data/clean/cves.csv]")
     print(f"Running {args.trials} paired outbreaks "
-          f"[n={spec.n} topo={spec.topology} strategy={spec.payload_strategy} "
-          f"beta={spec.beta} budget={spec.budget_per_step}] ...")
-    stats, curves = compare_policies(spec, n_trials=args.trials, base_seed=args.seed)
+          f"[{'REAL-NVD' if args.real else 'synthetic'} n={spec.n} topo={spec.topology} "
+          f"strategy={spec.payload_strategy} budget={spec.budget_per_step}] ...")
+    stats, curves = compare_policies(spec, n_trials=args.trials, base_seed=args.seed,
+                                     records=records)
     print_table(stats)
 
     report = paired_report(stats)

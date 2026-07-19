@@ -67,4 +67,9 @@ def sample_payload(
         cve = int(rng.integers(g.graph["n_cves"]))
     else:
         raise ValueError(f"unknown payload strategy: {strategy!r}")
+    # On real-data networks, ground transmissibility in the CVE's own CVSS-derived
+    # rate rather than a single global beta.
+    universe = g.graph.get("vuln_universe")
+    if universe is not None:
+        beta = float(universe.beta[cve])
     return Payload(cve=cve, beta=float(beta))

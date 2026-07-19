@@ -94,11 +94,42 @@ def test_build_universe_and_profiles_are_valid():
     assert uni.n_cves <= 15
     assert uni.beta.min() >= 0.05 and uni.beta.max() <= 0.5
     g = _base_topology(200, "ba", 3, np.random.default_rng(1))
-    attach_real_profiles(g, uni, rng=np.random.default_rng(2))
+    attach_real_profiles(g, uni, n_segments=8, homophily=0.5, rng=np.random.default_rng(2))
     assert g.graph["n_cves"] == uni.n_cves
-    assert all("vuln" in d for _, d in g.nodes(data=True))
+    assert all("vuln" in d and "segment" in d for _, d in g.nodes(data=True))
     prev = cve_prevalence(g)
     assert prev.min() >= 0.0 and prev.max() <= 1.0
+
+
+def test_segments_are_connected_regions():
+    """Each graph segment must be a connected subgraph (a real network zone)."""
+    import networkx as nx
+    from serum.data.profiles import graph_segments
+    g = _base_topology(300, "ba", 3, np.random.default_rng(4))
+    seg = graph_segments(g, 10, np.random.default_rng(5))
+    assert set(seg) == set(g.nodes())
+    for s in set(seg.values()):
+        members = [n for n, sg in seg.items() if sg == s]
+        assert nx.is_connected(g.subgraph(members)), f"segment {s} not connected"
+
+
+def test_homophily_raises_within_segment_software_sharing():
+    """Higher homophily => neighbours in the same segment share more products."""
+    records = _corpus(80)
+    uni = build_universe(records, n_products=30, n_cves=20, rng=np.random.default_rng(0))
+
+    def mean_shared(hom):
+        g = _base_topology(300, "ba", 3, np.random.default_rng(1))
+        attach_real_profiles(g, uni, n_segments=10, homophily=hom,
+                             rng=np.random.default_rng(2))
+        vals = []
+        for u, v in g.edges():
+            if g.nodes[u]["segment"] == g.nodes[v]["segment"]:
+                a, b = g.nodes[u]["products"], g.nodes[v]["products"]
+                vals.append(len(a & b) / max(1, len(a | b)))
+        return np.mean(vals) if vals else 0.0
+
+    assert mean_shared(0.9) > mean_shared(0.0)
 
 
 def test_generate_real_network_end_to_end():

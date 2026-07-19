@@ -16,7 +16,7 @@ handle exposing per-CVE ids and betas.
 
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, deque
 from dataclasses import dataclass, field
 
 import networkx as nx
@@ -98,31 +98,88 @@ def build_universe(
     )
 
 
+def graph_segments(g: nx.Graph, n_segments: int,
+                   rng: np.random.Generator) -> dict:
+    """Partition the graph into ``n_segments`` *connected* regions via
+    multi-source BFS (a graph Voronoi tessellation from random centres).
+
+    Segments model network zones -- subnets, VLANs, OU/imaging groups -- within
+    which hosts tend to run the same software. Because each region is connected,
+    a shared-software vulnerability induces a connected vulnerable subgraph, so
+    a worm can actually traverse it (the realism the independent model lacked)."""
+    nodes = list(g.nodes())
+    k = max(1, min(n_segments, len(nodes)))
+    centers = [int(x) for x in rng.choice(nodes, size=k, replace=False)]
+    seg: dict = {}
+    dq: deque = deque()
+    for i, c in enumerate(centers):
+        seg[c] = i
+        dq.append(c)
+    while dq:  # simultaneous BFS: nearest centre claims each node
+        u = dq.popleft()
+        for v in g.neighbors(u):
+            if v not in seg:
+                seg[v] = seg[u]
+                dq.append(v)
+    for v in nodes:  # any node in a disconnected fragment: assign at random
+        if v not in seg:
+            seg[v] = int(rng.integers(k))
+    return seg
+
+
 def attach_real_profiles(
     g: nx.Graph,
     universe: RealVulnUniverse,
     products_lambda: float = 6.0,
+    n_segments: int = 12,
+    homophily: float = 0.75,
     rng: np.random.Generator | None = None,
 ) -> nx.Graph:
-    """Assign each host a real-data-derived vulnerability profile in place."""
+    """Assign each host a real-data-derived vulnerability profile in place.
+
+    ``homophily`` in [0, 1] controls software monoculture: a fraction
+    ``homophily`` of a host's products is drawn from its segment's shared
+    software image, the rest sampled independently by global popularity.
+    ``homophily=0`` recovers the fully-independent assignment (an ablation)."""
     rng = rng or np.random.default_rng()
     prod_index = {p: i for i, p in enumerate(universe.products)}
-    # precompute, per CVE, the set of product indices it affects
     cve_prod_idx = [frozenset(prod_index[p] for p in cps) for cps in universe.cve_products]
-
     n_products = len(universe.products)
+
+    seg = graph_segments(g, n_segments, rng)
+    # each segment's shared "software image": a popularity-weighted product set
+    image_size = int(min(n_products, max(products_lambda * 3, products_lambda + 4)))
+    seg_image: dict = {}
+    for s in set(seg.values()):
+        img = rng.choice(n_products, size=image_size, replace=False, p=universe.weights)
+        seg_image[s] = np.asarray(img)
+
     for node in g.nodes():
         k = int(min(n_products, max(1, rng.poisson(products_lambda))))
-        chosen = rng.choice(n_products, size=k, replace=False, p=universe.weights)
-        host_products = frozenset(int(c) for c in chosen)
-        vuln = frozenset(
-            i for i, cpi in enumerate(cve_prod_idx) if host_products & cpi
-        )
+        n_seg = int(round(homophily * k))
+        n_glob = k - n_seg
+        prods: set = set()
+        if n_seg > 0:
+            img = seg_image[seg[node]]
+            take = min(n_seg, len(img))
+            prods.update(int(x) for x in rng.choice(img, size=take, replace=False))
+        # top up (segment image exhausted or the independent remainder)
+        while len(prods) < k:
+            p = int(rng.choice(n_products, p=universe.weights)) if n_glob or not prods \
+                else int(rng.choice(seg_image[seg[node]]))
+            prods.add(p)
+            if len(prods) >= n_products:
+                break
+        host_products = frozenset(prods)
+        vuln = frozenset(i for i, cpi in enumerate(cve_prod_idx) if host_products & cpi)
         g.nodes[node]["vuln"] = vuln
         g.nodes[node]["products"] = host_products
+        g.nodes[node]["segment"] = seg[node]
 
     g.graph["n_cves"] = universe.n_cves
     g.graph["vuln_universe"] = universe
+    g.graph["n_segments"] = len(set(seg.values()))
+    g.graph["homophily"] = homophily
     g.graph["data_source"] = "nvd"
     return g
 
@@ -135,12 +192,16 @@ def generate_real_network(
     n_products: int = 80,
     n_cves: int = 40,
     products_lambda: float = 6.0,
+    n_segments: int = 12,
+    homophily: float = 0.75,
     rng: np.random.Generator | None = None,
 ) -> nx.Graph:
-    """Build a topology and attach NVD-derived vulnerability profiles."""
+    """Build a topology and attach NVD-derived vulnerability profiles with
+    segment-correlated software (monoculture within network zones)."""
     rng = rng or np.random.default_rng()
     g = _base_topology(n, topology, m, rng)
     universe = build_universe(records, n_products=n_products, n_cves=n_cves, rng=rng)
-    attach_real_profiles(g, universe, products_lambda=products_lambda, rng=rng)
+    attach_real_profiles(g, universe, products_lambda=products_lambda,
+                         n_segments=n_segments, homophily=homophily, rng=rng)
     g.graph["topology"] = topology
     return g

@@ -44,6 +44,8 @@ class TrialSpec:
     budget_per_step: int = 5
     horizon: int = 40
     n_products: int = 80          # real-data: software-universe size
+    n_segments: int = 12          # real-data: network zones (subnets/VLANs)
+    homophily: float = 0.5        # real-data: software monoculture within a zone
 
 
 def build_episode(spec: TrialSpec, seed: int, records=None):
@@ -60,7 +62,8 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
         from serum.data.profiles import generate_real_network
         g = generate_real_network(
             records, n=spec.n, topology=spec.topology, m=spec.m,
-            n_cves=spec.n_cves, n_products=spec.n_products, rng=gen_rng,
+            n_cves=spec.n_cves, n_products=spec.n_products,
+            n_segments=spec.n_segments, homophily=spec.homophily, rng=gen_rng,
         )
     else:
         g = generate_network(

@@ -32,7 +32,8 @@ def parse_args():
     p.add_argument("--trials", type=int, default=30)
     p.add_argument("--n", type=int, default=500, help="hosts per network")
     p.add_argument("--topology", default="ba", choices=["ba", "ws", "er", "rgg"])
-    p.add_argument("--strategy", default="stealth", choices=["popular", "stealth", "random"])
+    p.add_argument("--strategy", default="band",
+                   choices=["band", "popular", "stealth", "random"])
     p.add_argument("--beta", type=float, default=0.35)
     p.add_argument("--budget", type=int, default=5)
     p.add_argument("--horizon", type=int, default=40)
@@ -41,6 +42,12 @@ def parse_args():
     p.add_argument("--no-plot", action="store_true")
     p.add_argument("--real", action="store_true",
                    help="use real NVD data (data/clean/cves.csv) instead of synthetic")
+    p.add_argument("--n-cves", type=int, default=-1,
+                   help="CVE universe size (default 40 for --real, 12 synthetic)")
+    p.add_argument("--homophily", type=float, default=-1.0,
+                   help="real-data software monoculture within a zone (default 0.4)")
+    p.add_argument("--band", type=float, nargs=2, default=None,
+                   help="prevalence band lo hi for the target CVE")
     return p.parse_args()
 
 
@@ -117,6 +124,9 @@ def main():
         payload_strategy=args.strategy,
         budget_per_step=args.budget,
         horizon=args.horizon,
+        n_cves=args.n_cves if args.n_cves > 0 else (40 if args.real else 12),
+        homophily=args.homophily if args.homophily >= 0 else 0.4,
+        prev_band=tuple(args.band) if args.band else (0.15, 0.55),
     )
     records = None
     if args.real:

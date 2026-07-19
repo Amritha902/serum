@@ -82,11 +82,25 @@ python scripts/run_experiment.py --trials 40 --real   # run on real-data network
 - `serum/data/profiles.py` — real CPE-product co-deployment → correlated host
   vulnerabilities; per-CVE transmissibility from CVSS.
 
-**An honest finding this surfaced:** with *independent* software assignment, a
-CVE's vulnerable hosts scatter across the topology, the vulnerable subgraph
-fragments, and worms barely propagate — real fleets spread via **software
-monoculture within network segments**. Modeling that topology-correlated
-vulnerability is the next step (tracked in `docs/RESEARCH.md`).
+Software is assigned with **segment-correlated monoculture**: the graph is carved
+into connected zones (subnets/VLANs) that share a software image (`homophily`
+controls the strength), so a CVE induces a connected vulnerable subgraph — as
+real worms actually spread. Crucially, that vulnerable *zone* need not coincide
+with the topological hubs, which is where content-awareness pays off.
+
+**Real-data result (60 paired outbreaks, real modern CVEs, `results/real/`):**
+
+| Policy | Infected | Availability | Contained @ step |
+|---|---:|---:|---:|
+| no-defense | 14.0% | 100.0% | 10.5 |
+| degree immunization *(best structural)* | 1.5% | 96.9% | 3.1 |
+| **content-aware** | **0.9%** | **98.7%** | **2.0** |
+
+- vs the best fixed baseline: **−18.6% infection, Wilcoxon p = 1.1×10⁻⁵**.
+- vs the per-trial **ensemble oracle**: **−6.1%, p = 0.006** — on real data the
+  content-aware agent beats even the oracle that cherry-picks the best structural
+  heuristic per outbreak (which it *cannot* do on synthetic data), because real
+  software zones genuinely diverge from topological centrality.
 
 ---
 

@@ -2,179 +2,181 @@
   "no-defense": {
     "name": "no-defense",
     "infected_fraction": [
-      0.0169,
-      0.0291
+      0.1404,
+      0.1309
     ],
     "availability": [
       1.0,
       0.0
     ],
     "steps_to_containment": [
-      3.05,
-      3.471
+      10.5,
+      7.084
     ]
   },
   "random": {
     "name": "random",
     "infected_fraction": [
-      0.0118,
-      0.0181
+      0.0654,
+      0.0992
     ],
     "availability": [
-      0.978,
-      0.0286
+      0.938,
+      0.0665
     ],
     "steps_to_containment": [
-      2.2,
-      2.8566
+      6.2,
+      6.6453
     ]
   },
   "acquaintance": {
     "name": "acquaintance",
     "infected_fraction": [
-      0.0135,
-      0.0251
+      0.0787,
+      0.1088
     ],
     "availability": [
-      0.9762,
-      0.028
+      0.925,
+      0.0713
     ],
     "steps_to_containment": [
-      2.375,
-      2.799
+      7.5,
+      7.1286
     ]
   },
   "degree": {
     "name": "degree",
     "infected_fraction": [
-      0.0082,
-      0.0058
+      0.0149,
+      0.0154
     ],
     "availability": [
-      0.9838,
-      0.0118
+      0.9692,
+      0.0255
     ],
     "steps_to_containment": [
-      1.625,
-      1.1766
+      3.0833,
+      2.5579
     ]
   },
   "eigenvector": {
     "name": "eigenvector",
     "infected_fraction": [
-      0.0078,
-      0.0043
+      0.017,
+      0.0185
     ],
     "availability": [
-      0.9845,
-      0.0095
+      0.9652,
+      0.0309
     ],
     "steps_to_containment": [
-      1.55,
-      0.9474
+      3.4833,
+      3.0849
     ]
   },
   "betweenness": {
     "name": "betweenness",
     "infected_fraction": [
-      0.0081,
-      0.0039
+      0.0155,
+      0.0177
     ],
     "availability": [
-      0.9828,
-      0.0107
+      0.9694,
+      0.0252
     ],
     "steps_to_containment": [
-      1.725,
-      1.0721
+      3.0667,
+      2.5157
     ]
   },
   "greedy-blocking": {
     "name": "greedy-blocking",
     "infected_fraction": [
-      0.0105,
-      0.0132
+      0.0405,
+      0.055
     ],
     "availability": [
-      0.98,
-      0.0196
+      0.9415,
+      0.0598
     ],
     "steps_to_containment": [
-      2,
-      1.9621
+      5.85,
+      5.9828
     ]
   },
   "content-aware": {
     "name": "content-aware",
     "infected_fraction": [
-      0.0073,
-      0.0027
+      0.0094,
+      0.0055
     ],
     "availability": [
-      0.9898,
-      0.0019
+      0.9865,
+      0.0048
     ],
     "steps_to_containment": [
-      1.4,
-      0.7
+      2.0333,
+      1.1968
     ]
   },
   "content-aware-oracle": {
     "name": "content-aware-oracle",
     "infected_fraction": [
-      0.0072,
-      0.0027
+      0.008,
+      0.0041
     ],
     "availability": [
       1.0,
       0.0
     ],
     "steps_to_containment": [
-      1.4,
-      0.7348
+      1.6833,
+      1.0566
     ]
   },
   "_spec": {
     "n": 500,
     "topology": "ba",
     "m": 3,
-    "n_cves": 12,
+    "n_cves": 40,
     "vuln_lambda": 6.0,
     "popularity_alpha": 0.8,
     "beta": 0.35,
-    "payload_strategy": "stealth",
+    "payload_strategy": "band",
     "prev_band": [
-      0.2,
-      0.6
+      0.15,
+      0.55
     ],
     "n_seeds": 3,
     "budget_per_step": 5,
     "horizon": 40,
-    "n_products": 80
+    "n_products": 80,
+    "n_segments": 12,
+    "homophily": 0.4
   },
   "_paired_report": {
-    "n_trials": 40,
+    "n_trials": 60,
     "primary": {
-      "vs": "eigenvector",
-      "mean_abs_reduction": 0.0005499999999999999,
-      "mean_rel_reduction": 0.024583333333333336,
+      "vs": "degree",
+      "mean_abs_reduction": 0.0055000000000000005,
+      "mean_rel_reduction": 0.1859268813545129,
       "ci95_abs": [
-        -0.00015000000000000001,
-        0.0015500000000000004
+        0.002933333333333334,
+        0.0086
       ],
-      "p_value": 0.24394625650102997,
-      "wins": 7
+      "p_value": 1.0886373861415766e-05,
+      "wins": 27
     },
     "ensemble": {
       "vs": "best-of-{degree,eigenvector,betweenness,greedy-blocking,acquaintance}",
-      "mean_abs_reduction": -0.0004,
-      "mean_rel_reduction": -0.06319444444444444,
+      "mean_abs_reduction": 0.003433333333333334,
+      "mean_rel_reduction": 0.060708341008263604,
       "ci95_abs": [
-        -0.0009,
-        4.9999999999999826e-05
+        0.0012666666666666666,
+        0.0063
       ],
-      "p_value": 0.08487051864955558,
-      "wins": 1
+      "p_value": 0.006223656151738119,
+      "wins": 19
     }
   }
 }

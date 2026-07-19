@@ -1,0 +1,42 @@
+[
+  {
+    "budget": 3,
+    "horizon": 10,
+    "prevalence_prior": 0.01795,
+    "threat_intel_prior": 0.011349999999999999,
+    "abs_reduction": 0.006600000000000002,
+    "rel_reduction": 0.3676880222841226
+  },
+  {
+    "budget": 3,
+    "horizon": 20,
+    "prevalence_prior": 0.01815,
+    "threat_intel_prior": 0.011349999999999999,
+    "abs_reduction": 0.0068000000000000005,
+    "rel_reduction": 0.3746556473829201
+  },
+  {
+    "budget": 5,
+    "horizon": 20,
+    "prevalence_prior": 0.00955,
+    "threat_intel_prior": 0.00995,
+    "abs_reduction": -0.00040000000000000105,
+    "rel_reduction": -0.041884816753926815
+  },
+  {
+    "budget": 5,
+    "horizon": 40,
+    "prevalence_prior": 0.00955,
+    "threat_intel_prior": 0.00995,
+    "abs_reduction": -0.00040000000000000105,
+    "rel_reduction": -0.041884816753926815
+  },
+  {
+    "budget": 8,
+    "horizon": 40,
+    "prevalence_prior": 0.00795,
+    "threat_intel_prior": 0.008,
+    "abs_reduction": -4.99999999999997e-05,
+    "rel_reduction": -0.00628930817610059
+  }
+]

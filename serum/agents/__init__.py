@@ -5,5 +5,12 @@ from serum.agents.content_aware import (
     OracleAfterDelay,
     OracleContentAware,
 )
+from serum.agents.threat_intel import ThreatIntelAgent, threat_intel_weights
 
-__all__ = ["ContentAwareAgent", "OracleAfterDelay", "OracleContentAware"]
+__all__ = [
+    "ContentAwareAgent",
+    "OracleAfterDelay",
+    "OracleContentAware",
+    "ThreatIntelAgent",
+    "threat_intel_weights",
+]

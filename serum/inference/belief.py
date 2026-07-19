@@ -52,6 +52,18 @@ class CVEBelief:
             base = cve_prevalence(g) + eps
         elif prior == "uniform":
             base = np.ones(self.n_cves)
+        elif prior == "threat_intel":
+            # A warm start from threat intelligence: weaponizability derived from
+            # CVSS (severity x exploitability, already encoded in per-CVE beta on
+            # real-data networks). Falls back to prevalence with no intel.
+            uni = g.graph.get("vuln_universe")
+            if uni is not None:
+                w = np.asarray(uni.beta, dtype=float)
+                base = (w - w.min()) + eps
+            else:
+                base = cve_prevalence(g) + eps
+        elif isinstance(prior, np.ndarray):
+            base = np.asarray(prior, dtype=float) + eps
         else:
             raise ValueError(f"unknown prior: {prior!r}")
         self.log_prior = np.log(base / base.sum())

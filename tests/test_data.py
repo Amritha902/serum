@@ -141,5 +141,22 @@ def test_generate_real_network_end_to_end():
     assert g.graph["n_cves"] == 12
 
 
+def test_threat_intel_prior_and_agent():
+    """The threat-intel prior weights are a valid distribution and the agent
+    runs end-to-end on a real-data network."""
+    from serum.agents.threat_intel import ThreatIntelAgent, threat_intel_weights
+    from serum.inference.belief import CVEBelief
+    records = _corpus(80)
+    g = generate_real_network(records, n=200, n_cves=12, n_products=25,
+                              rng=np.random.default_rng(3))
+    w = threat_intel_weights(g.graph["vuln_universe"])
+    assert abs(w.sum() - 1.0) < 1e-6 and (w >= 0).all()
+    # belief accepts the threat_intel prior; agent constructs and is callable
+    b = CVEBelief(g, prior="threat_intel")
+    assert abs(b.posterior().sum() - 1.0) < 1e-6
+    agent = ThreatIntelAgent(g)
+    assert agent.name == "content-aware+intel"
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))

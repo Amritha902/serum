@@ -62,8 +62,19 @@ full. All of the above is achieved while the agent **infers** the payload rather
 than being told it, landing close to the full-observability oracle.
 
 See [`docs/RESEARCH.md`](docs/RESEARCH.md) for the full design and the 12-point
-novelty register, and [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) for a
-verified prior-art audit and honest novelty verdicts.
+novelty register, [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) for a verified
+prior-art audit and honest novelty verdicts, [`docs/THEORY.md`](docs/THEORY.md)
+for the exploit-identifiability theorem (proofs + 100% empirical validation), and
+[`paper/serum.tex`](paper/serum.tex) for the paper draft.
+
+## Exploit-identifiability theory
+
+Because the propagation subgraph is fixed by *observable* node attributes, the
+unobserved exploit is identifiable from a saturating outbreak **iff the
+intersection of the infected hosts' CVE profiles is a singleton** — a condition
+a defender can check in advance from its asset inventory. `scripts/identifiability.py`
+validates that the Bayesian belief recovers the true CVE exactly when the theorem
+predicts (**116/116 = 100%**); ~54% of real CVEs are identifiable this way.
 
 ## Real-data grounding (NVD/CVE)
 

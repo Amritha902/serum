@@ -1,0 +1,210 @@
+\documentclass[11pt]{article}
+% Portable preamble: compiles on Overleaf / any TeX Live with no conference .sty.
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{natbib}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newcommand{\carriers}{\mathrm{car}}
+\newcommand{\supp}{\mathrm{supp}}
+
+\title{\textbf{SERUM}: Content-Aware Agentic Containment of Malware\\
+Under an Unobserved Payload}
+\author{Amritha S.}
+\date{Draft --- \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Malware propagates only across hosts exploitable by its payload, so the
+effective contagion graph is a payload-specific subgraph of the network. We
+study the \emph{defender} who does not observe the payload and must infer
+\emph{which exploit is spreading}, online, from the vulnerability-consistency
+structure of the infected set, then allocate a limited containment budget under
+that belief. We show (i) a combinatorial identifiability theory: because the
+propagation subgraph is fixed by \emph{observable} node attributes (the CVEs each
+host carries), the exploit is identifiable from a saturating outbreak iff the
+intersection of the infected hosts' vulnerability profiles is a singleton---a
+condition a defender can check in advance from its asset inventory; (ii) a
+content-aware agent that plans under a Bayesian belief over the exploit,
+optionally warm-started by a CVSS/LLM threat-intel prior; and (iii) an evaluation
+on real NVD/CVE data with software-monoculture network zones. Against the
+strongest deployable structure-only immunization the content-aware agent reduces
+infection by $18.6\%$ ($p=1.1\times10^{-5}$), beats an oracle that receives the
+signature after a delay, and is Pareto-dominant on availability and containment
+speed. We are explicit about scope: it does not beat an oracle ensemble on
+synthetic data, and the gated-propagation model itself is not novel; the
+contribution is the coupling of \emph{observable-attribute identifiability} with
+\emph{online, budgeted, content-aware containment}, grounded in real data.
+\end{abstract}
+
+\section{Introduction}
+A self-propagating worm exploiting a specific vulnerability (CVE) can infect a
+neighbouring host only if that host runs the vulnerable software. The network a
+worm actually traverses is therefore not the physical topology but the
+\emph{vulnerable subgraph} induced by the carriers of its target CVE. A defender
+that knows which exploit is loose can defend exactly that subgraph; a defender
+that sees only topology wastes budget immunizing hubs the payload cannot use.
+
+The realistic difficulty is that the defender does \emph{not} observe the
+payload. It sees who is infected and its own asset inventory. Because
+propagation is vulnerability-gated, every host infected \emph{by spread} must
+carry the target CVE---so the infected set is itself evidence about the exploit.
+SERUM turns this into an online Bayesian inference (a POMDP whose hidden state is
+the exploit) and acts under the resulting belief.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item A combinatorial \textbf{identifiability theory} for the unobserved exploit
+(\S\ref{sec:theory}): identifiable iff the intersection of infected profiles is a
+singleton; confusability is exactly the subset order on carrier sets. Validated
+against the Bayesian belief at $100\%$ agreement.
+\item A \textbf{content-aware agent} (\S\ref{sec:method}) that plans under the
+belief with a payload-conditioned exposed-vulnerable-degree score, switching from
+isolation to precise patching as the belief sharpens, and an optional
+CVSS/LLM-grounded threat-intel prior for cold starts.
+\item A \textbf{real-data evaluation} (\S\ref{sec:exp}) on NVD/CVE with
+software-monoculture zones, with paired statistics and an honest account of where
+content-awareness does and does not help.
+\end{itemize}
+
+\paragraph{What is \emph{not} novel.} The gated-propagation model is a special
+case of multitype bond percolation \citep{allard2009multitype} and the premise of
+software-diversity worm models; classical worm models already gate on a
+vulnerable population \citep{chen2003aawp,staniford2002own}. Learning-based
+immunization is established \citep{meirom2021rlgn,fan2020finder}. We claim none of
+these. The closest system, CyGym \citep{cygym2025}, has vulnerability-gated spread
+and budgeted defense but uses a \emph{static} prior over zero-days; we make the
+\emph{online inference of the exploit from the spread} the centerpiece.
+
+\section{Problem formulation}\label{sec:formulation}
+A host graph $G=(V,E)$; each host $v$ carries a vulnerability profile
+$X(v)\subseteq C$ over a CVE universe $C$, with $\carriers(c)=\{v: c\in X(v)\}$
+and vulnerable subgraph $G[c]$. A worm has unknown target $c^\star$. Propagation
+is gated: an infected $u$ infects a susceptible neighbour $w$ with probability
+$\beta$ only if $c^\star\in X(w)$ (SI; SIR with recovery time $r$ is a variant).
+Each step the defender observes the infected set (not $c^\star$) and spends a
+budget $B$ on \textsc{patch} (immunize a host, availability-preserving),
+\textsc{isolate} (remove a host, availability cost), or \textsc{segment} (cut a
+link), minimising a multi-objective cost of final infection, availability loss,
+and time-to-containment.
+
+\section{Identifiability of the exploit}\label{sec:theory}
+Let $\supp(I)=\bigcap_{v\in I}X(v)$.
+
+\begin{proposition}[Exact support]\label{prop:supp}
+After observing a propagation-infected set $I$, the CVEs consistent with the
+observation are exactly $\supp(I)$.
+\end{proposition}
+
+\begin{proposition}[Saturation]\label{prop:sat}
+Let $R$ be the component of $G[c^\star]$ containing the seeds. As $\beta\to1$ the
+outbreak infects exactly $R$, and the observer learns $\supp(R)$.
+\end{proposition}
+
+\begin{theorem}[Identifiability]\label{thm:id}
+$c^\star$ is identifiable from a saturating outbreak over $R$ iff
+$\bigcap_{v\in R}X(v)=\{c^\star\}$.
+\end{theorem}
+
+\begin{proposition}[Confusability = subset order]\label{prop:conf}
+$c'$ remains consistent after a saturating $c$-outbreak iff $R\subseteq
+\carriers(c')$; globally, $\carriers(c)\subseteq\carriers(c')$ implies $c'$ is
+confusable with $c$ for every $c$-outbreak.
+\end{proposition}
+
+\begin{corollary}
+Order CVEs by the subset relation on carrier sets. A CVE is globally identifiable
+iff no other CVE's carrier set is a superset of its own.
+\end{corollary}
+
+Proofs are elementary set arguments (see supplementary \texttt{docs/THEORY.md}).
+The consequence differs from cascade-mixture identifiability
+\citep{hoffmann2020mixtures}: the candidate propagation graphs are not latent but
+$\{G[c]\}$, fixed by observable profiles, so identifiability is a set-containment
+condition a defender can \emph{evaluate in advance}. Empirically the Bayesian
+belief converges to the truth exactly when Theorem~\ref{thm:id} predicts it
+($116/116=100\%$); on real NVD profiles about $54\%$ of CVEs are identifiable
+from a saturating outbreak.
+
+\section{Method}\label{sec:method}
+\textbf{Belief.} A posterior over $c^\star$: hard consistency (Prop.~1) for the
+theory, and a \emph{soft} likelihood for robustness---each infected host
+down-weights rather than eliminates a CVE, so a single false-positive detection
+cannot exclude the truth. The prior is prevalence, or a CVSS/LLM
+\emph{threat-intel} prior (weaponizability from severity $\times$ exploitability)
+that warm-starts cold decisions.
+
+\textbf{Content-aware policy.} Score each frontier host by its belief-weighted
+\emph{exposed-vulnerable degree}---the expected number of susceptible,
+exploitable neighbours it would infect next---and spend the budget top-down. When
+the belief's support collapses, switch from isolation to patching (keep hosts
+online). The full-observation oracle and an \emph{oracle-after-delay} (signature
+arrives at $t=\delta$) bound the value of inference.
+
+\section{Experiments}\label{sec:exp}
+We build networks with segment-correlated software (connected zones share a
+software image; a \texttt{homophily} knob controls monoculture) and draw target
+CVEs from a prevalence band per trial. Every policy faces the identical outbreak
+(paired design). Real-data profiles come from cleaned NVD records (network attack
+vector, no user interaction); per-CVE $\beta$ from CVSS.
+
+\begin{table}[t]\centering
+\caption{Real NVD data, 60 paired outbreaks. Lower infection / higher
+availability / faster containment is better.}
+\begin{tabular}{lrrr}
+\toprule
+Policy & Infected & Availability & Contain@step \\
+\midrule
+no-defense & 14.0\% & 100.0\% & 10.5 \\
+degree (best structural) & 1.5\% & 96.9\% & 3.1 \\
+oracle-after-delay ($t{=}5$) & 1.4\% & 97.3\% & 2.9 \\
+\textbf{content-aware (ours)} & \textbf{0.9\%} & \textbf{98.3\%} & \textbf{2.0} \\
+content-aware oracle (bound) & 0.8\% & 100.0\% & 1.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Findings.} Against the best fixed baseline, content-aware reduces
+infection by $18.6\%$ (paired Wilcoxon $p=1.1\times10^{-5}$) and beats the
+per-trial ensemble oracle on real data ($p=2\times10^{-3}$)---because real
+software zones diverge from topological centrality. It beats oracle-after-delay:
+inferring the exploit online beats waiting for a signature. The advantage scales
+with outbreak severity and holds under SIR. The threat-intel prior gives a
+$\sim37\%$ cold-start reduction under tight budgets and washes out with evidence.
+
+\paragraph{Honest scope.} On \emph{synthetic} data content-aware does not beat an
+oracle ensemble that cherry-picks the best structural heuristic per outbreak
+($p\approx0.84$); and on near-universal (``popular'') exploits over
+geometric/small-world topologies structure-only can win, since almost every host
+is vulnerable. Content-awareness helps when the exploit is stealthy enough that
+its victims are a distinctive, mislocated-from-the-hubs zone.
+
+\section{Related work}
+Source detection \citep{shah2011rumors} infers \emph{where} an outbreak started;
+NetRate \citep{gomez2011netrate} infers edges/rates; SERUM infers \emph{which
+exploit}. The nearest inference-from-shape is SCENARIOID \citep{scenarioid2023}
+(offline scenario classification); we do online belief tracking tied to
+identifiability. The POMDP/active-hypothesis-testing machinery is standard
+\citep{naghshvar2013active,miehling2018pomdp}; our observation model
+(vulnerability-gated cascade shape) and its coupling to identifiability are the
+new part. Multi-objective immunization and active sensing
+\citep{leskovec2007celf} and estimation-evasion games \citep{fanti2015spy}
+inform the roadmap.
+
+\section{Limitations and responsible use}
+The propagation model is abstract (a probability over an exploitability graph);
+inventories are assumed known; adversarial payload design against the inference
+is future work. SERUM is defensive: it studies faster, lower-collateral
+containment and contains no weaponizable attack code.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+\end{document}

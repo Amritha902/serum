@@ -97,11 +97,16 @@ class ContainmentEnv:
         horizon: int = 40,
         isolation_penalty: float = 1.0,
         recovery_time: int = 0,
+        decoys=None,
         rng: np.random.Generator | None = None,
     ):
         self.g0 = g
         self.payload = payload
         self.seeds = list(seeds)
+        # decoys: hosts the attacker fakes as infected (via a side channel) to
+        # mislead the defender's exploit inference. They are reported as infected
+        # but never really infect anyone and never count toward the outbreak.
+        self.decoys = list(decoys) if decoys else []
         self.budget_per_step = int(budget_per_step)
         self.horizon = int(horizon)
         self.isolation_penalty = float(isolation_penalty)
@@ -127,8 +132,11 @@ class ContainmentEnv:
         for s in self.seeds:
             self.status[s] = Status.INFECTED
         self._infected = set(self.seeds)
-        self._newly = set(self.seeds)
-        self._ever = set(self.seeds)               # every host ever infected
+        # decoys are reported to the defender as freshly infected (poisoning the
+        # belief) but are NOT in the real infected set: they never spread and are
+        # excluded from the outbreak count.
+        self._newly = set(self.seeds) | set(self.decoys)
+        self._ever = set(self.seeds)               # every host ever infected (real)
         self._age = {s: 0 for s in self.seeds}     # steps since infection (SIR)
         self.trace.append(len(self._infected))
         return self._observe()

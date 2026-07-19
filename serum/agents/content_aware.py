@@ -29,8 +29,9 @@ from serum.sim.environment import Action, Status
 class ContentAwareAgent:
     name = "content-aware"
 
-    def __init__(self, g, prior: str = "prevalence", patch_when_support_leq: int = 3):
-        self.belief = CVEBelief(g, prior=prior)
+    def __init__(self, g, prior: str = "prevalence", patch_when_support_leq: int = 3,
+                 belief_mode: str = "soft", belief_noise: float = 0.03):
+        self.belief = CVEBelief(g, prior=prior, mode=belief_mode, noise=belief_noise)
         self.patch_threshold = patch_when_support_leq
         self._last_t = -1
 

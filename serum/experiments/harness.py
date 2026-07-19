@@ -65,6 +65,7 @@ class TrialSpec:
     homophily: float = 0.5        # real-data: software monoculture within a zone
     inventory_miss: float = 0.0   # defender fails to see a true vuln (undetected)
     inventory_false: float = 0.0  # defender sees a vuln the host lacks (stale)
+    n_decoys: int = 0             # belief-poisoning decoy infections planted by attacker
 
 
 def build_episode(spec: TrialSpec, seed: int, records=None):
@@ -115,6 +116,11 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
     seeds = list(gen_rng.choice(carriers, size=spec.n_seeds, replace=False))
     seeds = [int(s) for s in seeds]
 
+    decoys = []
+    if spec.n_decoys > 0:
+        from serum.attack.deception import choose_decoys
+        decoys = choose_decoys(g, payload, spec.n_decoys, rng=gen_rng)
+
     def factory():
         # A per-episode dynamics RNG, re-derived from the same seed so that
         # every policy sees the same infection coin-flips.
@@ -126,6 +132,7 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
             budget_per_step=spec.budget_per_step,
             horizon=spec.horizon,
             recovery_time=spec.recovery_time,
+            decoys=decoys,
             rng=dyn_rng,
         )
 

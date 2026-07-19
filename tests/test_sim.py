@@ -189,3 +189,22 @@ def test_oracle_preserves_availability():
 
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))
+
+
+def test_decoys_poison_hard_belief_but_soft_resists():
+    """Belief-poisoning: decoy infections (not carrying the true CVE) make the
+    hard belief exclude the truth, while the soft belief keeps it with mass."""
+    from serum.attack.deception import choose_decoys
+    env, pl = make_env()
+    decoys = choose_decoys(env.g, pl, k=3, rng=np.random.default_rng(0))
+    if not decoys:
+        pytest.skip("no decoy candidates in this instance")
+    env2 = ContainmentEnv(env.g, pl, env.seeds, decoys=decoys,
+                          rng=np.random.default_rng(1))
+    obs = env2.reset()
+    hard = CVEBelief(env.g, mode="hard")
+    soft = CVEBelief(env.g, mode="soft", noise=0.05)
+    hard.update(obs.newly_infected, obs.seeds)
+    soft.update(obs.newly_infected, obs.seeds)
+    assert not hard.consistent[pl.cve]           # hard belief poisoned
+    assert soft.posterior()[pl.cve] > 0          # soft belief retains the truth

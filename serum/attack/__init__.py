@@ -5,5 +5,7 @@ from serum.attack.adversarial import (
     payload_identifiability_score,
     select_payload,
 )
+from serum.attack.deception import choose_decoys
 
-__all__ = ["evasive_payload", "payload_identifiability_score", "select_payload"]
+__all__ = ["evasive_payload", "payload_identifiability_score", "select_payload",
+           "choose_decoys"]

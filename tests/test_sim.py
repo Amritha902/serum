@@ -88,6 +88,35 @@ def test_belief_narrows_and_ranks_truth_high():
     assert rank <= 2, f"true CVE ranked #{rank + 1} (posterior too diffuse)"
 
 
+def test_soft_belief_survives_detection_noise():
+    """A single false-positive infection (a host NOT carrying the true CVE) must
+    not destroy the belief: the hard model wrongly excludes the truth, the soft
+    model keeps it ranked high."""
+    env, pl = make_env()
+    env.reset()
+    # find a host that does NOT carry the true CVE -> a plausible false positive
+    fp = next(v for v in env.g.nodes()
+              if pl.cve not in env.g.nodes[v]["vuln"] and v not in env.seeds)
+
+    hard = CVEBelief(env.g, mode="hard")
+    soft = CVEBelief(env.g, mode="soft", noise=0.05)
+    # feed some genuine evidence, then the false positive
+    obs = env._observe()
+    for _ in range(6):
+        hard.update(obs.newly_infected, obs.seeds)
+        soft.update(obs.newly_infected, obs.seeds)
+        if env.done():
+            break
+        obs = env.step([])
+    hard.update({fp}, frozenset())
+    soft.update({fp}, frozenset())
+
+    assert not hard.consistent[pl.cve]                 # hard model: truth excluded
+    post = soft.posterior()
+    rank = int((post > post[pl.cve]).sum())
+    assert rank <= 3, "soft belief lost the true CVE after one false positive"
+
+
 def test_content_aware_beats_no_defense():
     inf_ours, inf_none = [], []
     for s in range(6):

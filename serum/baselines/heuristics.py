@@ -125,37 +125,35 @@ class EigenvectorDefense:
 
 
 class GreedyBlockingDefense:
-    """Greedy influence-blocking: isolate the frontier host whose removal cuts
-    the most *susceptible* reachable mass right now.
+    """Greedy influence-blocking: isolate the frontier hosts that most *bridge*
+    the infection to the susceptible interior.
 
-    This is the standard strong heuristic for influence minimisation. It is
-    myopically optimal against structure -- but it still counts *all* reachable
-    susceptibles, not just the exploitable ones, so it over-values hubs the
-    payload cannot use. Greedy is recomputed each step over the frontier only,
-    keeping it tractable."""
+    A frontier host's myopic threat is the product of (i) its exposure -- how
+    many infected neighbours could infect it -- and (ii) its onward reach -- how
+    many susceptible neighbours it would then endanger. Isolating the top such
+    bridges greedily minimises expected next-step spread. Still payload-blind:
+    it counts all neighbours, not only exploitable ones."""
 
     name = "greedy-blocking"
 
-    def _susceptible_reach(self, env, v):
-        # size of the susceptible component reachable from v if v stays online
-        seen = {v}
-        stack = [v]
-        while stack:
-            u = stack.pop()
-            for w in env.g.neighbors(u):
-                if w in seen or w in env.isolated or w in env.patched:
-                    continue
-                if env.status[w] == Status.SUSCEPTIBLE:
-                    seen.add(w)
-                    stack.append(w)
-        return len(seen)
+    def _bridge_score(self, env, v):
+        infected_nbrs = susceptible_nbrs = 0
+        for w in env.g.neighbors(v):
+            if w in env.isolated:
+                continue
+            st = env.status[w]
+            if st == Status.INFECTED:
+                infected_nbrs += 1
+            elif st == Status.SUSCEPTIBLE and w not in env.patched:
+                susceptible_nbrs += 1
+        # +1 smoothing so a highly-exposed leaf still outranks an unexposed hub
+        return (infected_nbrs) * (susceptible_nbrs + 1)
 
     def __call__(self, env, obs):
         front = frontier(env)
         if not front:
             return []
-        # score by reachable susceptible mass; isolate the top-budget cut hosts
-        front.sort(key=lambda v: self._susceptible_reach(env, v), reverse=True)
+        front.sort(key=lambda v: self._bridge_score(env, v), reverse=True)
         k = min(env.budget_per_step, len(front))
         return [Action.isolate(v) for v in front[:k]]
 

@@ -92,27 +92,42 @@
   "greedy-blocking": {
     "name": "greedy-blocking",
     "infected_fraction": [
-      0.0405,
-      0.055
+      0.0156,
+      0.0165
     ],
     "availability": [
-      0.9415,
-      0.0598
+      0.9683,
+      0.0277
     ],
     "steps_to_containment": [
-      5.85,
-      5.9828
+      3.1667,
+      2.7699
+    ]
+  },
+  "oracle-delay-5": {
+    "name": "oracle-delay-5",
+    "infected_fraction": [
+      0.014,
+      0.0112
+    ],
+    "availability": [
+      0.9731,
+      0.0158
+    ],
+    "steps_to_containment": [
+      2.9,
+      1.9296
     ]
   },
   "content-aware": {
     "name": "content-aware",
     "infected_fraction": [
       0.0094,
-      0.0055
+      0.0053
     ],
     "availability": [
-      0.9865,
-      0.0048
+      0.9833,
+      0.0104
     ],
     "steps_to_containment": [
       2.0333,
@@ -158,24 +173,24 @@
     "n_trials": 60,
     "primary": {
       "vs": "degree",
-      "mean_abs_reduction": 0.0055000000000000005,
-      "mean_rel_reduction": 0.1859268813545129,
+      "mean_abs_reduction": 0.005533333333333334,
+      "mean_rel_reduction": 0.18624739417502575,
       "ci95_abs": [
         0.002933333333333334,
-        0.0086
+        0.008700000000000001
       ],
       "p_value": 1.0886373861415766e-05,
       "wins": 27
     },
     "ensemble": {
       "vs": "best-of-{degree,eigenvector,betweenness,greedy-blocking,acquaintance}",
-      "mean_abs_reduction": 0.003433333333333334,
-      "mean_rel_reduction": 0.060708341008263604,
+      "mean_abs_reduction": 0.0033,
+      "mean_rel_reduction": 0.08372930152922414,
       "ci95_abs": [
-        0.0012666666666666666,
-        0.0063
+        0.0014333333333333336,
+        0.005599999999999999
       ],
-      "p_value": 0.006223656151738119,
+      "p_value": 0.0021269398648426706,
       "wins": 19
     }
   }

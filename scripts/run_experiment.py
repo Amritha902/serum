@@ -54,7 +54,8 @@ def parse_args():
 def print_table(stats):
     order = [
         "no-defense", "random", "acquaintance", "degree", "eigenvector",
-        "betweenness", "greedy-blocking", "content-aware", "content-aware-oracle",
+        "betweenness", "greedy-blocking", "oracle-delay-5", "content-aware",
+        "content-aware-oracle",
     ]
     rows = [stats[n].summary() for n in order if n in stats]
     w = 22
@@ -82,7 +83,8 @@ def save_plot(curves, outdir):
 
     plt.figure(figsize=(8, 5))
     order = ["no-defense", "random", "acquaintance", "degree", "eigenvector",
-             "betweenness", "greedy-blocking", "content-aware", "content-aware-oracle"]
+             "betweenness", "greedy-blocking", "oracle-delay-5", "content-aware",
+             "content-aware-oracle"]
     styles = {
         "no-defense": ("#9e9e9e", "-"),
         "random": ("#b39ddb", "-"),
@@ -91,6 +93,7 @@ def save_plot(curves, outdir):
         "eigenvector": ("#4dd0e1", "-"),
         "betweenness": ("#4db6ac", "-"),
         "greedy-blocking": ("#66bb6a", "-"),
+        "oracle-delay-5": ("#ff9800", "-"),
         "content-aware": ("#e53935", "-"),
         "content-aware-oracle": ("#e53935", "--"),
     }

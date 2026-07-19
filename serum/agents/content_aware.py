@@ -80,6 +80,46 @@ class ContentAwareAgent:
         return actions
 
 
+class OracleAfterDelay:
+    """The realistic competitor: threat intelligence identifies the exploit only
+    after a fixed delay. Before the signature arrives the defender acts blindly
+    (degree-based frontier isolation); once it arrives (t >= delay) it defends
+    the true vulnerable subgraph exactly, like the oracle.
+
+    SERUM's content-aware agent should beat this: inferring the exploit online
+    from the outbreak is worth more than waiting for a signature to be published.
+    """
+
+    def __init__(self, delay: int = 5):
+        self.delay = int(delay)
+
+    @property
+    def name(self):
+        return f"oracle-delay-{self.delay}"
+
+    def __call__(self, env, obs):
+        front = frontier(env)
+        if not front:
+            return []
+        k = min(env.budget_per_step, len(front))
+        if obs.t < self.delay:
+            # blind phase: structure-only (degree) frontier isolation
+            front.sort(key=lambda v: env.g.degree(v), reverse=True)
+            return [Action.isolate(v) for v in front[:k]]
+        # intel arrived: patch the true exposed-vulnerable frontier
+        cve = env.payload.cve
+        def exposed(v):
+            if cve not in env.g.nodes[v]["vuln"]:
+                return 0
+            return sum(1 for w in env.g.neighbors(v)
+                       if env.status[w] == Status.SUSCEPTIBLE
+                       and w not in env.patched and cve in env.g.nodes[w]["vuln"])
+        scored = [(exposed(v), v) for v in front]
+        scored = [(s, v) for s, v in scored if s > 0]
+        scored.sort(reverse=True)
+        return [Action.patch(v) for _, v in scored[:k]]
+
+
 class OracleContentAware:
     """Upper bound: the same agent handed the true CVE (full observability).
 

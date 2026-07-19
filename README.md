@@ -94,13 +94,21 @@ with the topological hubs, which is where content-awareness pays off.
 |---|---:|---:|---:|
 | no-defense | 14.0% | 100.0% | 10.5 |
 | degree immunization *(best structural)* | 1.5% | 96.9% | 3.1 |
-| **content-aware** | **0.9%** | **98.7%** | **2.0** |
+| oracle-after-delay *(threat intel at t=5)* | 1.4% | 97.3% | 2.9 |
+| **content-aware** | **0.9%** | **98.3%** | **2.0** |
 
 - vs the best fixed baseline: **−18.6% infection, Wilcoxon p = 1.1×10⁻⁵**.
-- vs the per-trial **ensemble oracle**: **−6.1%, p = 0.006** — on real data the
+- vs the per-trial **ensemble oracle**: **−8.4%, p = 0.002** — on real data the
   content-aware agent beats even the oracle that cherry-picks the best structural
   heuristic per outbreak (which it *cannot* do on synthetic data), because real
   software zones genuinely diverge from topological centrality.
+- vs the **oracle-after-delay** (the realistic competitor that receives the true
+  signature at t=5): content-aware wins — **inferring the exploit online beats
+  waiting for threat intel to arrive.**
+
+The exploit belief uses a **soft likelihood** robust to detection noise: a single
+false-positive infection cannot wrongly exclude the true CVE (the failure mode of
+hard consistency filtering) — see `tests/test_sim.py`.
 
 ---
 

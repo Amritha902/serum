@@ -14,7 +14,11 @@ from typing import Callable
 
 import numpy as np
 
-from serum.agents.content_aware import ContentAwareAgent, OracleContentAware
+from serum.agents.content_aware import (
+    ContentAwareAgent,
+    OracleAfterDelay,
+    OracleContentAware,
+)
 from serum.baselines.heuristics import (
     AcquaintanceDefense,
     BetweennessDefense,
@@ -111,6 +115,7 @@ def default_policies(g, rng):
         EigenvectorDefense(),
         BetweennessDefense(),
         GreedyBlockingDefense(),
+        OracleAfterDelay(delay=5),            # realistic: threat intel arrives late
         ContentAwareAgent(g),                 # ours, partial observation
         OracleContentAware(patch=True),       # ours, full-observation upper bound
     ]

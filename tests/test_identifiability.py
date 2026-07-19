@@ -97,3 +97,15 @@ def test_evasive_payload_is_confusable_but_spreads():
     assert ev.cve in range(3)
     score = payload_identifiability_score(g, 0)
     assert score["n_confusers"] == 1 and not score["identifiable"]
+
+
+def test_spread_bounds_anonymity_prop4():
+    """Proposition 4: for every CVE, #confusers <= N(S/n) - 1 (the spread bound).
+    This is a theorem, so it must hold for every exploit in any network."""
+    import numpy as np
+    from serum.sim.network import generate_network
+    from serum.inference.identifiability import duality_table
+    g = generate_network(n=300, n_cves=16, vuln_lambda=5, popularity_alpha=0.7,
+                         rng=np.random.default_rng(0))
+    rows = duality_table(g)
+    assert rows and all(r["satisfies_bound"] for r in rows)

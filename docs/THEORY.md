@@ -109,6 +109,39 @@ Proposition 3), a condition a defender can *evaluate in advance* from its asset
 inventory. That checkability — and its coupling to the containment policy — is
 the contribution.
 
+## Spread bounds anonymity (a one-sided result — stated honestly)
+
+It is tempting to claim a clean "spread–anonymity duality" (a worm cannot both
+spread and hide). **The data does not support the strong version, so we state the
+weaker, correct one.**
+
+**Proposition 4 (spread bounds anonymity).** For an exploit `c` with reachable
+vulnerable component `R` of size `S(c)=|R|`, the number of confusers obeys
+`|confusers(c)| ≤ N(S(c)/n) − 1`, where `N(π) = #{c' : prevalence(c') ≥ π}` is the
+prevalence complementary count. In particular, since every confuser `c'` must
+satisfy `R ⊆ carriers(c')` and hence `prevalence(c') ≥ S(c)/n`, an exploit that
+saturates a large fraction of the fleet is forced toward identifiability: if
+`S(c)/n` exceeds the second-largest CVE prevalence, `c` is uniquely identifiable.
+
+**Proof.** Each confuser `c'` satisfies `R ⊆ carriers(c')` (Prop. 3), so
+`|carriers(c')| ≥ |R| = S(c)`, i.e. `prevalence(c') ≥ S(c)/n`. The confusers are
+therefore a subset of `{c' ≠ c : prevalence(c') ≥ S(c)/n}`, whose size is
+`N(S(c)/n) − 1` (excluding `c` itself, which also lies in the set). ∎
+
+**What is NOT true (and why).** Anonymity is *not* monotonically decreasing in
+spread. Empirically (`scripts/duality.py`, 480 real-CVE exploits) the spread–
+anonymity correlation is mildly **positive** (≈ +0.34), and anonymity *peaks at
+moderate prevalence*: a confuser must be a *more-prevalent* CVE whose carriers
+nest the victims, so both very rare exploits (few CVEs prevalent enough to nest
+them) and near-universal exploits (nothing more prevalent) have few confusers.
+The bound in Prop. 4 is therefore **one-sided** — it binds only at the high-
+spread extreme, forcing wide outbreaks toward identifiability, while leaving
+low/moderate-spread exploits free to be anonymous. The honest operational
+takeaway is asymmetric: **a worm that chooses wide reach forfeits anonymity, but
+a stealthy worm can stay hidden** — so a defender is most certain of the exploit
+exactly when the outbreak is worst (large), which is when identification matters
+most. This asymmetry, not a symmetric duality, is the real result.
+
 ## Empirical validation
 
 `scripts/identifiability.py` builds real-NVD networks, computes

@@ -114,6 +114,54 @@ def identifiable_fraction(g: nx.Graph, seeds_by_cve=None) -> float:
     return ok / len(live)
 
 
+def spread_potential(g: nx.Graph, cve: int, seeds=None) -> int:
+    """S(c): the number of hosts a worm exploiting ``cve`` can reach (the size of
+    its reachable vulnerable component) -- the maximum outbreak size."""
+    return len(reachable_component(g, cve, seeds))
+
+
+def n_cves_at_least(g: nx.Graph, prevalence: float) -> int:
+    """N(pi): how many CVEs have prevalence >= pi. Non-increasing in pi."""
+    prev = _prevalence_vector(g)
+    return int((prev >= prevalence).sum())
+
+
+def _prevalence_vector(g: nx.Graph) -> np.ndarray:
+    n = g.graph["n_cves"]
+    counts = np.zeros(n)
+    for _, d in g.nodes(data=True):
+        for c in d["vuln"]:
+            counts[c] += 1
+    return counts / g.number_of_nodes()
+
+
+def anonymity_bound(g: nx.Graph, cve: int, seeds=None) -> int:
+    """The spread-anonymity duality bound: the number of confusers of ``cve`` is
+    at most N(S(c)/n) - 1, where N is the prevalence complementary count. Every
+    confuser c' satisfies R(c) subset carriers(c'), so prevalence(c') >= S(c)/n;
+    hence confusers are drawn only from CVEs at least that prevalent."""
+    s = spread_potential(g, cve, seeds)
+    if s == 0:
+        return g.graph["n_cves"] - 1
+    return n_cves_at_least(g, s / g.number_of_nodes()) - 1
+
+
+def duality_table(g: nx.Graph) -> list:
+    """Per-CVE (spread, anonymity, bound) for empirically validating the duality
+    theorem: anonymity <= bound must hold for every CVE, and the achievable
+    (spread, anonymity) frontier is downward-sloping."""
+    rows = []
+    for c in range(g.graph["n_cves"]):
+        if not carriers(g, c):
+            continue
+        s = spread_potential(g, c)
+        a = len(confusers(g, c))
+        rows.append({"cve": c, "spread": s, "spread_frac": s / g.number_of_nodes(),
+                     "anonymity": a, "bound": anonymity_bound(g, c),
+                     "satisfies_bound": a <= anonymity_bound(g, c)})
+    return rows
+
+
 def identifiability_report(g: nx.Graph) -> dict:
     """Per-CVE identifiability + residual confusers, plus the fleet summary."""
     n = g.graph["n_cves"]

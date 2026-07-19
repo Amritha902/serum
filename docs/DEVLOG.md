@@ -114,6 +114,25 @@ characterises *when* full identification is possible, but containment does not
 require it — a cleaner, more robust, and more honest thesis than the original
 framing. Paper claims adjusted accordingly.
 
+## Phase 7 — SR3 grill: does online inference earn its keep? (honest: barely)
+
+Tried to mitigate the existential review point (SR3: "containment needs no
+identification, so the inference machinery is unnecessary") by finding a regime
+where online inference dominates a frozen prior. Added `update_belief=False`
+(freeze belief at prior) as an ablation and swept regimes. **Result: online
+inference buys only +0.1–0.2 pts everywhere** — including the tight-budget,
+low-prevalence regime where it was predicted to matter most (there it was
++0.00 to +0.12 pt). Reason: Prop 3's over-coverage — the true victims are a
+*subset* of any consistent confuser's victims, so the belief-weighted defense
+covers them with or without identification; inference only trims wasted budget at
+the margin. **Honest conclusion (the fix is a reframe, not a regime):** the core
+contribution is *content-awareness + over-coverage robustness* (defend the
+vulnerable subgraph consistent with observations), NOT online exploit inference,
+which is a marginal refinement. The identifiability theorem stands as
+*theoretical* characterisation + the group-testing connection, decoupled from the
+empirical containment claim. This is uncomfortable but true; the paper's headline
+must move off "we infer the exploit."
+
 ## Missed fields found via grilling
 
 - **Group testing / separating systems / superimposed codes** (Dorfman 1943,

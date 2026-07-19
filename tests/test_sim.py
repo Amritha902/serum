@@ -241,3 +241,13 @@ def test_robust_agent_survives_heavy_poisoning():
         rob.append(e_rob.run(RobustAgent(env2.g)).infected_fraction)
         soft.append(e_soft.run(ContentAwareAgent(env2.g, belief_mode="soft")).infected_fraction)
     assert np.mean(rob) <= np.mean(soft)
+
+
+def test_belief_freeze_ablation_runs():
+    """update_belief=False freezes the belief at its prior (the 'no online
+    inference' ablation used to measure what inference buys)."""
+    env, _ = make_env()
+    ag = ContentAwareAgent(env.g, update_belief=False)
+    before = ag.belief.support_size()
+    env.run(ag)
+    assert ag.belief.support_size() == before      # belief never narrowed

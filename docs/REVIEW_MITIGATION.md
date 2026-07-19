@@ -131,6 +131,44 @@ hub-dominated backbone topologies where structure-only suffices. Reporting where
 the method does NOT help is the credible answer to R6, not a topology cherry-pick.
 This also mitigates R4-scale (ran at 6474 nodes, ~20s/20 trials).
 
+## Round 2 — what the revised paper now exposes (post-mitigation penalties)
+
+**SR3 (existential, self-inflicted).** The honest reframe "containment does not
+need identification" deflates the technical core: a POMDP + identifiability
+theorem + group-testing framing, then containment works without narrowing the
+belief. Reviewer: reduce it to "patch hosts sharing a profile with the infected"
+— where is the contribution?
+→ **Mitigation (real work):** find the regime where identification *does* drive
+containment — heterogeneous inventories where the *consistent-set* vulnerable
+subgraph diverges from the *true* one, so a wrong-but-consistent belief mis-defends
+and the agent must actually narrow. If such a regime exists and is realistic, the
+inference earns its keep; if not, honestly down-scope to "the simple method" and
+prove it beats the obvious alternatives. (Backlog P0.)
+
+**SR1 (scoping is a retreat).** Applicability now needs "software-monoculture
+zones that anti-correlate with centrality." Is there a REAL enterprise network
+with REAL host-vuln data that satisfies this?
+→ **Mitigation:** obtain/argue a real enterprise-inventory dataset; or measure
+the favorable-regime condition and show where real networks fall. (Backlog P1.)
+
+**SR2 (the win is a knob).** The advantage is a function of `homophily`, set by us.
+→ **Mitigation:** chart advantage vs a zone–hub *divergence* metric; locate real
+networks on that axis. Makes the knob a measured property, not a free parameter.
+
+**SR5 (self-designed attacks).** Robustness is vs attacks we built with our
+parameters; no adaptive adversary targeting the robust agent.
+→ **Mitigation:** an adaptive attacker that best-responds to the robust agent's
+audit rule.
+
+**SR6 (multiplicity).** Many p-values, no correction.
+→ **Mitigation:** Holm/Bonferroni across the headline claims; report family-wise.
+
+**SR7 (time-dependent data).** NVD snapshot depends on fetch date.
+→ **Mitigation:** pin a dated NVD snapshot in the repo; version it.
+
+**SR8 (muddled arc).** After the walk-backs, the positive takeaway is fuzzy.
+→ **Mitigation:** one-thesis rewrite around whatever survives SR3.
+
 ## Mitigation status
 
 - [x] R6 — real AS topology run; honest scope established (segmented nets only).

@@ -30,9 +30,13 @@ class ContentAwareAgent:
     name = "content-aware"
 
     def __init__(self, g, prior: str = "prevalence", patch_when_support_leq: int = 3,
-                 belief_mode: str = "soft", belief_noise: float = 0.03):
+                 belief_mode: str = "soft", belief_noise: float = 0.03,
+                 update_belief: bool = True):
         self.belief = CVEBelief(g, prior=prior, mode=belief_mode, noise=belief_noise)
         self.patch_threshold = patch_when_support_leq
+        # update_belief=False freezes the belief at its prior -> a "no online
+        # inference" ablation, to isolate what the inference actually buys.
+        self.update_belief = update_belief
         self._last_t = -1
 
     def _exposed_vuln_degree(self, env, v, posterior) -> float:
@@ -58,7 +62,8 @@ class ContentAwareAgent:
     def __call__(self, env, obs):
         # Update belief with the newest propagation evidence exactly once/step.
         if obs.t != self._last_t:
-            self.belief.update(obs.newly_infected, obs.seeds)
+            if self.update_belief:
+                self.belief.update(obs.newly_infected, obs.seeds)
             self._last_t = obs.t
 
         front = frontier(env)

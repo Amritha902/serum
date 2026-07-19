@@ -79,6 +79,64 @@ def generate_network(
     return g
 
 
+def assign_criticality(
+    g: nx.Graph,
+    alpha: float = 1.5,
+    value_max: float = 20.0,
+    cost_scales_with_value: bool = True,
+    rng: np.random.Generator | None = None,
+) -> nx.Graph:
+    """Attach heavy-tailed criticality to every host, in place.
+
+    Real fleets are lopsided: most hosts are commodity endpoints, a small
+    minority (crown-jewel databases, domain controllers, payment gateways) matter
+    disproportionately. We draw ``value(v)`` from a Zipf-like tail so a few
+    hosts dominate the *blast radius* of any outbreak, and set the isolation
+    cost ``cost_isolate(v)`` in proportion (taking a critical host offline hurts
+    more than isolating a laptop).
+
+    Parameters
+    ----------
+    alpha : shape of the value tail (Pareto exponent + 1). Higher = flatter,
+        lower = more skew. 1.5 gives a moderately heavy tail.
+    value_max : cap on any single host's value (avoid runaway outliers).
+    cost_scales_with_value : if True, ``cost_isolate = value``. Otherwise
+        every host has cost 1 (so budget = action count as before).
+
+    The network's total value is stored on ``g.graph["total_value"]`` and total
+    isolation cost on ``g.graph["total_cost"]`` for downstream metrics.
+    """
+    rng = rng or np.random.default_rng()
+    total_value = 0.0
+    total_cost = 0.0
+    for v in g.nodes():
+        # Pareto tail, shifted so minimum value is 1.0.
+        val = 1.0 + rng.pareto(alpha)
+        val = float(min(val, value_max))
+        g.nodes[v]["value"] = val
+        cost = val if cost_scales_with_value else 1.0
+        g.nodes[v]["cost_isolate"] = float(cost)
+        total_value += val
+        total_cost += cost
+    g.graph["total_value"] = float(total_value)
+    g.graph["total_cost"] = float(total_cost)
+    return g
+
+
+def total_value(g: nx.Graph) -> float:
+    """Sum of host ``value`` attributes, defaulting to n if unset."""
+    if "total_value" in g.graph:
+        return float(g.graph["total_value"])
+    return float(sum(d.get("value", 1.0) for _, d in g.nodes(data=True)))
+
+
+def total_cost(g: nx.Graph) -> float:
+    """Sum of host ``cost_isolate`` attributes, defaulting to n if unset."""
+    if "total_cost" in g.graph:
+        return float(g.graph["total_cost"])
+    return float(sum(d.get("cost_isolate", 1.0) for _, d in g.nodes(data=True)))
+
+
 def cve_prevalence(g: nx.Graph) -> np.ndarray:
     """Return the fraction of hosts vulnerable to each CVE id."""
     n_cves = g.graph["n_cves"]

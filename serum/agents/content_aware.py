@@ -31,18 +31,23 @@ class ContentAwareAgent:
 
     def __init__(self, g, prior: str = "prevalence", patch_when_support_leq: int = 3,
                  belief_mode: str = "soft", belief_noise: float = 0.03,
-                 update_belief: bool = True):
+                 update_belief: bool = True, value_weighted: bool = False):
         self.belief = CVEBelief(g, prior=prior, mode=belief_mode, noise=belief_noise)
         self.patch_threshold = patch_when_support_leq
         # update_belief=False freezes the belief at its prior -> a "no online
         # inference" ablation, to isolate what the inference actually buys.
         self.update_belief = update_belief
+        # value_weighted=True steers the score by downstream host *value*
+        # (criticality), so budget preferentially protects branches whose
+        # blast radius would be largest. With uniform value it is identical.
+        self.value_weighted = bool(value_weighted)
         self._last_t = -1
 
     def _exposed_vuln_degree(self, env, v, posterior) -> float:
         """Belief-weighted count of susceptible neighbours this host could
         infect: sum over CVEs c of P(c) * 1[v carries c] * (# susceptible
-        neighbours that also carry c)."""
+        neighbours that also carry c). If ``value_weighted``, each susceptible
+        neighbour contributes its criticality ``value(w)`` instead of 1."""
         g = env.g
         v_vuln = defender_vuln(g, v)          # defender's (maybe imperfect) view
         # Only CVEs that v itself carries can make v a spreader.
@@ -54,9 +59,10 @@ class ContentAwareAgent:
             if env.status[w] != Status.SUSCEPTIBLE or w in env.patched:
                 continue
             w_vuln = defender_vuln(g, w)
+            weight = float(g.nodes[w].get("value", 1.0)) if self.value_weighted else 1.0
             for c in cand:
                 if c in w_vuln:
-                    score += posterior[c]
+                    score += posterior[c] * weight
         return score
 
     def __call__(self, env, obs):

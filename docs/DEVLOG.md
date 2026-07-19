@@ -147,10 +147,57 @@ Docs: RESEARCH.md (12-novelty register), THEORY.md (theorems), LITERATURE_REVIEW
 (6 themes, verified), RELATED_WORK.md (audit), this DEVLOG. Paper draft:
 paper/serum.tex. Experiment outputs: results/ (JSON + figures).
 
+## Phase 8 — Cost & blast-radius objectives
+
+Real fleets are lopsided: a handful of hosts (crown-jewel DBs, DCs, payment
+gateways) matter far more than the rest. Fraction infected is not the right
+objective in that regime. Added heavy-tailed host `value` + isolation `cost`
+(`sim.network.assign_criticality`, Pareto tail), two new metrics on
+`EpisodeResult` (`blast_radius` = fraction of total value ever infected;
+`cost_availability` = 1 − fraction of total isolation cost spent), and an
+optional cost-budget mode on `ContainmentEnv` (`cost_budget=True`, isolation of
+host v consumes `cost_isolate(v)` units). Defaults preserve backward
+compatibility — with no criticality attached, `blast_radius == infected_fraction`
+and `cost_availability == availability` (both properties tested).
+
+Steering: added a `value_weighted` flag to `ContentAwareAgent` — each
+susceptible neighbour contributes its `value` to the exposed-vulnerable-degree
+score, so budget preferentially cuts off branches whose blast radius would be
+largest. Experiment (`scripts/blast_radius.py`, 30 paired trials on real-CVE
+networks, α=1.2 Pareto criticality, value_max=100, budget=2):
+
+| policy | inf% | blast% | avail% | cost_av% |
+|---|---|---|---|---|
+| no-defense | 21.27 | 19.77 | 100 | 100 |
+| degree | 18.08 | 16.60 | 94.93 | 95.33 |
+| content-aware | 10.49 | 9.33 | 98.35 | 98.63 |
+| **content-aware+value** | **11.32** | **8.33** | **98.39** | **98.93** |
+
+**Paired steering effect** (`content-aware+value` − `content-aware`):
+- `blast_radius`: **−1.00pp** (95% CI [−1.82, −0.19], 18/30 wins) — significant.
+- `infected_fraction`: **+0.83pp** (95% CI [+0.33, +1.35], 5/30 wins).
+
+The trade is real, not free: you buy a ~1pp reduction on the value-weighted
+objective by paying ~0.8pp on the plain outbreak count. The point of the item
+is that this trade is now *available* — the defender can steer under a
+different objective and the framework supports it end-to-end.
+
+**Grilled honestly.** (1) Effect requires meaningfully skewed criticality: with
+`value_max=20` the CI straddles 0 (checked). Real fleets ARE skewed, so this is
+a fair regime, not a fudge. (2) It is a trade-off, not a Pareto improvement —
+protecting value costs a little on raw infection count. (3) The mechanism is
+myopic (weights next-hop neighbour values only), so improvements come from
+protecting hosts that would infect a high-value host in the *next* step, not
+from global reasoning about downstream chains. A tree-lookahead or influence-
+maximisation variant could plausibly do better; not attempted this iteration.
+(4) `cost_budget=True` is implemented and tested but the headline experiment
+runs with `cost_budget=False`, to isolate the effect of the value-weighted
+score from the effect of a cost-metered budget. Both together is an open
+combination.
+
 ## Open / next
 
 - Application framing: **IoT botnet** (device-firmware zones, DDoS blast radius).
-- Objectives beyond availability: **cost** and **blast radius** (host criticality).
 - Poison-robust defense: attack detection / budget-hedging (motivated by Phase 4).
 - Multi-exploit / polymorphic payloads (hidden state = exploit *set*).
 - Optimal-stopping: when to commit to acting vs keep watching (inference races spread).

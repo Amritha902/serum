@@ -81,6 +81,10 @@ class EpisodeResult:
     trace: list                  # per-step infected counts (for plots)
     payload_cve: int
     map_cve_correct: Optional[bool] = None  # did the belief's MAP match truth?
+    # Value-weighted metrics. Default to their unweighted twins when no
+    # criticality is attached (every host has value/cost 1.0).
+    blast_radius: float = 0.0            # fraction of total host value ever infected
+    cost_availability: float = 1.0       # 1 - fraction of total isolation cost spent
 
 
 # A policy maps (env, observation) -> chosen actions (respecting the budget).
@@ -98,6 +102,7 @@ class ContainmentEnv:
         isolation_penalty: float = 1.0,
         recovery_time: int = 0,
         decoys=None,
+        cost_budget: bool = False,
         rng: np.random.Generator | None = None,
     ):
         self.g0 = g
@@ -113,6 +118,10 @@ class ContainmentEnv:
         # recovery_time == 0 -> SI (no recovery); > 0 -> SIR (a host that has been
         # infected for this many steps is cleaned and becomes immune).
         self.recovery_time = int(recovery_time)
+        # cost_budget=False (default): every action costs 1 unit of budget (count).
+        # cost_budget=True: isolation of host v consumes ``cost_isolate(v)`` units;
+        # patching / segmenting stay at 1 unit each (cheap policy actions).
+        self.cost_budget = bool(cost_budget)
         self.rng = rng or np.random.default_rng()
         self.reset()
 
@@ -235,13 +244,23 @@ class ContainmentEnv:
                 self.status[v] = Status.RECOVERED
                 self._infected.discard(v)
 
+    def _action_cost(self, action: Action) -> float:
+        if not self.cost_budget:
+            return 1.0
+        if action.kind == "isolate":
+            return float(self.g.nodes[action.target].get("cost_isolate", 1.0))
+        return 1.0
+
     def step(self, actions: list) -> Observation:
-        budget = self.budget_per_step
+        budget = float(self.budget_per_step)
         for action in actions:
             if budget <= 0:
                 break
+            cost = self._action_cost(action)
+            if cost > budget:
+                continue  # skip actions we cannot afford; keep looking
             if self._apply(action):
-                budget -= 1
+                budget -= cost
                 self.budget_spent += 1
         self._newly = self._spread_once()
         self._recover()
@@ -264,6 +283,25 @@ class ContainmentEnv:
         # every host that was ever infected (spreading, recovered, or isolated
         # while infected) -- the true outbreak size, robust to SIR and isolation.
         ever_infected = len(self._ever)
+        # Value-weighted metrics: what fraction of *criticality* was hit
+        # (blast radius) and what fraction of *isolation-cost* the defender
+        # spent taking hosts offline. When no criticality is attached, both
+        # collapse to their unweighted twins.
+        val_total = 0.0
+        val_hit = 0.0
+        cost_total = 0.0
+        cost_iso = 0.0
+        for u, d in self.g.nodes(data=True):
+            val = float(d.get("value", 1.0))
+            cost = float(d.get("cost_isolate", 1.0))
+            val_total += val
+            cost_total += cost
+            if u in self._ever:
+                val_hit += val
+            if u in self.isolated:
+                cost_iso += cost
+        blast = val_hit / val_total if val_total > 0 else 0.0
+        cost_av = 1.0 - (cost_iso / cost_total if cost_total > 0 else 0.0)
         return EpisodeResult(
             infected_fraction=ever_infected / self.n,
             final_infected=len(self._infected),
@@ -272,4 +310,6 @@ class ContainmentEnv:
             budget_spent=self.budget_spent,
             trace=list(self.trace),
             payload_cve=self.payload.cve,
+            blast_radius=blast,
+            cost_availability=cost_av,
         )

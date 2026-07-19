@@ -1,0 +1,886 @@
+{
+  "spec": {
+    "n": 500,
+    "n_cves": 40,
+    "homophily": 0.4,
+    "band": [
+      0.15,
+      0.55
+    ],
+    "trials": 30,
+    "criticality_alpha": 1.2,
+    "value_max": 100.0
+  },
+  "summary": {
+    "no-defense": {
+      "infected_fraction": {
+        "mean": 0.21266666666666667,
+        "se": 0.021792402627074794
+      },
+      "blast_radius": {
+        "mean": 0.19770924954678976,
+        "se": 0.0221271459593114
+      },
+      "availability": {
+        "mean": 1.0,
+        "se": 0.0
+      },
+      "cost_availability": {
+        "mean": 1.0,
+        "se": 0.0
+      }
+    },
+    "degree": {
+      "infected_fraction": {
+        "mean": 0.18080000000000002,
+        "se": 0.020616609752846113
+      },
+      "blast_radius": {
+        "mean": 0.16604120163964994,
+        "se": 0.02100902737259691
+      },
+      "availability": {
+        "mean": 0.9493333333333334,
+        "se": 0.00260385802768747
+      },
+      "cost_availability": {
+        "mean": 0.9532783849393783,
+        "se": 0.004202042977549149
+      }
+    },
+    "content-aware": {
+      "infected_fraction": {
+        "mean": 0.10493333333333331,
+        "se": 0.015405248645307701
+      },
+      "blast_radius": {
+        "mean": 0.09328317530190275,
+        "se": 0.013261235806724801
+      },
+      "availability": {
+        "mean": 0.9834666666666666,
+        "se": 0.002723981759915529
+      },
+      "cost_availability": {
+        "mean": 0.9863494077521151,
+        "se": 0.0028570146001019405
+      }
+    },
+    "content-aware+value": {
+      "infected_fraction": {
+        "mean": 0.1132,
+        "se": 0.0169330256103816
+      },
+      "blast_radius": {
+        "mean": 0.0833072722389221,
+        "se": 0.011239130259349578
+      },
+      "availability": {
+        "mean": 0.9838666666666666,
+        "se": 0.0027222933761910477
+      },
+      "cost_availability": {
+        "mean": 0.9892914385747411,
+        "se": 0.0016305967659562565
+      }
+    }
+  },
+  "paired_steer_blast": {
+    "mean": -0.009975903062980651,
+    "ci95": [
+      -0.018212079071270704,
+      -0.0018948639186956511
+    ],
+    "wins": 18
+  },
+  "paired_steer_infected": {
+    "mean": 0.008266666666666667,
+    "ci95": [
+      0.003333333333333334,
+      0.013466666666666667
+    ],
+    "wins": 5
+  },
+  "rows": [
+    {
+      "no-defense": {
+        "infected_fraction": 0.092,
+        "blast_radius": 0.0912830338031912,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.078,
+        "blast_radius": 0.08744302314380879,
+        "availability": 0.968,
+        "cost_availability": 0.9809523239305606
+      },
+      "content-aware": {
+        "infected_fraction": 0.064,
+        "blast_radius": 0.07203699215243048,
+        "availability": 0.968,
+        "cost_availability": 0.9837549764478726
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.048,
+        "blast_radius": 0.0650731662336014,
+        "availability": 0.976,
+        "cost_availability": 0.9899735932610322
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.228,
+        "blast_radius": 0.19375800072208432,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.196,
+        "blast_radius": 0.17145458984443568,
+        "availability": 0.952,
+        "cost_availability": 0.9634486176742204
+      },
+      "content-aware": {
+        "infected_fraction": 0.064,
+        "blast_radius": 0.056317708997225505,
+        "availability": 0.992,
+        "cost_availability": 0.9963752901055186
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.116,
+        "blast_radius": 0.08977242129304273,
+        "availability": 0.996,
+        "cost_availability": 0.9980621162751784
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.29,
+        "blast_radius": 0.25304290274113755,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.214,
+        "blast_radius": 0.1919728273838418,
+        "availability": 0.948,
+        "cost_availability": 0.9512030746603893
+      },
+      "content-aware": {
+        "infected_fraction": 0.152,
+        "blast_radius": 0.1283157440164025,
+        "availability": 0.996,
+        "cost_availability": 0.9924224788586192
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.166,
+        "blast_radius": 0.09828891839800513,
+        "availability": 0.996,
+        "cost_availability": 0.9928117421134183
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.35,
+        "blast_radius": 0.42081328892300035,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.306,
+        "blast_radius": 0.3327577196485,
+        "availability": 0.952,
+        "cost_availability": 0.9515461054329235
+      },
+      "content-aware": {
+        "infected_fraction": 0.21,
+        "blast_radius": 0.20525958229216257,
+        "availability": 0.996,
+        "cost_availability": 0.9975789672925593
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.236,
+        "blast_radius": 0.17792653097994462,
+        "availability": 0.996,
+        "cost_availability": 0.9974008818372014
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.126,
+        "blast_radius": 0.1347708896965443,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.084,
+        "blast_radius": 0.04805122555024638,
+        "availability": 0.96,
+        "cost_availability": 0.9755446253933148
+      },
+      "content-aware": {
+        "infected_fraction": 0.05,
+        "blast_radius": 0.02974664949702862,
+        "availability": 0.992,
+        "cost_availability": 0.9961000775045674
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.05,
+        "blast_radius": 0.02922500035674497,
+        "availability": 0.992,
+        "cost_availability": 0.9961000775045674
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.154,
+        "blast_radius": 0.0941848693908998,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.112,
+        "blast_radius": 0.06997006524847711,
+        "availability": 0.948,
+        "cost_availability": 0.9440910596258318
+      },
+      "content-aware": {
+        "infected_fraction": 0.032,
+        "blast_radius": 0.024828085553534027,
+        "availability": 0.992,
+        "cost_availability": 0.9976651830928621
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.046,
+        "blast_radius": 0.02945053517080643,
+        "availability": 0.992,
+        "cost_availability": 0.9940788436498597
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.18,
+        "blast_radius": 0.1645925217424813,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.172,
+        "blast_radius": 0.15912786808877621,
+        "availability": 0.94,
+        "cost_availability": 0.939471943038539
+      },
+      "content-aware": {
+        "infected_fraction": 0.09,
+        "blast_radius": 0.08244765042758703,
+        "availability": 0.964,
+        "cost_availability": 0.9617495888304348
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.102,
+        "blast_radius": 0.07770337372612883,
+        "availability": 0.964,
+        "cost_availability": 0.9774877776027626
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.148,
+        "blast_radius": 0.1040631646636789,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.112,
+        "blast_radius": 0.08545130848536142,
+        "availability": 0.96,
+        "cost_availability": 0.9141829794145758
+      },
+      "content-aware": {
+        "infected_fraction": 0.042,
+        "blast_radius": 0.040366715905530544,
+        "availability": 0.996,
+        "cost_availability": 0.9984576210295046
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.04,
+        "blast_radius": 0.039177568609866466,
+        "availability": 0.996,
+        "cost_availability": 0.9984423497764989
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.156,
+        "blast_radius": 0.1297308153884725,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.148,
+        "blast_radius": 0.12985999108272403,
+        "availability": 0.94,
+        "cost_availability": 0.9527044689497163
+      },
+      "content-aware": {
+        "infected_fraction": 0.098,
+        "blast_radius": 0.09270096025337494,
+        "availability": 0.964,
+        "cost_availability": 0.9756943597443923
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.098,
+        "blast_radius": 0.06759227312550276,
+        "availability": 0.968,
+        "cost_availability": 0.9704881849397552
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.212,
+        "blast_radius": 0.18992776860720584,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.186,
+        "blast_radius": 0.17468107876783556,
+        "availability": 0.924,
+        "cost_availability": 0.952321952483296
+      },
+      "content-aware": {
+        "infected_fraction": 0.076,
+        "blast_radius": 0.0790815199516893,
+        "availability": 0.964,
+        "cost_availability": 0.9763610541430836
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.08,
+        "blast_radius": 0.09573728076152153,
+        "availability": 0.964,
+        "cost_availability": 0.9824220341556604
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.192,
+        "blast_radius": 0.21774769984637676,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.142,
+        "blast_radius": 0.1603113469520403,
+        "availability": 0.968,
+        "cost_availability": 0.9774129299680557
+      },
+      "content-aware": {
+        "infected_fraction": 0.124,
+        "blast_radius": 0.14992462240775858,
+        "availability": 0.996,
+        "cost_availability": 0.9959276141339426
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.124,
+        "blast_radius": 0.09541351034805523,
+        "availability": 0.996,
+        "cost_availability": 0.9831206211855853
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.276,
+        "blast_radius": 0.2433554834555673,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.23,
+        "blast_radius": 0.21097757113754928,
+        "availability": 0.94,
+        "cost_availability": 0.901221701338317
+      },
+      "content-aware": {
+        "infected_fraction": 0.116,
+        "blast_radius": 0.09892988324369875,
+        "availability": 0.972,
+        "cost_availability": 0.9796802465980672
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.12,
+        "blast_radius": 0.10023647103183649,
+        "availability": 0.968,
+        "cost_availability": 0.9834783817268427
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.48,
+        "blast_radius": 0.3883199282644445,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.448,
+        "blast_radius": 0.3720536223047096,
+        "availability": 0.956,
+        "cost_availability": 0.9751040694710247
+      },
+      "content-aware": {
+        "infected_fraction": 0.366,
+        "blast_radius": 0.28103219710931765,
+        "availability": 0.996,
+        "cost_availability": 0.9973597247855766
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.392,
+        "blast_radius": 0.2526582471052499,
+        "availability": 0.996,
+        "cost_availability": 0.9973597247855766
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.268,
+        "blast_radius": 0.3152340937823563,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.17,
+        "blast_radius": 0.18885890833458338,
+        "availability": 0.944,
+        "cost_availability": 0.9551692038395105
+      },
+      "content-aware": {
+        "infected_fraction": 0.058,
+        "blast_radius": 0.04125270562221033,
+        "availability": 0.98,
+        "cost_availability": 0.9828034873832245
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.066,
+        "blast_radius": 0.04683959234626963,
+        "availability": 0.972,
+        "cost_availability": 0.9805191244168578
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.518,
+        "blast_radius": 0.4609174801865167,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.488,
+        "blast_radius": 0.4430876783285131,
+        "availability": 0.948,
+        "cost_availability": 0.9752154950477553
+      },
+      "content-aware": {
+        "infected_fraction": 0.35,
+        "blast_radius": 0.24723284479038957,
+        "availability": 0.996,
+        "cost_availability": 0.9983620963619927
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.386,
+        "blast_radius": 0.2273213826528724,
+        "availability": 0.996,
+        "cost_availability": 0.9981889115198445
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.288,
+        "blast_radius": 0.3195555093301428,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.25,
+        "blast_radius": 0.287410743869027,
+        "availability": 0.9359999999999999,
+        "cost_availability": 0.9561593816905632
+      },
+      "content-aware": {
+        "infected_fraction": 0.128,
+        "blast_radius": 0.15451649606136125,
+        "availability": 0.96,
+        "cost_availability": 0.9277207603557632
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.142,
+        "blast_radius": 0.1166892274058665,
+        "availability": 0.952,
+        "cost_availability": 0.9719467912883024
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.266,
+        "blast_radius": 0.24602937254676788,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.22,
+        "blast_radius": 0.2033346366641727,
+        "availability": 0.924,
+        "cost_availability": 0.9454319006852427
+      },
+      "content-aware": {
+        "infected_fraction": 0.14,
+        "blast_radius": 0.12970312919637184,
+        "availability": 0.996,
+        "cost_availability": 0.9972285280873416
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.148,
+        "blast_radius": 0.1014714362937188,
+        "availability": 0.996,
+        "cost_availability": 0.99692459443966
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.06,
+        "blast_radius": 0.04741036535836822,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.06,
+        "blast_radius": 0.04741036535836822,
+        "availability": 0.964,
+        "cost_availability": 0.962731757642161
+      },
+      "content-aware": {
+        "infected_fraction": 0.042,
+        "blast_radius": 0.02525712947325165,
+        "availability": 0.992,
+        "cost_availability": 0.9881603429724566
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.036,
+        "blast_radius": 0.02288857566097757,
+        "availability": 0.992,
+        "cost_availability": 0.9921762432696528
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.09,
+        "blast_radius": 0.06436812205045188,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.078,
+        "blast_radius": 0.051442932627858914,
+        "availability": 0.964,
+        "cost_availability": 0.9842433394403749
+      },
+      "content-aware": {
+        "infected_fraction": 0.052,
+        "blast_radius": 0.036790251320071354,
+        "availability": 0.996,
+        "cost_availability": 0.9981583179859695
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.048,
+        "blast_radius": 0.033545174990064715,
+        "availability": 0.996,
+        "cost_availability": 0.9978322207463479
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.322,
+        "blast_radius": 0.35396074921641985,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.296,
+        "blast_radius": 0.33625211344929123,
+        "availability": 0.9319999999999999,
+        "cost_availability": 0.9383591680089066
+      },
+      "content-aware": {
+        "infected_fraction": 0.108,
+        "blast_radius": 0.15687449895703903,
+        "availability": 0.952,
+        "cost_availability": 0.9707637977303648
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.094,
+        "blast_radius": 0.08753901138207652,
+        "availability": 0.968,
+        "cost_availability": 0.9791298081096236
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.074,
+        "blast_radius": 0.0843596783673725,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.056,
+        "blast_radius": 0.04691508876156549,
+        "availability": 0.976,
+        "cost_availability": 0.9850475540890791
+      },
+      "content-aware": {
+        "infected_fraction": 0.038,
+        "blast_radius": 0.03178485141552722,
+        "availability": 0.996,
+        "cost_availability": 0.996688155966578
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.046,
+        "blast_radius": 0.039329013457413374,
+        "availability": 0.996,
+        "cost_availability": 0.9971173269289413
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.322,
+        "blast_radius": 0.30810825074553766,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.316,
+        "blast_radius": 0.30542670696187946,
+        "availability": 0.948,
+        "cost_availability": 0.9186297456400755
+      },
+      "content-aware": {
+        "infected_fraction": 0.168,
+        "blast_radius": 0.15237392443245137,
+        "availability": 0.964,
+        "cost_availability": 0.9725559013612572
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.2,
+        "blast_radius": 0.17424180926320695,
+        "availability": 0.952,
+        "cost_availability": 0.9749985323020969
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.22,
+        "blast_radius": 0.2537483647395677,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.212,
+        "blast_radius": 0.2506664090148981,
+        "availability": 0.944,
+        "cost_availability": 0.9321611701162601
+      },
+      "content-aware": {
+        "infected_fraction": 0.118,
+        "blast_radius": 0.17006948584263287,
+        "availability": 0.956,
+        "cost_availability": 0.966755585017905
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.132,
+        "blast_radius": 0.10794912148970176,
+        "availability": 0.964,
+        "cost_availability": 0.9797936564437555
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.138,
+        "blast_radius": 0.11735634167921423,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.116,
+        "blast_radius": 0.093838435750379,
+        "availability": 0.948,
+        "cost_availability": 0.9607179149068772
+      },
+      "content-aware": {
+        "infected_fraction": 0.07,
+        "blast_radius": 0.04586056532768097,
+        "availability": 0.976,
+        "cost_availability": 0.9763224481456325
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.074,
+        "blast_radius": 0.05272807207569589,
+        "availability": 0.976,
+        "cost_availability": 0.9813241199846104
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.122,
+        "blast_radius": 0.08560070542079756,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.084,
+        "blast_radius": 0.057079344803765385,
+        "availability": 0.94,
+        "cost_availability": 0.9414453597989063
+      },
+      "content-aware": {
+        "infected_fraction": 0.028,
+        "blast_radius": 0.019628398396285808,
+        "availability": 0.988,
+        "cost_availability": 0.9870391232930857
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.028,
+        "blast_radius": 0.019628398396285808,
+        "availability": 0.988,
+        "cost_availability": 0.9944477563314824
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.058,
+        "blast_radius": 0.04917868452703757,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.038,
+        "blast_radius": 0.01869065128265437,
+        "availability": 0.972,
+        "cost_availability": 0.9859017725271592
+      },
+      "content-aware": {
+        "infected_fraction": 0.03,
+        "blast_radius": 0.013373663157655414,
+        "availability": 0.988,
+        "cost_availability": 0.9890751944295475
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.03,
+        "blast_radius": 0.017504835878745947,
+        "availability": 0.988,
+        "cost_availability": 0.9934246817814404
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.346,
+        "blast_radius": 0.31802410724043256,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.296,
+        "blast_radius": 0.26493257091149913,
+        "availability": 0.924,
+        "cost_availability": 0.9347355154793362
+      },
+      "content-aware": {
+        "infected_fraction": 0.178,
+        "blast_radius": 0.14796894895027918,
+        "availability": 0.996,
+        "cost_availability": 0.9983363691635027
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.182,
+        "blast_radius": 0.14393704369293203,
+        "availability": 0.996,
+        "cost_availability": 0.9979226219952282
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.03,
+        "blast_radius": 0.01530538889291448,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.038,
+        "blast_radius": 0.022311387512913432,
+        "availability": 0.968,
+        "cost_availability": 0.9762708102042189
+      },
+      "content-aware": {
+        "infected_fraction": 0.026,
+        "blast_radius": 0.013583408158403344,
+        "availability": 0.992,
+        "cost_availability": 0.9966844996096488
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.026,
+        "blast_radius": 0.013342298344202697,
+        "availability": 0.992,
+        "cost_availability": 0.9966844996096488
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.158,
+        "blast_radius": 0.09224046822938108,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.11,
+        "blast_radius": 0.06302980039300245,
+        "availability": 0.952,
+        "cost_availability": 0.9560154799914088
+      },
+      "content-aware": {
+        "infected_fraction": 0.044,
+        "blast_radius": 0.019596372003455223,
+        "availability": 0.996,
+        "cost_availability": 0.9989778396616751
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.052,
+        "blast_radius": 0.021250143588679576,
+        "availability": 0.996,
+        "cost_availability": 0.989836125923993
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.216,
+        "blast_radius": 0.17428943684532847,
+        "availability": 1.0,
+        "cost_availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.168,
+        "blast_radius": 0.10643603752681993,
+        "availability": 0.94,
+        "cost_availability": 0.9109101276927474
+      },
+      "content-aware": {
+        "infected_fraction": 0.086,
+        "blast_radius": 0.05164027414427555,
+        "availability": 0.992,
+        "cost_availability": 0.9957226024705058
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.088,
+        "blast_radius": 0.054757733108646234,
+        "availability": 0.996,
+        "cost_availability": 0.9952498133368041
+      }
+    }
+  ]
+}

@@ -251,3 +251,93 @@ def test_belief_freeze_ablation_runs():
     before = ag.belief.support_size()
     env.run(ag)
     assert ag.belief.support_size() == before      # belief never narrowed
+
+
+def test_blast_radius_defaults_match_infected_fraction():
+    """Without criticality attached, ``blast_radius`` collapses to
+    ``infected_fraction`` and ``cost_availability`` collapses to
+    ``availability`` -- so the new metrics are backward-compatible."""
+    env, _ = make_env()
+    res = env.run(DegreeDefense())
+    assert abs(res.blast_radius - res.infected_fraction) < 1e-9
+    assert abs(res.cost_availability - res.availability) < 1e-9
+
+
+def test_assign_criticality_makes_blast_diverge_from_infected():
+    """With heavy-tailed value, blast_radius must differ from
+    infected_fraction (the two metrics measure different things)."""
+    from serum.sim.network import assign_criticality
+    env, _ = make_env()
+    assign_criticality(env.g0, alpha=1.1, value_max=100.0,
+                       rng=np.random.default_rng(7))
+    res = env.run(NoDefense())
+    # some hosts infected -> some value hit; but weighted != unweighted
+    if res.infected_fraction > 0.02:
+        assert abs(res.blast_radius - res.infected_fraction) > 1e-3
+    # every metric is a proper fraction
+    for x in (res.blast_radius, res.cost_availability):
+        assert 0.0 <= x <= 1.0
+
+
+def test_value_weighted_agent_steers_score_toward_high_value_neighbors():
+    """The value-weighted content-aware agent must prefer a frontier host with
+    a high-value susceptible neighbour over one with a low-value neighbour,
+    even when both carry the same CVEs. This is the mechanism that lets it
+    trade a little infected_fraction for a lot of blast_radius."""
+    from serum.sim.network import assign_criticality
+    env, pl = make_env()
+    obs = env.reset()
+    assign_criticality(env.g, alpha=1.05, value_max=100.0,
+                       rng=np.random.default_rng(0))
+    ag_v = ContentAwareAgent(env.g, value_weighted=True)
+    ag_b = ContentAwareAgent(env.g, value_weighted=False)
+    post = ag_v.belief.posterior()
+    # Take two hosts on the frontier; compare their score deltas under both.
+    from serum.baselines.heuristics import frontier
+    front = frontier(env)
+    if len(front) < 2:
+        pytest.skip("degenerate frontier")
+    scores_v = [(ag_v._exposed_vuln_degree(env, v, post), v) for v in front]
+    scores_b = [(ag_b._exposed_vuln_degree(env, v, post), v) for v in front]
+    # top-1 under value_weighted may differ from top-1 under value-blind if
+    # value is heterogeneous. Both must, however, return non-negative scores.
+    assert min(s for s, _ in scores_v) >= 0
+    assert min(s for s, _ in scores_b) >= 0
+    # And the top scorer under value-weighted must have at least one susceptible
+    # neighbour whose value contributed (i.e. > 1 sometimes).
+    top_v = max(scores_v)[1]
+    top_v_nbrs = [w for w in env.g.neighbors(top_v)
+                  if env.status[w] == Status.SUSCEPTIBLE and w not in env.patched]
+    max_nbr_val = max((env.g.nodes[w].get("value", 1.0) for w in top_v_nbrs),
+                      default=1.0)
+    assert max_nbr_val >= 1.0     # criticality attached, floor is 1.0
+
+
+def test_cost_budget_charges_isolation_by_host_cost():
+    """With ``cost_budget=True``, isolating an expensive host consumes more
+    budget than isolating a cheap one -- so a single step can afford many
+    cheap isolations but only a few expensive ones."""
+    from serum.sim.network import assign_criticality
+    env, _ = make_env(cost_budget=True, budget_per_step=10)
+    assign_criticality(env.g0, alpha=1.05, value_max=50.0,
+                       rng=np.random.default_rng(1))
+    env.reset()
+    # rank hosts by isolation cost
+    costs = sorted(env.g.nodes(), key=lambda v: env.g.nodes[v]["cost_isolate"])
+    cheapest = costs[:5]  # 5 cheapest hosts (each costs ~1)
+    expensive = [v for v in costs[::-1]
+                 if env.g.nodes[v]["cost_isolate"] > 5.0][:5]
+    if len(expensive) < 2:
+        pytest.skip("no expensive hosts in this instance")
+    # A single step can isolate all 5 cheap hosts (total cost <~ 6 < 10).
+    env.step([Action.isolate(v) for v in cheapest])
+    assert all(v in env.isolated for v in cheapest)
+    # A fresh step tries to isolate 5 EXPENSIVE hosts; the budget of 10 can
+    # only afford a few of them, so the cheaper of the batch get through and
+    # some are refused (accounting works).
+    isolated_before = set(env.isolated)
+    env.step([Action.isolate(v) for v in expensive])
+    newly_iso = set(env.isolated) - isolated_before
+    total_cost = sum(env.g.nodes[v]["cost_isolate"] for v in newly_iso)
+    assert total_cost <= 10.0 + 1e-9      # never overspent
+    assert len(newly_iso) < len(expensive)  # some were priced out

@@ -14,11 +14,16 @@ item off here. Record negative results; never overclaim. Work top-down.
   between belief-driven and structure-only targets. Target: never worse than
   structure-only under heavy poisoning, and full content-aware benefit when
   clean. Experiment across decoy counts; commit `scripts/robust.py`.
-- [ ] **Cost & blast-radius objectives.** Give hosts a `criticality`/`value`
-  weight. Add metrics: value-weighted infection (**blast radius**) and
-  cost-weighted availability (isolating a critical host costs more). Make the
-  budget a *cost* budget. Show content-aware can be steered to protect
-  high-value hosts. `scripts/blast_radius.py`.
+- [x] **Cost & blast-radius objectives.** DONE — heavy-tailed `value`/`cost_isolate`
+  on hosts (`assign_criticality`); `EpisodeResult` now reports `blast_radius`
+  and `cost_availability` (backward-compatible defaults). `ContainmentEnv`
+  supports `cost_budget=True` (isolation costs `cost_isolate(v)` units). New
+  `value_weighted` flag on `ContentAwareAgent` steers the score by neighbour
+  value. `scripts/blast_radius.py` (30 paired trials, α=1.2 Pareto,
+  value_max=100): **content-aware+value cuts blast_radius by −1.00pp**
+  (95% CI [−1.82, −0.19], 18/30 wins) at **+0.83pp** infected_fraction — an
+  honest trade, not a Pareto win. Effect vanishes with `value_max=20`
+  (a caveat, not a fudge — real fleets are skewed).
 
 ## P1 — application & breadth
 

@@ -222,3 +222,22 @@ def test_committee_agent_runs_and_matches_single_in_benign_case():
         env2, _ = make_env(seed=s)
         none.append(env2.run(NoDefense()).infected_fraction)
     assert np.mean(comm) <= np.mean(none)
+
+
+def test_robust_agent_survives_heavy_poisoning():
+    """The poison-robust agent audits its belief against observed spread and
+    hedges to structure; under heavy decoy poisoning it must beat a single soft
+    belief (which the poisoning overwhelms)."""
+    from serum.agents.robust import RobustAgent
+    from serum.agents.content_aware import ContentAwareAgent
+    rob, soft = [], []
+    for s in range(5):
+        env, _ = make_env(seed=s, decoys=None)
+        env2, pl = make_env(seed=s)
+        from serum.attack.deception import choose_decoys
+        decoys = choose_decoys(env2.g, pl, k=20, rng=np.random.default_rng(s))
+        e_rob = ContainmentEnv(env2.g, pl, env2.seeds, decoys=decoys, rng=np.random.default_rng(s + 9))
+        e_soft = ContainmentEnv(env2.g, pl, env2.seeds, decoys=decoys, rng=np.random.default_rng(s + 9))
+        rob.append(e_rob.run(RobustAgent(env2.g)).infected_fraction)
+        soft.append(e_soft.run(ContentAwareAgent(env2.g, belief_mode="soft")).infected_fraction)
+    assert np.mean(rob) <= np.mean(soft)

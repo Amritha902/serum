@@ -7,7 +7,7 @@ item off here. Record negative results; never overclaim. Work top-down.
 
 ## P0 — highest value (do first)
 
-- [ ] **Poison-robust defender.** The committee failed to beat belief poisoning
+- [x] **Poison-robust defender.** DONE — RobustAgent audits belief vs spread, hedges to structure; tracks the better of belief/structure at every poisoning level. The committee failed to beat belief poisoning
   (correlated failures). Build a defender that (a) *detects* poisoning — e.g. the
   believed exploit's vulnerable subgraph poorly explains the observed infection
   frontier, or belief mass shifts implausibly fast — and (b) *hedges* the budget

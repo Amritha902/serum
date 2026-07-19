@@ -78,6 +78,19 @@ testing** (Theme 6 of the literature review).
    independently rediscovers the belief features (validates the design), which is
    the honest claim.
 
+## Phase 5 — Poison-robust defender (redeems the committee failure)
+
+- **RobustAgent** audits its belief against the spread it predicts: each step it
+  measures the fraction of new (propagation) infections that carry the current
+  MAP CVE and moves a trust weight `α` toward it, scoring hosts as
+  `α·content + (1−α)·structural`. Poisoning is one-shot; the real worm keeps
+  revealing the truth, so `α` falls under attack and the agent hedges to
+  structure. **Result (scripts/robust.py):** it tracks the *better* of
+  {content-aware, degree} at every poisoning level — 1.13% clean (vs degree
+  1.71%), 1.49% at 15 decoys (beats both), 1.77% at 30 decoys (vs single-soft's
+  collapse to 4.94%). The committee failure is redeemed by *detection + hedging*,
+  not ensembling — the honest lesson made concrete.
+
 ## Missed fields found via grilling
 
 - **Group testing / separating systems / superimposed codes** (Dorfman 1943,

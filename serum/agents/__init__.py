@@ -7,6 +7,7 @@ from serum.agents.content_aware import (
     OracleContentAware,
 )
 from serum.agents.probing import ProbingAgent
+from serum.agents.robust import RobustAgent
 from serum.agents.threat_intel import ThreatIntelAgent, threat_intel_weights
 
 __all__ = [
@@ -15,6 +16,7 @@ __all__ = [
     "OracleAfterDelay",
     "OracleContentAware",
     "ProbingAgent",
+    "RobustAgent",
     "ThreatIntelAgent",
     "threat_intel_weights",
 ]

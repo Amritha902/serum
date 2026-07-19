@@ -172,13 +172,72 @@ content-aware oracle (bound) & 0.8\% & 100.0\% & 1.7 \\
 \end{tabular}
 \end{table}
 
-\paragraph{Findings.} Against the best fixed baseline, content-aware reduces
-infection by $18.6\%$ (paired Wilcoxon $p=1.1\times10^{-5}$) and beats the
-per-trial ensemble oracle on real data ($p=2\times10^{-3}$)---because real
-software zones diverge from topological centrality. It beats oracle-after-delay:
-inferring the exploit online beats waiting for a signature. The advantage scales
-with outbreak severity and holds under SIR. The threat-intel prior gives a
-$\sim37\%$ cold-start reduction under tight budgets and washes out with evidence.
+\paragraph{Findings (synthetic real-CVE profiles).} Against the best fixed
+baseline, content-aware reduces infection by $18.6\%$ (paired Wilcoxon
+$p=1.1\times10^{-5}$) and beats the per-trial ensemble oracle on real data
+($p=2\times10^{-3}$)---because real software zones diverge from topological
+centrality. It beats oracle-after-delay: inferring the exploit online beats
+waiting for a signature. The advantage scales with outbreak severity and holds
+under SIR (recovery). The threat-intel prior gives a $\sim37\%$ cold-start
+reduction under tight budgets and washes out with evidence.
+
+\paragraph{Real topology (flagship).} On the SNAP \texttt{email-Eu-core} graph
+(1004 hosts, 42 real organisational departments used as software zones) with real
+NVD CVEs, structure-only immunization barely helps because the vulnerable
+department-zones do not coincide with the topological hubs:
+
+\begin{table}[t]\centering
+\caption{Real topology + real departments + real CVEs, 40 paired outbreaks.}
+\begin{tabular}{lrr}
+\toprule
+Policy & Infected & Availability \\
+\midrule
+no-defense & 20.1\% & 100.0\% \\
+degree immunization & 18.8\% & 92.2\% \\
+betweenness (best structural) & 17.6\% & 92.5\% \\
+oracle-after-delay ($t{=}5$) & 18.1\% & 96.2\% \\
+\textbf{content-aware (ours)} & \textbf{11.7\%} & \textbf{97.5\%} \\
+content-aware oracle (bound) & 9.1\% & 100.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Content-aware cuts infection by $28.4\%$ vs the best fixed baseline
+($p=1.7\times10^{-7}$) and beats the ensemble oracle ($p=1.9\times10^{-7}$). The
+result is significant across BA/WS/RGG topologies (rel.\ reductions
+$+17.7/+11.5/+30.2\%$, all $p<10^{-3}$).
+
+\paragraph{Pareto dominance (infection vs availability).} Sweeping the budget
+($2$--$12$), content-aware occupies the low-infection, high-availability corner:
+at every budget it is simultaneously lower-infection and higher-availability than
+every structural baseline (e.g.\ at budget $2$: $3.7\%/99\%$ vs degree
+$9.6\%/96\%$). It patches precisely once its belief sharpens; structure-only
+defenders must isolate blindly. See \texttt{results/pareto.png}.
+
+\paragraph{Identifiability, validated.} The Bayesian belief recovers the true CVE
+exactly iff Theorem~\ref{thm:id} predicts identifiability: $116/116=100\%$
+agreement over real-data networks; $\sim54\%$ of real CVEs are identifiable from a
+saturating outbreak, the rest having confusers (Prop.~\ref{prop:conf}).
+
+\paragraph{Robustness to inference-evasion (Stackelberg attacker).} An attacker
+that picks a non-identifiable (confusable) payload to defeat the belief does not
+help itself: the content-aware edge is $+22.4\%$ under an evasive attacker vs
+$+17.7\%$ under a random one. This follows from Prop.~\ref{prop:conf}: a
+confusable exploit's victims are a subset of its confusers', so the hedged belief
+still defends the true victims. Inference-evasion is not a winning strategy.
+
+\paragraph{Active sensing.} Honeypot value-of-information probing captures the
+payload almost immediately (step $\approx1$), enabling early
+availability-preserving patching: availability rises ($99.2\%$ vs $98.4\%$) at no
+infection cost. Consistent with the evasion result, passive inference already
+suffices for containment, so sensing is an identification/availability tool.
+
+\paragraph{Learned policy.} A cross-entropy-method policy over belief-augmented
+features matches the hand-designed content-aware agent on held-out data
+($1.09\%$ vs $1.04\%$) and beats degree/betweenness ($1.65\%/2.11\%$); it
+independently assigns the largest weights to the belief-conditioned features,
+validating the design. This is learning \emph{under exploit uncertainty}, not
+vanilla GNN-RL immunization.
 
 \paragraph{Honest scope.} On \emph{synthetic} data content-aware does not beat an
 oracle ensemble that cherry-picks the best structural heuristic per outbreak
@@ -188,16 +247,60 @@ is vulnerable. Content-awareness helps when the exploit is stealthy enough that
 its victims are a distinctive, mislocated-from-the-hubs zone.
 
 \section{Related work}
-Source detection \citep{shah2011rumors} infers \emph{where} an outbreak started;
-NetRate \citep{gomez2011netrate} infers edges/rates; SERUM infers \emph{which
-exploit}. The nearest inference-from-shape is SCENARIOID \citep{scenarioid2023}
-(offline scenario classification); we do online belief tracking tied to
-identifiability. The POMDP/active-hypothesis-testing machinery is standard
-\citep{naghshvar2013active,miehling2018pomdp}; our observation model
-(vulnerability-gated cascade shape) and its coupling to identifiability are the
-new part. Multi-objective immunization and active sensing
-\citep{leskovec2007celf} and estimation-evasion games \citep{fanti2015spy}
-inform the roadmap.
+A full, source-verified survey is in the supplementary \texttt{docs/LITERATURE\_REVIEW.md};
+we summarise the five neighbouring literatures and our position in each.
+
+\paragraph{Propagation model (not novel).} Vulnerability-gated spread is a
+special case of heterogeneous multitype bond percolation
+\citep{allard2009multitype}, itself a case of the SIR-percolation mapping
+\citep{newman2002spread}; the security-side antecedent is software-diversity
+worm spread via graph colouring \citep{odonnell2004diversity}, and classical
+worm models gate on a vulnerable population \citep{staniford2002own,chen2003aawp}.
+The same attribute-gated-subgraph pattern underlies lateral-movement models
+\citep{powell2019lateral}. We claim no novelty at the mechanism level.
+
+\paragraph{Containment (our baselines).} Structure-only immunization is mature:
+degree/acquaintance \citep{pastorsatorras2002immunization,cohen2003acquaintance},
+spectral node/edge removal (NetShield) \citep{chen2016netshield}, collective
+influence \citep{morone2015influence}, and connectivity-preserving link
+containment \citep{matamalas2018containment}. The nearest ``data-aware'' method,
+DAVA \citep{zhang2015dava}, conditions on the \emph{observed infected} subgraph;
+SERUM conditions on the \emph{inferred exploit} (a sharper conditioning) and adds
+an availability objective.
+
+\paragraph{Inference \& identifiability (the core neighbourhood).} Source
+detection \citep{shah2011rumors} infers \emph{where} an outbreak began; NetInf
+\citep{gomez2010netinf} infers the \emph{graph}; SERUM infers \emph{which
+exploit}. The nearest inference-from-shape is SCENARIOID \citep{scenarioid2023},
+an \emph{offline, feature-engineered} classification of intervention regimes with
+no identifiability guarantee; we do online belief tracking tied to an exact
+condition. Our identifiability theorem's nearest neighbour is cascade-mixture
+identifiability \citep{hoffmann2020mixtures}, whose condition is on \emph{latent}
+edge structure; ours is a set-containment condition on \emph{observable} node
+attributes, and holds online per cascade. Contrast also mechanism discrimination
+\citep{cencetti2023contagion} and parameter identifiability
+\citep{kiss2023identifiability}.
+
+\paragraph{Cyber-defense decision-making.} Belief-state POMDP defense is
+established \citep{miehling2015pomdp,miehling2018pomdp}, as is deception to infer
+attacker \emph{intent} \citep{shinde2020deception}; SERUM's hidden state is the
+\emph{exploit}, sensing is a payload-capturing honeypot, and the machinery is
+active hypothesis testing \citep{naghshvar2013active} / value of information
+\citep{leskovec2007celf}. Our adversary evades the defender's \emph{inference}
+(cf.\ estimation-evasion \citep{shokri2012location,fanti2015spy}), not a detector
+\citep{biggio2013evasion}. \textbf{The closest system is CyGym}
+\citep{cygym2025}: it has vulnerability-gated spread and per-action costs but a
+\emph{static, common-knowledge prior over zero-days} and an offline equilibrium
+policy \emph{independent of the realised exploit} --- no online belief update and
+no sensing. That online-inference gap is what SERUM fills.
+
+\paragraph{ML/LLM components (deliberately standard).} GNN-RL graph intervention
+\citep{meirom2021rlgn2,fan2020finder} and LLM-as-Bayesian-prior
+\citep{yan2025llmpriors} are established; LLM CVE reasoning is benchmarked
+\citep{ctibench2024} and paralleled by population-level exploitation priors
+(EPSS) \citep{epss2021}. SERUM's learned policy is ``learning under exploit
+uncertainty'' (belief-augmented features), and its LLM layer is a grounded prior
+over a fixed CVE candidate set, corrected online by the Bayesian tracker.
 
 \section{Limitations and responsible use}
 The propagation model is abstract (a probability over an exploitability graph);

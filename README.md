@@ -121,6 +121,31 @@ The exploit belief uses a **soft likelihood** robust to detection noise: a singl
 false-positive infection cannot wrongly exclude the true CVE (the failure mode of
 hard consistency filtering) — see `tests/test_sim.py`.
 
+### Flagship: a real network with real community structure
+
+Beyond synthetic graphs, SERUM runs on the SNAP **email-Eu-core** network (1004
+hosts, 42 real organisational **departments**), using the departments directly as
+software zones — a real community structure, not a synthetic partition. Loader:
+`serum/data/topology.py` (downloads + caches from SNAP; `--topology email`).
+
+Real topology + real departments + real NVD CVEs (40 paired outbreaks, budget 8):
+
+| Policy | Infected | Availability |
+|---|---:|---:|
+| no-defense | 20.1% | 100.0% |
+| degree immunization *(structural)* | 18.8% | 92.2% |
+| betweenness *(best structural)* | 17.6% | 92.5% |
+| oracle-after-delay (t=5) | 18.1% | 96.2% |
+| **content-aware (ours)** | **11.7%** | **97.5%** |
+| content-aware oracle (bound) | 9.1% | 100.0% |
+
+On a real org network, **structure-only immunization barely helps** (17.6% vs
+no-defense 20.1%) because the vulnerable *department-zones do not align with the
+topological hubs* — exactly the regime SERUM's thesis predicts. Content-aware
+cuts infection to **11.7% — −28.4% vs the best fixed baseline, Wilcoxon
+p = 1.7×10⁻⁷** — and beats the per-trial ensemble oracle (p = 1.9×10⁻⁷).
+Data: `results/real/email_topo.json`.
+
 ---
 
 ## Why this is a non-trivial problem

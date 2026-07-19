@@ -133,6 +133,7 @@ def attach_real_profiles(
     products_lambda: float = 6.0,
     n_segments: int = 12,
     homophily: float = 0.75,
+    segments: dict | None = None,
     rng: np.random.Generator | None = None,
 ) -> nx.Graph:
     """Assign each host a real-data-derived vulnerability profile in place.
@@ -146,7 +147,9 @@ def attach_real_profiles(
     cve_prod_idx = [frozenset(prod_index[p] for p in cps) for cps in universe.cve_products]
     n_products = len(universe.products)
 
-    seg = graph_segments(g, n_segments, rng)
+    # use a real segment map (e.g. org departments) when provided, else carve
+    # the graph into connected zones synthetically.
+    seg = dict(segments) if segments is not None else graph_segments(g, n_segments, rng)
     # each segment's shared "software image": a popularity-weighted product set
     image_size = int(min(n_products, max(products_lambda * 3, products_lambda + 4)))
     seg_image: dict = {}
@@ -194,14 +197,26 @@ def generate_real_network(
     products_lambda: float = 6.0,
     n_segments: int = 12,
     homophily: float = 0.75,
+    base_graph: nx.Graph | None = None,
     rng: np.random.Generator | None = None,
 ) -> nx.Graph:
     """Build a topology and attach NVD-derived vulnerability profiles with
-    segment-correlated software (monoculture within network zones)."""
+    segment-correlated software (monoculture within network zones).
+
+    If ``base_graph`` is given it is used as the topology (and its ``segment``
+    node attribute, if present, as the real network zones) instead of a synthetic
+    graph -- e.g. a real SNAP topology with org-department segments."""
     rng = rng or np.random.default_rng()
-    g = _base_topology(n, topology, m, rng)
+    if base_graph is not None:
+        g = base_graph.copy()
+        seg = ({n: d for n, d in g.nodes(data="segment")}
+               if all("segment" in g.nodes[n] for n in g.nodes()) else None)
+    else:
+        g = _base_topology(n, topology, m, rng)
+        seg = None
     universe = build_universe(records, n_products=n_products, n_cves=n_cves, rng=rng)
     attach_real_profiles(g, universe, products_lambda=products_lambda,
-                         n_segments=n_segments, homophily=homophily, rng=rng)
-    g.graph["topology"] = topology
+                         n_segments=n_segments, homophily=homophily,
+                         segments=seg, rng=rng)
+    g.graph["topology"] = g.graph.get("topology", topology)
     return g

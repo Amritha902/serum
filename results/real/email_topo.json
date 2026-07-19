@@ -1,0 +1,152 @@
+{
+  "no-defense": {
+    "name": "no-defense",
+    "infected_fraction": [
+      0.2009,
+      0.0964
+    ],
+    "availability": [
+      1.0,
+      0.0
+    ],
+    "steps_to_containment": [
+      9.225,
+      2.5738
+    ]
+  },
+  "random": {
+    "name": "random",
+    "infected_fraction": [
+      0.1939,
+      0.0939
+    ],
+    "availability": [
+      0.9225,
+      0.0212
+    ],
+    "steps_to_containment": [
+      9.55,
+      2.6072
+    ]
+  },
+  "acquaintance": {
+    "name": "acquaintance",
+    "infected_fraction": [
+      0.1935,
+      0.094
+    ],
+    "availability": [
+      0.9225,
+      0.0218
+    ],
+    "steps_to_containment": [
+      9.55,
+      2.6921
+    ]
+  },
+  "degree": {
+    "name": "degree",
+    "infected_fraction": [
+      0.1875,
+      0.0976
+    ],
+    "availability": [
+      0.9219,
+      0.024
+    ],
+    "steps_to_containment": [
+      9.625,
+      2.9638
+    ]
+  },
+  "eigenvector": {
+    "name": "eigenvector",
+    "infected_fraction": [
+      0.1879,
+      0.0983
+    ],
+    "availability": [
+      0.9187,
+      0.031
+    ],
+    "steps_to_containment": [
+      10.025,
+      3.8242
+    ]
+  },
+  "betweenness": {
+    "name": "betweenness",
+    "infected_fraction": [
+      0.1762,
+      0.1013
+    ],
+    "availability": [
+      0.9254,
+      0.0235
+    ],
+    "steps_to_containment": [
+      9.2,
+      2.8914
+    ]
+  },
+  "greedy-blocking": {
+    "name": "greedy-blocking",
+    "infected_fraction": [
+      0.189,
+      0.0975
+    ],
+    "availability": [
+      0.9181,
+      0.0283
+    ],
+    "steps_to_containment": [
+      10.1,
+      3.4843
+    ]
+  },
+  "oracle-delay-5": {
+    "name": "oracle-delay-5",
+    "infected_fraction": [
+      0.1815,
+      0.0992
+    ],
+    "availability": [
+      0.9617,
+      0.0079
+    ],
+    "steps_to_containment": [
+      9.425,
+      3.065
+    ]
+  },
+  "content-aware": {
+    "name": "content-aware",
+    "infected_fraction": [
+      0.1174,
+      0.1028
+    ],
+    "availability": [
+      0.9749,
+      0.0295
+    ],
+    "steps_to_containment": [
+      7.325,
+      3.1096
+    ]
+  },
+  "content-aware-oracle": {
+    "name": "content-aware-oracle",
+    "infected_fraction": [
+      0.0907,
+      0.1095
+    ],
+    "availability": [
+      1.0,
+      0.0
+    ],
+    "steps_to_containment": [
+      5.65,
+      3.637
+    ]
+  }
+}

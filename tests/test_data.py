@@ -160,3 +160,19 @@ def test_threat_intel_prior_and_agent():
 
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))
+
+
+def test_real_topology_loads_with_segments():
+    """email-Eu-core loads as a connected graph whose nodes carry real
+    department segments. Skips gracefully if the data isn't available."""
+    import pytest
+    try:
+        from serum.data.topology import load_email_eu_core
+        g = load_email_eu_core()
+    except Exception as e:
+        pytest.skip(f"real topology unavailable: {e}")
+    import networkx as nx
+    assert g.number_of_nodes() > 900
+    assert nx.is_connected(g)
+    assert all("segment" in g.nodes[n] for n in g.nodes())
+    assert g.graph["n_departments"] > 1

@@ -33,6 +33,17 @@ from serum.sim.network import generate_network
 from serum.sim.payload import sample_payload
 
 
+_REAL_TOPO_CACHE = {}
+
+
+def _real_topology():
+    """Load (once) the real SNAP email-Eu-core graph with department segments."""
+    if "email" not in _REAL_TOPO_CACHE:
+        from serum.data.topology import load_email_eu_core
+        _REAL_TOPO_CACHE["email"] = load_email_eu_core()
+    return _REAL_TOPO_CACHE["email"]
+
+
 @dataclass
 class TrialSpec:
     n: int = 500
@@ -66,10 +77,12 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
     gen_rng = np.random.default_rng(seed)
     if records is not None:
         from serum.data.profiles import generate_real_network
+        base = _real_topology() if spec.topology == "email" else None
         g = generate_real_network(
             records, n=spec.n, topology=spec.topology, m=spec.m,
             n_cves=spec.n_cves, n_products=spec.n_products,
-            n_segments=spec.n_segments, homophily=spec.homophily, rng=gen_rng,
+            n_segments=spec.n_segments, homophily=spec.homophily,
+            base_graph=base, rng=gen_rng,
         )
     else:
         g = generate_network(

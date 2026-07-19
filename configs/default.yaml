@@ -12,7 +12,7 @@ network:
   popularity_alpha: 0.8 # Zipf skew of CVE prevalence
 
 payload:
-  beta: 0.15            # per-contact transmission probability
+  beta: 0.35            # per-contact transmission probability
   strategy: stealth     # popular | stealth | random
 
 outbreak:

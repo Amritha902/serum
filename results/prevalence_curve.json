@@ -1,0 +1,102 @@
+[
+  {
+    "band": [
+      0.1,
+      0.2
+    ],
+    "beta": 0.35,
+    "no_defense": 0.3804,
+    "ca": 0.016100000000000003,
+    "best_fixed": 0.02975,
+    "best_name": "degree",
+    "vs": "degree",
+    "mean_abs_reduction": 0.01365,
+    "mean_rel_reduction": 0.03548479472546717,
+    "ci95_abs": [
+      0.0019000000000000002,
+      0.028352499999999968
+    ],
+    "p_value": 0.03318233594190465,
+    "wins": 16
+  },
+  {
+    "band": [
+      0.2,
+      0.3
+    ],
+    "beta": 0.35,
+    "no_defense": 0.3371,
+    "ca": 0.015050000000000003,
+    "best_fixed": 0.02445,
+    "best_name": "degree",
+    "vs": "degree",
+    "mean_abs_reduction": 0.0094,
+    "mean_rel_reduction": 0.08746657310968457,
+    "ci95_abs": [
+      0.00125,
+      0.020199999999999996
+    ],
+    "p_value": 0.010173662839130033,
+    "wins": 18
+  },
+  {
+    "band": [
+      0.3,
+      0.4
+    ],
+    "beta": 0.35,
+    "no_defense": 0.21005000000000001,
+    "ca": 0.01225,
+    "best_fixed": 0.017249999999999998,
+    "best_name": "betweenness",
+    "vs": "betweenness",
+    "mean_abs_reduction": 0.005,
+    "mean_rel_reduction": 0.05624342184968123,
+    "ci95_abs": [
+      0.0007000000000000001,
+      0.01125
+    ],
+    "p_value": 0.13906789796513125,
+    "wins": 12
+  },
+  {
+    "band": [
+      0.4,
+      0.5
+    ],
+    "beta": 0.35,
+    "no_defense": 0.36195000000000005,
+    "ca": 0.0159,
+    "best_fixed": 0.0316,
+    "best_name": "betweenness",
+    "vs": "betweenness",
+    "mean_abs_reduction": 0.0157,
+    "mean_rel_reduction": 0.08465547018934036,
+    "ci95_abs": [
+      0.0028987500000000003,
+      0.032
+    ],
+    "p_value": 0.003628018369882316,
+    "wins": 19
+  },
+  {
+    "band": [
+      0.5,
+      0.65
+    ],
+    "beta": 0.35,
+    "no_defense": 0.5154500000000001,
+    "ca": 0.02605,
+    "best_fixed": 0.06300000000000001,
+    "best_name": "betweenness",
+    "vs": "betweenness",
+    "mean_abs_reduction": 0.036950000000000004,
+    "mean_rel_reduction": 0.19079085985648578,
+    "ci95_abs": [
+      0.01734875,
+      0.05840124999999999
+    ],
+    "p_value": 0.0006873058990181509,
+    "wins": 24
+  }
+]

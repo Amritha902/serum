@@ -22,7 +22,9 @@ import sys
 # allow running from repo root without install
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from serum.experiments.harness import TrialSpec, compare_policies  # noqa: E402
+from serum.experiments.harness import (  # noqa: E402
+    TrialSpec, compare_policies, paired_report,
+)
 
 
 def parse_args():
@@ -42,8 +44,8 @@ def parse_args():
 
 def print_table(stats):
     order = [
-        "no-defense", "random", "degree", "betweenness",
-        "content-aware", "content-aware-oracle",
+        "no-defense", "random", "acquaintance", "degree", "eigenvector",
+        "betweenness", "greedy-blocking", "content-aware", "content-aware-oracle",
     ]
     rows = [stats[n].summary() for n in order if n in stats]
     w = 22
@@ -70,13 +72,16 @@ def save_plot(curves, outdir):
     import numpy as np
 
     plt.figure(figsize=(8, 5))
-    order = ["no-defense", "random", "degree", "betweenness",
-             "content-aware", "content-aware-oracle"]
+    order = ["no-defense", "random", "acquaintance", "degree", "eigenvector",
+             "betweenness", "greedy-blocking", "content-aware", "content-aware-oracle"]
     styles = {
         "no-defense": ("#9e9e9e", "-"),
         "random": ("#b39ddb", "-"),
+        "acquaintance": ("#ce93d8", "-"),
         "degree": ("#4fc3f7", "-"),
+        "eigenvector": ("#4dd0e1", "-"),
         "betweenness": ("#4db6ac", "-"),
+        "greedy-blocking": ("#66bb6a", "-"),
         "content-aware": ("#e53935", "-"),
         "content-aware-oracle": ("#e53935", "--"),
     }
@@ -117,8 +122,23 @@ def main():
     stats, curves = compare_policies(spec, n_trials=args.trials, base_seed=args.seed)
     print_table(stats)
 
+    report = paired_report(stats)
+    if report:
+        n = report["n_trials"]
+        for kind in ("primary", "ensemble"):
+            r = report[kind]
+            lo, hi = r["ci95_abs"]
+            label = "PRIMARY (vs best fixed baseline)" if kind == "primary" \
+                else "STRESS  (vs per-trial ensemble oracle)"
+            print(f"\n{label}: content-aware vs {r['vs']} (paired, n={n})")
+            print(f"  reduction: {100*r['mean_abs_reduction']:.2f} pts "
+                  f"(95% CI [{100*lo:.2f}, {100*hi:.2f}]); "
+                  f"rel {100*r['mean_rel_reduction']:.1f}%")
+            print(f"  wins {r['wins']}/{n}; Wilcoxon p = {r['p_value']:.2e}")
+
     summary = {name: s.summary() for name, s in stats.items()}
     summary["_spec"] = vars(spec)
+    summary["_paired_report"] = report
     with open(os.path.join(args.outdir, "summary.json"), "w") as f:
         json.dump(summary, f, indent=2)
     print(f"[saved stats -> {os.path.join(args.outdir, 'summary.json')}]")

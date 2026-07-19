@@ -30,6 +30,7 @@ def sample_payload(
     beta: float = 0.35,
     strategy: str = "popular",
     rng: np.random.Generator | None = None,
+    band: tuple = (0.20, 0.60),
 ) -> Payload:
     """Choose which CVE the attacker weaponises.
 
@@ -40,6 +41,11 @@ def sample_payload(
                  i.e. the *hardest* case for our thesis -- a conservative test).
     "stealth"  : target a mid-prevalence CVE (structure-only defenders squander
                  budget on invulnerable hubs; the content-aware edge is largest).
+    "band"     : sample *uniformly at random* among CVEs whose prevalence falls
+                 in a "spreadable but not universal" band (default 20-60%). This
+                 is the recommended evaluation strategy: it varies the target
+                 across trials (no single hand-picked CVE) while keeping every
+                 outbreak in the regime where containment is non-trivial.
     "random"   : uniformly random CVE.
     """
     rng = rng or np.random.default_rng()
@@ -49,6 +55,14 @@ def sample_payload(
     elif strategy == "stealth":
         order = np.argsort(prev)          # ascending prevalence
         cve = int(order[len(order) // 2])  # median-prevalence CVE
+    elif strategy == "band":
+        lo, hi = band
+        cand = np.where((prev >= lo) & (prev <= hi))[0]
+        if len(cand) == 0:  # relax to the middle third if the band is empty
+            order = np.argsort(prev)
+            third = max(1, len(order) // 3)
+            cand = order[third:2 * third]
+        cve = int(rng.choice(cand))
     elif strategy == "random":
         cve = int(rng.integers(g.graph["n_cves"]))
     else:

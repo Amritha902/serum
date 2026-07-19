@@ -26,8 +26,8 @@ from serum.experiments.harness import TrialSpec, compare_policies  # noqa: E402
 
 GRID = {
     "topology": ["ba", "ws", "rgg"],
-    "beta": [0.10, 0.15, 0.22],
-    "payload_strategy": ["stealth", "popular"],
+    "beta": [0.22, 0.35, 0.45],
+    "payload_strategy": ["band", "popular"],
     "budget_per_step": [3, 5, 8],
 }
 
@@ -51,9 +51,10 @@ def load_done(path):
 def edge(stats):
     """Relative infection reduction of content-aware vs best structure-only."""
     ca = stats["content-aware"].summary()["infected_fraction"][0]
+    struct_names = ("degree", "eigenvector", "betweenness", "greedy-blocking", "acquaintance")
     best_struct = min(
         stats[n].summary()["infected_fraction"][0]
-        for n in ("degree", "betweenness") if n in stats
+        for n in struct_names if n in stats
     )
     if best_struct <= 0:
         return 0.0

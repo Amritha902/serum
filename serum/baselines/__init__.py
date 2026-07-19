@@ -5,6 +5,9 @@ from serum.baselines.heuristics import (
     RandomDefense,
     DegreeDefense,
     BetweennessDefense,
+    EigenvectorDefense,
+    GreedyBlockingDefense,
+    AcquaintanceDefense,
     frontier,
 )
 
@@ -13,5 +16,8 @@ __all__ = [
     "RandomDefense",
     "DegreeDefense",
     "BetweennessDefense",
+    "EigenvectorDefense",
+    "GreedyBlockingDefense",
+    "AcquaintanceDefense",
     "frontier",
 ]

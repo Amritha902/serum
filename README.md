@@ -22,34 +22,47 @@ attacker's exploit and allocates its defensive budget accordingly.
 
 ## The core result
 
-Same network, same worm, same budget — six defenders. Lower infection is
-better; higher availability is better; contained-by-step is faster.
+Nine defenders, same network, same worm, same budget, **randomized attack
+target** (payload CVE drawn per trial). Lower infection is better; higher
+availability is better; contained-by-step is faster.
 
 | Policy | Infected | Availability | Contained @ step |
 |---|---:|---:|---:|
-| no-defense | 35.9% | 100.0% | 13.8 |
-| random isolation | 25.8% | 87.4% | 12.7 |
-| degree immunization *(structure-only)* | 3.7% | 94.9% | 5.1 |
-| betweenness immunization *(structure-only)* | 3.6% | 94.9% | 5.1 |
-| **content-aware agent *(ours, partial-obs)*** | **1.7%** | **98.6%** | **3.1** |
-| content-aware oracle *(upper bound)* | 1.1% | 100.0% | 2.2 |
+| no-defense | 36.6% | 100.0% | 14.2 |
+| random isolation | 23.0% | 88.4% | 11.6 |
+| acquaintance immunization *(structural)* | 22.6% | 88.6% | 11.4 |
+| degree immunization *(structural)* | 3.4% | 95.5% | 4.5 |
+| eigenvector immunization *(structural)* | 4.5% | 94.4% | 5.6 |
+| betweenness immunization *(structural)* | 3.4% | 95.5% | 4.5 |
+| greedy influence-blocking *(structural)* | 12.3% | 89.5% | 10.4 |
+| **content-aware agent *(ours, partial-obs)*** | **1.8%** | **98.5%** | **3.0** |
+| content-aware oracle *(upper bound)* | 1.1% | 100.0% | 2.0 |
 
-*30 paired outbreaks, 500-host Barabási–Albert network, stealth payload. See
-`results/summary.json` and `results/infection_curves.png`.*
+*40 paired outbreaks, 500-host Barabási–Albert network, β=0.35, target CVE
+sampled per trial. See `results/summary.json` and `results/infection_curves.png`.*
 
-The content-aware agent **halves the infected fraction** relative to the best
-structure-only baseline, **keeps more of the network online** (it patches
-precisely instead of bluntly isolating), and **contains faster** — while
-*inferring* the payload rather than being told it. It sits close to the
-full-observability oracle, so the inference leaves little on the table.
+**What holds up under rigorous, paired, randomized-target evaluation:**
 
-**Robustness (54-config sweep, `results/phase_diagram.png`).** Content-awareness
-beats the best structure-only baseline in **52 / 54** configurations of
-topology × spread-rate × attacker-strategy × budget — mean **+20.4%** infection
-reduction, up to **+69%**. The advantage is largest under **tight budgets and
-faster spread**, precisely where squandering budget on invulnerable hosts is
-most costly. See [`docs/RESEARCH.md`](docs/RESEARCH.md) for the full design and
-the 12-point novelty register.
+1. **Pareto dominance (the robust win).** The content-aware agent is at least as
+   good on infection as *every* structural baseline and **strictly better on
+   availability *and* containment speed** — because it patches precisely instead
+   of bluntly isolating. No baseline dominates it on any axis.
+2. **Significant infection reduction vs the best deployable baseline.** Paired
+   vs betweenness (the strongest fixed structural policy): **−1.65 pts, 95% CI
+   [0.50, 3.13], Wilcoxon p = 0.025**.
+3. **The advantage scales with outbreak severity** (`results/prevalence_curve.png`).
+   Across exploit-prevalence bands it is significant in **4 / 5** bands and grows
+   with how bad the outbreak is — up to **−3.7 pts (2.4× lower infection),
+   p < 0.001** for the most severe outbreaks. It never significantly loses.
+
+**Honest scope.** Against an *oracle ensemble* that cherry-picks the best
+structural heuristic per outbreak, the infection edge is not significant
+(p ≈ 0.84) — no single deployable defender is that oracle, but we report it in
+full. All of the above is achieved while the agent **infers** the payload rather
+than being told it, landing close to the full-observability oracle.
+
+See [`docs/RESEARCH.md`](docs/RESEARCH.md) for the full design and the 12-point
+novelty register.
 
 ---
 

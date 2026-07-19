@@ -16,8 +16,11 @@ import numpy as np
 
 from serum.agents.content_aware import ContentAwareAgent, OracleContentAware
 from serum.baselines.heuristics import (
+    AcquaintanceDefense,
     BetweennessDefense,
     DegreeDefense,
+    EigenvectorDefense,
+    GreedyBlockingDefense,
     NoDefense,
     RandomDefense,
 )
@@ -34,8 +37,9 @@ class TrialSpec:
     n_cves: int = 12
     vuln_lambda: float = 6.0
     popularity_alpha: float = 0.8
-    beta: float = 0.15
-    payload_strategy: str = "stealth"
+    beta: float = 0.35
+    payload_strategy: str = "band"
+    prev_band: tuple = (0.20, 0.60)
     n_seeds: int = 3
     budget_per_step: int = 5
     horizon: int = 40
@@ -56,7 +60,8 @@ def build_episode(spec: TrialSpec, seed: int):
         popularity_alpha=spec.popularity_alpha,
         rng=gen_rng,
     )
-    payload = sample_payload(g, beta=spec.beta, strategy=spec.payload_strategy, rng=gen_rng)
+    payload = sample_payload(g, beta=spec.beta, strategy=spec.payload_strategy,
+                             rng=gen_rng, band=spec.prev_band)
     # Seed the outbreak among hosts that actually carry the payload's CVE,
     # otherwise patient zero cannot spread at all.
     carriers = [v for v, d in g.nodes(data=True) if payload.cve in d["vuln"]]
@@ -86,8 +91,11 @@ def default_policies(g, rng):
     return [
         NoDefense(),
         RandomDefense(rng=rng),
+        AcquaintanceDefense(rng=rng),
         DegreeDefense(),
+        EigenvectorDefense(),
         BetweennessDefense(),
+        GreedyBlockingDefense(),
         ContentAwareAgent(g),                 # ours, partial observation
         OracleContentAware(patch=True),       # ours, full-observation upper bound
     ]
@@ -134,6 +142,63 @@ def compare_policies(spec: TrialSpec, n_trials: int = 20, base_seed: int = 0, ve
         if verbose:
             print(f"  trial {t + 1}/{n_trials} (cve={payload.cve}) done", flush=True)
     return stats, curves
+
+
+STRUCT_NAMES = ("degree", "eigenvector", "betweenness", "greedy-blocking", "acquaintance")
+
+
+def _paired_vs(ca, comp, n_boot, seed):
+    from scipy import stats as ss
+    diff = comp - ca                               # >0 == content-aware wins
+    rng = np.random.default_rng(seed)
+    idx = np.arange(len(diff))
+    boots = np.array([diff[rng.choice(idx, size=len(idx), replace=True)].mean()
+                      for _ in range(n_boot)])
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    try:
+        _, p = ss.wilcoxon(ca, comp)
+    except ValueError:
+        p = float("nan")
+    return {
+        "mean_abs_reduction": float(diff.mean()),
+        "mean_rel_reduction": float((diff / np.maximum(comp, 1e-9)).mean()),
+        "ci95_abs": (float(lo), float(hi)),
+        "p_value": float(p),
+        "wins": int((diff > 0).sum()),
+    }
+
+
+def paired_report(stats, n_boot: int = 5000, seed: int = 0):
+    """Paired comparison of the content-aware agent against structure-only
+    defenders, on the two comparators a reviewer will ask for.
+
+    - ``primary`` (the deployable claim): vs the single structural baseline with
+      the best *mean* performance -- the one you'd actually choose in advance.
+    - ``ensemble`` (a stress test): vs the per-trial *best* of all structural
+      baselines -- an oracle that cherry-picks the winning heuristic on every
+      outbreak. Beating a single baseline is the real claim; matching the
+      ensemble oracle is a bonus.
+
+    Each reports mean infection reduction, a bootstrap 95% CI, a paired Wilcoxon
+    p-value, and win count."""
+    if "content-aware" not in stats:
+        return None
+    struct = [n for n in STRUCT_NAMES if n in stats]
+    if not struct:
+        return None
+    ca = np.array(stats["content-aware"].infected_fraction, dtype=float)
+    means = {n: float(np.mean(stats[n].infected_fraction)) for n in struct}
+    best_name = min(means, key=means.get)          # strongest on average
+    best_fixed = np.array(stats[best_name].infected_fraction, dtype=float)
+    mat = np.vstack([np.array(stats[n].infected_fraction, dtype=float) for n in struct])
+    ensemble = mat.min(axis=0)
+
+    return {
+        "n_trials": int(len(ca)),
+        "primary": {"vs": best_name, **_paired_vs(ca, best_fixed, n_boot, seed)},
+        "ensemble": {"vs": "best-of-{" + ",".join(struct) + "}",
+                     **_paired_vs(ca, ensemble, n_boot, seed)},
+    }
 
 
 def evaluate_policy(spec: TrialSpec, policy_factory: Callable, n_trials=20, base_seed=0):

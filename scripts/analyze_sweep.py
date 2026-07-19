@@ -32,7 +32,8 @@ def edge(rec):
     """Relative infection reduction of content-aware vs best structure-only."""
     pol = rec["policies"]
     ca = pol["content-aware"]["infected_fraction"][0]
-    struct = [pol[n]["infected_fraction"][0] for n in ("degree", "betweenness") if n in pol]
+    struct_names = ("degree", "eigenvector", "betweenness", "greedy-blocking", "acquaintance")
+    struct = [pol[n]["infected_fraction"][0] for n in struct_names if n in pol]
     best = min(struct) if struct else 1.0
     return (1.0 - ca / best) if best > 0 else 0.0, ca, best
 

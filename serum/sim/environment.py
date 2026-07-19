@@ -54,6 +54,10 @@ class Action:
     def segment(u, v):
         return Action("segment", (u, v))
 
+    @staticmethod
+    def probe(v):
+        return Action("probe", v)
+
 
 @dataclass
 class Observation:
@@ -64,6 +68,7 @@ class Observation:
     isolated: frozenset
     patched: frozenset
     seeds: frozenset             # planted patient-zeros (known to defender)
+    captured_cve: object = None  # the payload CVE if a honeypot has captured it
 
 
 @dataclass
@@ -114,6 +119,8 @@ class ContainmentEnv:
         self.patched: set = set()
         self.isolated: set = set()
         self.segmented: set = set()
+        self.honeypots: set = set()
+        self._captured_cve = None
         self.t = 0
         self.budget_spent = 0
         self.trace: list[int] = []
@@ -134,6 +141,7 @@ class ContainmentEnv:
             isolated=frozenset(self.isolated),
             patched=frozenset(self.patched),
             seeds=frozenset(self.seeds),
+            captured_cve=self._captured_cve,
         )
 
     # -- interventions ---------------------------------------------------
@@ -161,6 +169,15 @@ class ContainmentEnv:
                 return False
             self.segmented.add(key)
             return True
+        if action.kind == "probe":
+            # deploy a honeypot: emulates a vulnerable service to attract the worm;
+            # absorbs an attack and captures the payload (reveals the CVE).
+            v = action.target
+            if v in self.honeypots or v in self.isolated \
+                    or self.status[v] == Status.INFECTED:
+                return False
+            self.honeypots.add(v)
+            return True
         raise ValueError(f"unknown action kind: {action.kind!r}")
 
     def _edge_open(self, u, v) -> bool:
@@ -176,11 +193,18 @@ class ContainmentEnv:
             if u in self.isolated:
                 continue
             for v in self.g.neighbors(u):
+                if not self._edge_open(u, v):
+                    continue
+                if v in self.honeypots:
+                    # the honeypot advertises the vulnerable service, so the worm
+                    # attacks it -> the payload is captured and the CVE revealed;
+                    # the honeypot absorbs the attack (v is never infected).
+                    if self._captured_cve is None:
+                        self._captured_cve = payload.cve
+                    continue
                 if self.status[v] != Status.SUSCEPTIBLE:
                     continue
                 if v in self.isolated or v in self.patched:
-                    continue
-                if not self._edge_open(u, v):
                     continue
                 if not payload.can_infect(self.g.nodes[v]["vuln"]):
                     continue  # <-- the crux: only exploitable hosts fall

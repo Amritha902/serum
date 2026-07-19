@@ -1,0 +1,19 @@
+[
+  {
+    "agent": "content-aware",
+    "infected": 0.00955,
+    "availability": 0.9835499999999999
+  },
+  {
+    "agent": "probe_0.2",
+    "infected": 0.00965,
+    "availability": 0.992,
+    "capture_step": 1.0
+  },
+  {
+    "agent": "probe_0.4",
+    "infected": 0.014550000000000002,
+    "availability": 0.994,
+    "capture_step": 1.0
+  }
+]

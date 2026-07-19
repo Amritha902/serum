@@ -57,6 +57,28 @@ def test_sir_recovery_makes_hosts_immune():
         assert env.status[seed] == Status.RECOVERED
 
 
+def test_honeypot_captures_payload_and_absorbs_attack():
+    """A honeypot on a frontier host captures the payload (reveals the CVE) and
+    is never itself infected."""
+    env, pl = make_env()
+    env.reset()
+    # place a honeypot on a susceptible neighbour of a seed
+    seed = env.seeds[0]
+    target = next((w for w in env.g.neighbors(seed)
+                   if env.status[w] == Status.SUSCEPTIBLE), None)
+    if target is None:
+        pytest.skip("seed has no susceptible neighbour in this instance")
+    env.step([Action.probe(target)])
+    # after a spread step the seed attacks the honeypot -> capture
+    for _ in range(3):
+        if env._captured_cve is not None:
+            break
+        env.step([])
+    assert env._captured_cve == pl.cve
+    assert env.status[target] != Status.INFECTED     # honeypot absorbed the attack
+    assert target not in env._ever
+
+
 def test_isolate_removes_from_spread():
     env, _ = make_env()
     env.reset()

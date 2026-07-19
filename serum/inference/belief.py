@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from serum.data.inventory import defender_prevalence, defender_vuln
 from serum.sim.network import cve_prevalence
 
 
@@ -49,7 +50,9 @@ class CVEBelief:
         self.noise = float(noise)
         self.known_seeds = known_seeds
         if prior == "prevalence":
-            base = cve_prevalence(g) + eps
+            # the defender's prevalence estimate comes from its (possibly
+            # imperfect) inventory, not ground truth
+            base = defender_prevalence(g) + eps
         elif prior == "uniform":
             base = np.ones(self.n_cves)
         elif prior == "threat_intel":
@@ -82,7 +85,7 @@ class CVEBelief:
             if v in seeds or v in self._seen:
                 continue
             self._seen.add(v)
-            vuln = self.g.nodes[v]["vuln"]
+            vuln = defender_vuln(self.g, v)   # defender's view, not ground truth
             for c in range(self.n_cves):
                 carries = c in vuln
                 if not carries:

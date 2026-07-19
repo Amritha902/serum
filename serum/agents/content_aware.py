@@ -21,6 +21,7 @@ from __future__ import annotations
 import numpy as np
 
 from serum.baselines.heuristics import frontier
+from serum.data.inventory import defender_vuln
 from serum.inference.belief import CVEBelief
 from serum.sim.environment import Action, Status
 
@@ -38,7 +39,7 @@ class ContentAwareAgent:
         infect: sum over CVEs c of P(c) * 1[v carries c] * (# susceptible
         neighbours that also carry c)."""
         g = env.g
-        v_vuln = g.nodes[v]["vuln"]
+        v_vuln = defender_vuln(g, v)          # defender's (maybe imperfect) view
         # Only CVEs that v itself carries can make v a spreader.
         cand = [c for c in v_vuln if posterior[c] > 0]
         if not cand:
@@ -47,7 +48,7 @@ class ContentAwareAgent:
         for w in g.neighbors(v):
             if env.status[w] != Status.SUSCEPTIBLE or w in env.patched:
                 continue
-            w_vuln = g.nodes[w]["vuln"]
+            w_vuln = defender_vuln(g, w)
             for c in cand:
                 if c in w_vuln:
                     score += posterior[c]

@@ -176,3 +176,22 @@ def test_real_topology_loads_with_segments():
     assert nx.is_connected(g)
     assert all("segment" in g.nodes[n] for n in g.nodes())
     assert g.graph["n_departments"] > 1
+
+
+def test_imperfect_inventory_defender_view():
+    """apply_inventory_noise creates a defender view that (a) differs from truth
+    and (b) misses some true vulns; defender_vuln falls back to truth otherwise."""
+    from serum.data.inventory import apply_inventory_noise, defender_vuln
+    records = _corpus(80)
+    g = generate_real_network(records, n=300, n_cves=20, n_products=40,
+                              rng=np.random.default_rng(3))
+    # before noise: defender_vuln == ground truth
+    v0 = next(iter(g.nodes()))
+    assert defender_vuln(g, v0) == g.nodes[v0]["vuln"]
+    apply_inventory_noise(g, miss=0.5, false=0.0, rng=np.random.default_rng(1))
+    # with 50% miss and no false entries, observed is a strict-ish subset of truth
+    missed = sum(len(g.nodes[v]["vuln"]) - len(g.nodes[v]["vuln_observed"])
+                 for v in g.nodes())
+    assert missed > 0
+    for v in g.nodes():
+        assert g.nodes[v]["vuln_observed"] <= g.nodes[v]["vuln"]  # miss-only => subset

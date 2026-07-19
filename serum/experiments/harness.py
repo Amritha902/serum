@@ -63,6 +63,8 @@ class TrialSpec:
     n_products: int = 80          # real-data: software-universe size
     n_segments: int = 12          # real-data: network zones (subnets/VLANs)
     homophily: float = 0.5        # real-data: software monoculture within a zone
+    inventory_miss: float = 0.0   # defender fails to see a true vuln (undetected)
+    inventory_false: float = 0.0  # defender sees a vuln the host lacks (stale)
 
 
 def build_episode(spec: TrialSpec, seed: int, records=None):
@@ -94,6 +96,10 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
             popularity_alpha=spec.popularity_alpha,
             rng=gen_rng,
         )
+    if spec.inventory_miss > 0 or spec.inventory_false > 0:
+        from serum.data.inventory import apply_inventory_noise
+        apply_inventory_noise(g, miss=spec.inventory_miss,
+                              false=spec.inventory_false, rng=gen_rng)
     if spec.attack_objective:
         from serum.attack.adversarial import select_payload
         payload = select_payload(g, beta=spec.beta, objective=spec.attack_objective,

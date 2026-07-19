@@ -67,6 +67,34 @@ def load_email_eu_core(cache_dir: str = CACHE, largest_cc: bool = True) -> nx.Gr
     return h
 
 
+SNAP_AS = "https://snap.stanford.edu/data/as20000102.txt.gz"
+
+
+def load_as_graph(cache_dir: str = CACHE, largest_cc: bool = True) -> nx.Graph:
+    """Load a real Autonomous-Systems (Internet) topology from SNAP -- an actual
+    computer-network graph (AS-level router connectivity), 6474 nodes. Unlike the
+    email graph this is a genuine reachability network, the appropriate substrate
+    for worm propagation. Segments (network zones) are assigned structurally since
+    AS graphs carry no department labels."""
+    path = os.path.join(cache_dir, "as.txt.gz")
+    _download(SNAP_AS, path)
+    g = nx.Graph()
+    op = gzip.open if path.endswith(".gz") else open
+    with op(path, "rt") as f:
+        for line in f:
+            if line.startswith("#") or not line.strip():
+                continue
+            a, b = line.split()[:2]
+            if a != b:
+                g.add_edge(int(a), int(b))
+    if largest_cc:
+        g = g.subgraph(max(nx.connected_components(g), key=len)).copy()
+    order = sorted(g.nodes())
+    h = nx.relabel_nodes(g, {old: i for i, old in enumerate(order)}, copy=True)
+    h.graph["topology"] = "as-internet"
+    return h
+
+
 def real_segment_map(g: nx.Graph) -> dict:
     """The node -> real department (segment) mapping carried by the graph."""
     return {n: d for n, d in g.nodes(data="segment")}

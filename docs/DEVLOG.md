@@ -91,6 +91,29 @@ testing** (Theme 6 of the literature review).
   collapse to 4.94%). The committee failure is redeemed by *detection + hedging*,
   not ensembling — the honest lesson made concrete.
 
+## Phase 6 — Deep technical grill: what actually drives the win (honest reframe)
+
+A decomposition (content-aware with prevalence vs uniform prior, plus belief
+diagnostics) revealed that **the containment advantage does NOT come from
+identifying the exploit**:
+- the belief ends with ~11 of 40 CVEs still consistent (it does not narrow to 1);
+- the MAP is the true CVE only ~25% of the time (usually mis-identifies);
+- yet infection is 0.95%, near the oracle's 0.85%, and a *uniform* prior gives
+  0.97% (the prior barely matters).
+
+**Honest mechanism.** The win comes from defending the belief-*consistent*
+vulnerable subgraph, which works *even under-identification* because the
+surviving CVEs are confusers that **share the same victims** (Prop 3) — the same
+reason evasion backfires. Containment succeeds because good defense contains the
+outbreak in ~3 steps, leaving little evidence, but that little evidence rules out
+enough CVEs that the *consistent set's* vulnerable hosts already overlap the true
+victims. So the empirical claim is NOT "we identify the exploit"; it is **"we
+defend the vulnerable subgraph the observations are consistent with, without
+needing to identify the exploit."** The identifiability theorem (Thm 1)
+characterises *when* full identification is possible, but containment does not
+require it — a cleaner, more robust, and more honest thesis than the original
+framing. Paper claims adjusted accordingly.
+
 ## Missed fields found via grilling
 
 - **Group testing / separating systems / superimposed codes** (Dorfman 1943,

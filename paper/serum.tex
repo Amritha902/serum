@@ -43,6 +43,12 @@ speed. We are explicit about scope: it does not beat an oracle ensemble on
 synthetic data, and the gated-propagation model itself is not novel; the
 contribution is the coupling of \emph{observable-attribute identifiability} with
 \emph{online, budgeted, content-aware containment}, grounded in real data.
+Notably, effective containment does \emph{not} require identifying the exploit:
+defending the observation-\emph{consistent} vulnerable subgraph suffices, because
+confusable exploits share victims---which is precisely why the agent is robust to
+partial observation, mis-identification, and adversarial evasion. Formally the
+inference is an instance of \emph{online, graph-induced, adversarial group
+testing}.
 \end{abstract}
 
 \section{Introduction}

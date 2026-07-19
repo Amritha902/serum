@@ -72,7 +72,7 @@ finalizing.
 |---|---|---|
 | Learning Mixtures of Graphs from Epidemic Cascades, Hoffmann, Basu, Goel, Caramanis, **ICML 2020**, arXiv:1906.06057 | ✔ 🔴 | Same theorem shape: "edge-separated" necessary-&-sufficient identifiability of which graph a cascade came from |
 | Finding the Graph of Epidemic Cascades, Netrapalli & Sanghavi, SIGMETRICS 2012 | ✔ | Separation-style recovery conditions |
-| Parameter Identifiability in Network Epidemics, Sridhar et al., 2023, arXiv:2208.07543 | ✔ | Structural vs practical identifiability backbone |
+| On Parameter Identifiability in Network-Based Epidemic Models, Kiss & Simon, Bull. Math. Biol. 2023, arXiv:2208.07543 | ✔ | Structural vs practical identifiability backbone (corrected: earlier draft misattributed this as "Sridhar et al.") |
 
 **Verdict:** our delta = a separating condition stated over **CVE profiles** (an
 *observable, checkable combinatorial* condition), coupled to N1's induced

@@ -62,8 +62,9 @@ full. All of the above is achieved while the agent **infers** the payload rather
 than being told it, landing close to the full-observability oracle.
 
 See [`docs/RESEARCH.md`](docs/RESEARCH.md) for the full design and the 12-point
-novelty register, [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) for a verified
-prior-art audit and honest novelty verdicts, [`docs/THEORY.md`](docs/THEORY.md)
+novelty register, [`docs/LITERATURE_REVIEW.md`](docs/LITERATURE_REVIEW.md) for a comprehensive,
+source-verified survey of the field, [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md)
+for the prior-art audit and honest novelty verdicts, [`docs/THEORY.md`](docs/THEORY.md)
 for the exploit-identifiability theorem (proofs + 100% empirical validation), and
 [`paper/serum.tex`](paper/serum.tex) for the paper draft.
 

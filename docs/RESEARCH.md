@@ -101,9 +101,9 @@ building the system, the register below is re-graded honestly:
 | N4 | Identifiability theory | Incremental→novel *narrowly*; distinct from Hoffmann via observable profiles | ✅ theorem + 100% validation ([`THEORY.md`](THEORY.md)) |
 | N5 | Belief-weighted exposed-vulnerable degree | Modest, defensible | ✅ |
 | N6 | Infection–availability Pareto (isolate→patch) | Incremental | ✅ |
-| N7 | Active sensing / VoI probing | Incremental | ⬜ next |
-| N8 | Stackelberg vs the *inference* | Underexplored, defensible | ⬜ next |
-| N9 | GNN+RL immunization | **Established** (RLGN/FINDER) — not alone | ⬜ (needs differentiator) |
+| N7 | Active sensing / VoI probing (honeypots) | Incremental | ✅ dual-control agent; captures @step 1, +availability |
+| N8 | Stackelberg vs the *inference* | Underexplored, defensible | ✅ evasion backfires (Prop 3 corollary) |
+| N9 | Learning under exploit-uncertainty | Defensible (not vanilla GNN-RL) | ✅ CEM policy rediscovers belief signal |
 | N10 | CVSS/LLM threat-intel prior | Open slice; frame modestly | ✅ prior + cold-start + LLM hook |
 | N11 | Real NVD grounding | Validation | ✅ full pipeline |
 | N12 | Phase diagram of the advantage | Systematization | ✅ sweep + prevalence curve |

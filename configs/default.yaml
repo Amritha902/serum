@@ -1,0 +1,25 @@
+# Default experiment configuration for Argus.
+# The "take-off" regime: the target vulnerability covers ~45% of the fleet,
+# its vulnerable subgraph is connected, and the worm spreads gradually -- the
+# setting where reactive containment (and content-awareness) actually matters.
+
+network:
+  n: 500                # hosts
+  topology: ba          # ba | ws | er | rgg
+  m: 3                  # density / attachment parameter
+  n_cves: 12            # size of the CVE universe
+  vuln_lambda: 6.0      # mean vulnerabilities per host (Poisson)
+  popularity_alpha: 0.8 # Zipf skew of CVE prevalence
+
+payload:
+  beta: 0.15            # per-contact transmission probability
+  strategy: stealth     # popular | stealth | random
+
+outbreak:
+  n_seeds: 3
+  budget_per_step: 5    # defender interventions per time step
+  horizon: 40
+
+experiment:
+  n_trials: 30
+  base_seed: 0

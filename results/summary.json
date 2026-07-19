@@ -1,0 +1,105 @@
+{
+  "no-defense": {
+    "name": "no-defense",
+    "infected_fraction": [
+      0.3586,
+      0.1505
+    ],
+    "availability": [
+      1.0,
+      0.0
+    ],
+    "steps_to_containment": [
+      13.85,
+      5.7903
+    ]
+  },
+  "random": {
+    "name": "random",
+    "infected_fraction": [
+      0.2582,
+      0.1659
+    ],
+    "availability": [
+      0.8735,
+      0.0784
+    ],
+    "steps_to_containment": [
+      12.65,
+      7.8376
+    ]
+  },
+  "degree": {
+    "name": "degree",
+    "infected_fraction": [
+      0.0367,
+      0.0496
+    ],
+    "availability": [
+      0.949,
+      0.047
+    ],
+    "steps_to_containment": [
+      5.1,
+      4.7
+    ]
+  },
+  "betweenness": {
+    "name": "betweenness",
+    "infected_fraction": [
+      0.0357,
+      0.0572
+    ],
+    "availability": [
+      0.949,
+      0.0508
+    ],
+    "steps_to_containment": [
+      5.1,
+      5.0784
+    ]
+  },
+  "content-aware": {
+    "name": "content-aware",
+    "infected_fraction": [
+      0.0169,
+      0.0109
+    ],
+    "availability": [
+      0.9855,
+      0.0059
+    ],
+    "steps_to_containment": [
+      3.15,
+      1.5256
+    ]
+  },
+  "content-aware-oracle": {
+    "name": "content-aware-oracle",
+    "infected_fraction": [
+      0.0105,
+      0.0048
+    ],
+    "availability": [
+      1.0,
+      0.0
+    ],
+    "steps_to_containment": [
+      2.25,
+      1.0428
+    ]
+  },
+  "_spec": {
+    "n": 500,
+    "topology": "ba",
+    "m": 3,
+    "n_cves": 12,
+    "vuln_lambda": 6.0,
+    "popularity_alpha": 0.8,
+    "beta": 0.35,
+    "payload_strategy": "stealth",
+    "n_seeds": 3,
+    "budget_per_step": 5,
+    "horizon": 40
+  }
+}

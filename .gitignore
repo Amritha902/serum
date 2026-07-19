@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# Experiment artifacts (keep the headline figure; ignore bulky/local logs)
+results/sweep.jsonl
+results/*.tmp
+data/raw/
+
+# Editor
+.vscode/
+.idea/

@@ -1,0 +1,149 @@
+"""Reproducible comparison of containment policies across random outbreaks.
+
+Every trial draws a fresh network, payload, and seed set from a single seeded
+RNG stream, then replays the *identical* outbreak under each policy (same graph,
+same payload, same seeds, same spread randomness) so differences are due to the
+policy alone -- a paired design that slashes variance.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from statistics import mean, pstdev
+from typing import Callable
+
+import numpy as np
+
+from argus.agents.content_aware import ContentAwareAgent, OracleContentAware
+from argus.baselines.heuristics import (
+    BetweennessDefense,
+    DegreeDefense,
+    NoDefense,
+    RandomDefense,
+)
+from argus.sim.environment import ContainmentEnv
+from argus.sim.network import generate_network
+from argus.sim.payload import sample_payload
+
+
+@dataclass
+class TrialSpec:
+    n: int = 500
+    topology: str = "ba"
+    m: int = 3
+    n_cves: int = 12
+    vuln_lambda: float = 6.0
+    popularity_alpha: float = 0.8
+    beta: float = 0.15
+    payload_strategy: str = "stealth"
+    n_seeds: int = 3
+    budget_per_step: int = 5
+    horizon: int = 40
+
+
+def build_episode(spec: TrialSpec, seed: int):
+    """Construct one fully-specified outbreak (network + payload + seeds).
+
+    Returns a factory that yields a *fresh* env with identical dynamics RNG for
+    each policy, so every policy faces the same stochastic outbreak."""
+    gen_rng = np.random.default_rng(seed)
+    g = generate_network(
+        n=spec.n,
+        topology=spec.topology,
+        m=spec.m,
+        n_cves=spec.n_cves,
+        vuln_lambda=spec.vuln_lambda,
+        popularity_alpha=spec.popularity_alpha,
+        rng=gen_rng,
+    )
+    payload = sample_payload(g, beta=spec.beta, strategy=spec.payload_strategy, rng=gen_rng)
+    # Seed the outbreak among hosts that actually carry the payload's CVE,
+    # otherwise patient zero cannot spread at all.
+    carriers = [v for v, d in g.nodes(data=True) if payload.cve in d["vuln"]]
+    if len(carriers) < spec.n_seeds:
+        carriers = list(g.nodes())
+    seeds = list(gen_rng.choice(carriers, size=spec.n_seeds, replace=False))
+    seeds = [int(s) for s in seeds]
+
+    def factory():
+        # A per-episode dynamics RNG, re-derived from the same seed so that
+        # every policy sees the same infection coin-flips.
+        dyn_rng = np.random.default_rng(seed + 10_000_019)
+        return ContainmentEnv(
+            g=g,
+            payload=payload,
+            seeds=seeds,
+            budget_per_step=spec.budget_per_step,
+            horizon=spec.horizon,
+            rng=dyn_rng,
+        )
+
+    return factory, payload
+
+
+def default_policies(g, rng):
+    """The standard comparison lineup, freshly constructed per trial."""
+    return [
+        NoDefense(),
+        RandomDefense(rng=rng),
+        DegreeDefense(),
+        BetweennessDefense(),
+        ContentAwareAgent(g),                 # ours, partial observation
+        OracleContentAware(patch=True),       # ours, full-observation upper bound
+    ]
+
+
+@dataclass
+class PolicyStats:
+    name: str
+    infected_fraction: list = field(default_factory=list)
+    availability: list = field(default_factory=list)
+    steps_to_containment: list = field(default_factory=list)
+
+    def summary(self):
+        def ms(xs):
+            return (round(mean(xs), 4), round(pstdev(xs), 4)) if xs else (float("nan"), 0.0)
+        return {
+            "name": self.name,
+            "infected_fraction": ms(self.infected_fraction),
+            "availability": ms(self.availability),
+            "steps_to_containment": ms(self.steps_to_containment),
+        }
+
+
+def compare_policies(spec: TrialSpec, n_trials: int = 20, base_seed: int = 0, verbose=True):
+    """Run all policies over ``n_trials`` paired outbreaks; return per-policy stats."""
+    stats: dict[str, PolicyStats] = {}
+    curves: dict[str, list] = {}
+    for t in range(n_trials):
+        seed = base_seed + t
+        factory, payload = build_episode(spec, seed)
+        # policies constructed against this trial's graph
+        probe_env = factory()
+        pol_rng = np.random.default_rng(seed + 777)
+        policies = default_policies(probe_env.g, pol_rng)
+        for policy in policies:
+            env = factory()
+            res = env.run(policy)
+            stats.setdefault(policy.name, PolicyStats(policy.name))
+            s = stats[policy.name]
+            s.infected_fraction.append(res.infected_fraction)
+            s.availability.append(res.availability)
+            s.steps_to_containment.append(res.steps_to_containment)
+            curves.setdefault(policy.name, []).append(res.trace)
+        if verbose:
+            print(f"  trial {t + 1}/{n_trials} (cve={payload.cve}) done", flush=True)
+    return stats, curves
+
+
+def evaluate_policy(spec: TrialSpec, policy_factory: Callable, n_trials=20, base_seed=0):
+    """Evaluate a single custom policy factory across trials."""
+    out = PolicyStats(getattr(policy_factory, "name", "custom"))
+    for t in range(n_trials):
+        factory, _ = build_episode(spec, base_seed + t)
+        env = factory()
+        res = env.run(policy_factory(env.g))
+        out.infected_fraction.append(res.infected_fraction)
+        out.availability.append(res.availability)
+        out.steps_to_containment.append(res.steps_to_containment)
+    return out

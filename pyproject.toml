@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "argus-malware-containment"
+version = "0.1.0"
+description = "Content-aware agentic containment of malware propagation on networks"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Amritha S" }]
+keywords = ["network-security", "malware", "epidemic-model", "agentic-ai",
+            "graph", "pomdp", "containment", "cyber-defense"]
+dependencies = [
+    "numpy>=2.0",
+    "networkx>=3.3",
+    "scipy>=1.13",
+    "matplotlib>=3.8",
+    "pyyaml>=6.0",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+include = ["argus*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

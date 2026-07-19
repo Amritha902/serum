@@ -89,6 +89,30 @@ Legend: **[v1]** implemented tonight · **[v2]** next · **[v3]** stretch.
 
 ---
 
+## Implementation status & honest verdicts (updated)
+
+After a verified prior-art audit ([`RELATED_WORK.md`](RELATED_WORK.md)) and
+building the system, the register below is re-graded honestly:
+
+| # | Novelty | Verdict | Built? |
+|---|---|---|---|
+| N1 | Vulnerability-gated propagation | **Not novel** (multitype percolation; diversity worms) — don't claim | ✅ |
+| N2/N3 | Online exploit inference from cascade shape | Novel *cell*; cite SCENARIOID, CyGym | ✅ soft + hard belief |
+| N4 | Identifiability theory | Incremental→novel *narrowly*; distinct from Hoffmann via observable profiles | ✅ theorem + 100% validation ([`THEORY.md`](THEORY.md)) |
+| N5 | Belief-weighted exposed-vulnerable degree | Modest, defensible | ✅ |
+| N6 | Infection–availability Pareto (isolate→patch) | Incremental | ✅ |
+| N7 | Active sensing / VoI probing | Incremental | ⬜ next |
+| N8 | Stackelberg vs the *inference* | Underexplored, defensible | ⬜ next |
+| N9 | GNN+RL immunization | **Established** (RLGN/FINDER) — not alone | ⬜ (needs differentiator) |
+| N10 | CVSS/LLM threat-intel prior | Open slice; frame modestly | ✅ prior + cold-start + LLM hook |
+| N11 | Real NVD grounding | Validation | ✅ full pipeline |
+| N12 | Phase diagram of the advantage | Systematization | ✅ sweep + prevalence curve |
+
+**The defensible core to lead with:** online exploit inference from
+vulnerability-gated cascade shape + a checkable identifiability condition on
+observable profiles + budgeted content-aware containment, on real data —
+the cell CyGym leaves open (static prior vs online inference).
+
 ## 3. Novelty register — the contributions
 
 Ten contributions, ordered from the conceptual core outward to the ambitious

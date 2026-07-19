@@ -208,3 +208,17 @@ def test_decoys_poison_hard_belief_but_soft_resists():
     soft.update(obs.newly_infected, obs.seeds)
     assert not hard.consistent[pl.cve]           # hard belief poisoned
     assert soft.posterior()[pl.cve] > 0          # soft belief retains the truth
+
+
+def test_committee_agent_runs_and_matches_single_in_benign_case():
+    """The committee (panel of belief-agents + structural anchors) runs and, with
+    no poisoning, contains at least as well as no defense."""
+    from serum.agents.committee import CommitteeAgent
+    from serum.baselines.heuristics import NoDefense
+    comm, none = [], []
+    for s in range(4):
+        env, _ = make_env(seed=s)
+        comm.append(env.run(CommitteeAgent(env.g)).infected_fraction)
+        env2, _ = make_env(seed=s)
+        none.append(env2.run(NoDefense()).infected_fraction)
+    assert np.mean(comm) <= np.mean(none)

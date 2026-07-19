@@ -142,6 +142,23 @@ a stealthy worm can stay hidden** — so a defender is most certain of the explo
 exactly when the outbreak is worst (large), which is when identification matters
 most. This asymmetry, not a symmetric duality, is the real result.
 
+## Connection to group testing and separating systems
+
+Theorem 1 is, in classical terms, a **group-testing** identifiability condition.
+Treat the CVE universe as items with exactly one "defective" (the payload `c*`);
+each host is a *test* whose pool is its vulnerability profile `X(v)`, and an
+infected host is a *positive test* revealing that its pool contains `c*`. The
+condition `⋂_{v∈I} X(v) = {c*}` is exactly the requirement that the observed
+tests form a **separating family** for `c*` (Rényi 1961); confusers are
+**cover-free-family** violations (Kautz & Singleton 1964), and the imperfect-
+inventory / belief-poisoning settings are **noisy group testing** (Atia &
+Saligrama 2012). The distinction from classical group testing — and SERUM's
+contribution — is that the pooling matrix is **not designed** but fixed by the
+fleet's software distribution, and the tests are **not queried** but *realised by
+an adversarial, graph-constrained spreading process, observed online*. This
+"online, graph-induced, adversarial group testing" framing is the honest home for
+the identifiability results; see `docs/LITERATURE_REVIEW.md` (Theme 6).
+
 ## Empirical validation
 
 `scripts/identifiability.py` builds real-NVD networks, computes

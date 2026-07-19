@@ -198,6 +198,45 @@ fills.
 
 ---
 
+## Theme 6 — Group testing, separating systems & combinatorial identification (THE FIELD WE MISSED)
+
+Surfaced late, during a self-grill of the identifiability theory: SERUM's
+identifiability result is, formally, a **group-testing / separating-system**
+statement. This is a classical, deeply-developed field that the earlier audit
+missed entirely. It must be cited (an information-theory reviewer would spot it
+immediately), and it *strengthens* SERUM by giving the theorem a rigorous home.
+
+- **Dorfman, "The Detection of Defective Members of Large Populations," Ann. Math. Stat. 14(4):436 (1943).** The origin of group testing: identify defective items by testing pooled subgroups. → *the ancestral framework*.
+- **Rényi, "On random generating elements of a finite Boolean algebra" / separating systems (1961).** Families of sets that *separate* every pair of elements. → **SERUM's identifiability condition IS a separating-system condition** (the infected hosts' profiles separate the true CVE from every other).
+- **Kautz & Singleton, "Nonrandom binary superimposed codes," IEEE Trans. IT 10(4):363 (1964).** Superimposed codes / *cover-free families*: no codeword covered by the union of `r` others. → **SERUM's confusers are exactly cover-free-family violations** (`carriers(c) ⊆ carriers(c')`).
+- **Du & Hwang, "Combinatorial Group Testing and Its Applications," World Scientific (2000).** The canonical monograph (adaptive vs non-adaptive, disjunct/separable matrices, bounds). → *the toolbox* for SERUM's identifiability bounds and constructions.
+- **Aldridge, Johnson & Scarlett, "Group Testing: An Information Theory Perspective," Found. Trends Commun. Inf. Theory 15(3–4):196 (2019); arXiv:1902.06002.** Modern survey incl. information-theoretic limits. → *rate/limit results* relevant to how much of an outbreak is needed to identify the exploit.
+- **Atia & Saligrama, "Boolean Compressed Sensing and Noisy Group Testing," IEEE Trans. IT 58(3):1880 (2012).** Group testing under observation noise. → **the exact framework for SERUM's imperfect-inventory and belief-poisoning settings** (noisy tests).
+
+**The mapping (and SERUM's genuine twist).**
+
+| SERUM | Group testing |
+|---|---|
+| identify the payload CVE from infected hosts | identify the *defective* from positive *tests* |
+| Theorem 1 (∩ infected profiles = {c*}) | 1-separable / *separating-family* condition |
+| confusers (Prop. 3) | *cover-free-family* violations |
+| imperfect inventory / deception poisoning | *noisy* group testing (Atia–Saligrama) |
+| active honeypot sensing | *adaptive* group testing |
+| diversity-for-observability (design) | *separating-family construction* |
+
+**The differentiator SERUM must state.** In classical group testing the *tests are
+designed* by the experimenter to be separating. In SERUM the "tests" are the host
+vulnerability profiles — **not designed, but given by the fleet's software
+distribution — and the "outcomes" (which hosts are infected) are produced by an
+adversarial, graph-constrained *spreading process*, observed *online* as the
+outbreak grows.** So SERUM is group testing where (i) the pooling matrix is fixed
+by nature, (ii) the queries are realised by contagion rather than chosen, and
+(iii) an adversary picks the defective to be hard to separate. Positioning SERUM
+as "online, graph-induced, adversarial group testing for exploit identification"
+is both honest and a genuinely novel cell.
+
+---
+
 ## The three nearest neighbors — cite prominently, differentiate in the same breath
 
 | Paper | What it shares with SERUM | The verified gap SERUM fills |

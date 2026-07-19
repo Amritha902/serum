@@ -13,8 +13,8 @@ venv/
 # OS
 .DS_Store
 
-# Experiment artifacts (keep the headline figure; ignore bulky/local logs)
-results/sweep.jsonl
+# Experiment artifacts (keep figures + sweep data; ignore bulky/local logs)
+results/sweep.log
 results/*.tmp
 data/raw/
 

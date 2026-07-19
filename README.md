@@ -43,6 +43,14 @@ precisely instead of bluntly isolating), and **contains faster** — while
 *inferring* the payload rather than being told it. It sits close to the
 full-observability oracle, so the inference leaves little on the table.
 
+**Robustness (54-config sweep, `results/phase_diagram.png`).** Content-awareness
+beats the best structure-only baseline in **52 / 54** configurations of
+topology × spread-rate × attacker-strategy × budget — mean **+20.4%** infection
+reduction, up to **+69%**. The advantage is largest under **tight budgets and
+faster spread**, precisely where squandering budget on invulnerable hosts is
+most costly. See [`docs/RESEARCH.md`](docs/RESEARCH.md) for the full design and
+the 12-point novelty register.
+
 ---
 
 ## Why this is a non-trivial problem

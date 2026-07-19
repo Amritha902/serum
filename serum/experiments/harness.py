@@ -43,6 +43,7 @@ class TrialSpec:
     popularity_alpha: float = 0.8
     beta: float = 0.35
     payload_strategy: str = "band"
+    attack_objective: str = ""    # "" = passive; else evasive/identifiable/spread
     prev_band: tuple = (0.20, 0.60)
     n_seeds: int = 3
     budget_per_step: int = 5
@@ -80,8 +81,13 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
             popularity_alpha=spec.popularity_alpha,
             rng=gen_rng,
         )
-    payload = sample_payload(g, beta=spec.beta, strategy=spec.payload_strategy,
-                             rng=gen_rng, band=spec.prev_band)
+    if spec.attack_objective:
+        from serum.attack.adversarial import select_payload
+        payload = select_payload(g, beta=spec.beta, objective=spec.attack_objective,
+                                 rng=gen_rng)
+    else:
+        payload = sample_payload(g, beta=spec.beta, strategy=spec.payload_strategy,
+                                 rng=gen_rng, band=spec.prev_band)
     # Seed the outbreak among hosts that actually carry the payload's CVE,
     # otherwise patient zero cannot spread at all.
     carriers = [v for v, d in g.nodes(data=True) if payload.cve in d["vuln"]]

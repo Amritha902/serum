@@ -1,0 +1,29 @@
+[
+  {
+    "attacker": "identifiable",
+    "no_defense": 0.1928,
+    "content_aware": 0.01115,
+    "best_fixed": 0.02415,
+    "best_name": "betweenness",
+    "rel_edge": 0.1566152495130096,
+    "p": 0.0035557867636058717
+  },
+  {
+    "attacker": "band",
+    "no_defense": 0.1402,
+    "content_aware": 0.00955,
+    "best_fixed": 0.015150000000000002,
+    "best_name": "degree",
+    "rel_edge": 0.17740856365856367,
+    "p": 0.00031488006307371413
+  },
+  {
+    "attacker": "evasive",
+    "no_defense": 0.22545,
+    "content_aware": 0.00915,
+    "best_fixed": 0.0178,
+    "best_name": "degree",
+    "rel_edge": 0.22360823451717576,
+    "p": 0.00012840613167075
+  }
+]

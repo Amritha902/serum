@@ -85,3 +85,15 @@ def test_identifiable_fraction_in_unit_interval():
 
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))
+
+
+def test_evasive_payload_is_confusable_but_spreads():
+    """The evasive attacker picks a spreading, non-identifiable payload; a
+    'spread' attacker maximises reach. Both must return a valid CVE."""
+    from serum.attack.adversarial import select_payload, payload_identifiability_score
+    g = toy_graph()
+    # CVE 0 spreads (component {a,b,c}) and is confusable (confuser 2) -> evasive pick
+    ev = select_payload(g, beta=0.3, objective="evasive", min_component=2)
+    assert ev.cve in range(3)
+    score = payload_identifiability_score(g, 0)
+    assert score["n_confusers"] == 1 and not score["identifiable"]

@@ -82,6 +82,21 @@ when `c*` is non-identifiable, the residual confusers `supp(R)\{c*}` are exactly
 the CVEs the agent must hedge across — and, crucially, they all share the victim
 set, so acting on any of them defends nearly the same hosts.
 
+## Corollary (robustness to inference-evasion)
+
+An attacker could try to defeat the belief by choosing a *non-identifiable*
+payload (novelty N8). Proposition 3 shows this backfires: `c'` confuses `c*`
+only if `R ⊆ carriers(c')`, i.e. every victim of `c*` also carries the confuser.
+Hence the believed vulnerable set is a *superset* of the true victim set, and a
+content-aware action taken under the (confused) belief still covers every host
+`c*` can reach. The attacker faces a bind: spreading widely needs a large carrier
+set, but a carrier set large enough to matter is hard to hide inside a confuser's
+without that confuser being defended too. Empirically
+(`scripts/adversarial.py`), an inference-evading attacker does **not** erode the
+content-aware advantage — it slightly *increases* it, because evasive payloads
+are high-prevalence and produce larger outbreaks that structure-only defenders
+handle worse. Inference-evasion is not a winning strategy against SERUM.
+
 ## Difference from cascade-mixture identifiability
 
 Hoffmann et al. (ICML 2020) ask when two *latent* graphs generating a cascade

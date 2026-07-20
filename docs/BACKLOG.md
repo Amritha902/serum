@@ -38,10 +38,18 @@ item off here. Record negative results; never overclaim. Work top-down.
   marginal −2.09pp on blast (CI [−3.98, −0.17], 12/20). Absolute infection is
   high (60%+) because Mirai-style payloads on tight budgets do form botnets —
   the deltas are what to read.
-- [ ] **Sample complexity of identification.** How much of the outbreak must the
-  defender observe before the exploit is identified? Curve of support-size /
-  identification-latency vs infected fraction, on real data. Ties to group-
-  testing rate results (Aldridge–Johnson–Scarlett).
+- [x] **Sample complexity of identification.** DONE —
+  `identification_trajectory` / `identification_latency` in
+  `serum/inference/identifiability.py` (seed profiles excluded from the belief so
+  only *propagation* infections count as tests), experiment in
+  `scripts/sample_complexity.py`. Real NVD networks (K=30 CVEs, n=400,
+  homophily 0.4, 12 nets, 76 identifiable CVEs): **median 5 propagation
+  infections** identify the payload = **1.25% of the fleet** (p90 2.25%) =
+  18.5% of the reachable component. Empirical hosts / log₂K ≈ 1.02 — matches
+  the information-theoretic bit-bound of adaptive group testing. 100% of
+  theoretically-identifiable CVEs identify in practice. Caveat: synth K=16 gives
+  ratio 2× log₂K, so the "matches the bound" line depends on real profiles
+  being more informative than the Zipf toy — not a universal claim.
 - [ ] **Confusability-graph analysis figure.** From `confusability_graph`: on
   real data, the distribution of confuser counts, the identifiable fraction, and
   a small drawn example. `scripts/confusability.py`.

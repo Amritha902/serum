@@ -255,9 +255,52 @@ mesh, budget=3, horizon=25, target=default telnet creds):
    any recalibration, but the headline shape (content-awareness > topology
    for value-weighted objectives) is baked into the model, not the numbers.
 
+## Phase 10 — Sample complexity of identification (group-testing rate on real data)
+
+**What.** How many infected hosts does the defender have to *see* before the
+posterior support collapses to a single CVE? New `identification_trajectory`
+(step-by-step: infected count → support size) and `identification_latency` in
+`serum/inference/identifiability.py`; experiment in `scripts/sample_complexity.py`.
+Critical design choice: `known_seeds=True` in the belief so the seeds' own
+vulnerability profiles do NOT count as evidence — only *propagation* infections
+do. (An earlier iteration with `known_seeds=False` produced a fake-looking
+"median=3 hosts" result that just recovered the seed count; caught in the grill.)
+
+**Real-data numbers.** 12 networks × 30 CVEs (400 hosts each, homophily 0.4,
+NVD-derived profiles), 76 identifiable-CVE trials:
+- **Median 5 propagation infections** to pin the payload's identity.
+- **1.25% of the fleet** (0.7–2.0% inter-network range) ever infected at
+  identification; p90 = 2.25%.
+- **18.5% of the reachable vulnerable component** observed at identification.
+- **empirical hosts / log₂K ≈ 1.02** with K=30 → the empirical median lands
+  essentially on the information-theoretic bit-bound.
+- **Identification rate = 100%** among theoretically-identifiable CVEs — the
+  supp(R) prediction survives dropping seed profiles from the belief.
+
+**Group-testing tie-in.** Adaptive noiseless group testing with 1 defective in K
+items needs ≥⌈log₂K⌉ tests (Aldridge–Johnson–Scarlett survey, 2019). Each new
+propagation infection acts as one such test: it intersects the running support
+with that host's carrier set. Real profiles are correlated (segment
+monoculture), which could have hurt the rate; empirically it doesn't — the
+information-theoretic scaling lands within a small constant of the i.i.d. bound.
+
+**Grill / caveats.**
+- On K=16 synth (Zipf profiles, no product structure) the ratio is 2.0× log₂K,
+  not 1.0× — the "matches log₂K" line depends on the specific profile
+  structure. Real product-based profiles are *more* informative than the Zipf
+  toy, not less.
+- We only probe CVEs with reachable component ≥10 (otherwise there is nothing
+  to observe). Small-component CVEs are dropped honestly, not miscounted.
+- The result is a rate/order statement, not an equality: log₂K is the
+  information-theoretic *bit-count*; hosts-to-identify is a *test-count* in
+  the group-testing analogue. Same order, not the same object.
+- 100% identification is a *lemma verification*, not a discovery — Thm 1 already
+  predicts it. The novel part is the constant (~log₂K, not O(K)).
+
+Artifacts: `results/sample_complexity.json`, `results/sample_complexity.png`.
+
 ## Open / next
 
-- Sample complexity of identification (P1).
 - Confusability-graph analysis figure (P1).
 - Poison-robust defense: attack detection / budget-hedging (motivated by Phase 4).
 - Multi-exploit / polymorphic payloads (hidden state = exploit *set*).

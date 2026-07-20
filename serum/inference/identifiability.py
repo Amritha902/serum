@@ -162,6 +162,77 @@ def duality_table(g: nx.Graph) -> list:
     return rows
 
 
+def identification_trajectory(g: nx.Graph, cve: int, seeds,
+                              beta: float = 1.0, horizon: int = 200,
+                              known_seeds: bool = True,
+                              rng: np.random.Generator | None = None) -> list:
+    """Run a saturating outbreak of ``cve`` and record, at every step, the
+    per-step number of newly-infected hosts, the cumulative propagation-infected
+    count, and the noiseless posterior *support size* (# CVEs consistent with
+    all seen infections; hard-consistency belief).
+
+    ``known_seeds=True`` (default, operational): the defender knows *which*
+    hosts were planted as patient-zeros, so those hosts' vulnerability profiles
+    are NOT folded into the belief — only genuine propagation infections count
+    as evidence. This is the correct sample-complexity setting for the group-
+    testing analogue: each new propagation event is an unplanned "test" that
+    contracts the support.
+
+    ``known_seeds=False``: the theorem's setting — every observed infection
+    (seeds included) folds into supp(I), so the trajectory limits to supp(R).
+
+    Returned rows: ``{"step", "infected", "infected_frac", "newly", "support"}``.
+    ``infected`` counts *propagation* infections only (not the seeds) under
+    ``known_seeds=True``, matching the sample-complexity semantic. The first
+    row is the pre-observation state (all CVEs still consistent). If ``cve``
+    has irreducible confusers the trajectory bottoms out at 1 + |confusers|.
+    """
+    from serum.inference.belief import CVEBelief
+    from serum.sim.environment import ContainmentEnv
+    from serum.sim.payload import Payload
+
+    rng = rng or np.random.default_rng(0)
+    payload = Payload(cve=cve, beta=beta)
+    env = ContainmentEnv(g, payload, seeds, horizon=horizon, rng=rng)
+    belief = CVEBelief(g, mode="hard", known_seeds=known_seeds)
+    obs = env.reset()
+    n = g.number_of_nodes()
+    seed_set = set(seeds)
+
+    def _prop_infected() -> int:
+        # count non-seed hosts that have ever been infected (the actual
+        # evidence a defender would consume when known_seeds=True)
+        return len(env._ever - seed_set) if known_seeds else len(env._ever)
+
+    rows = [{"step": 0, "infected": 0, "infected_frac": 0.0, "newly": 0,
+             "support": g.graph["n_cves"]}]
+    for _ in range(env.horizon):
+        belief.update(obs.newly_infected, obs.seeds)
+        pi = _prop_infected()
+        rows.append({"step": env.t, "infected": pi,
+                     "infected_frac": pi / n,
+                     "newly": len(obs.newly_infected),
+                     "support": int(belief.consistent.sum())})
+        if env.done():
+            break
+        obs = env.step([])
+    return rows
+
+
+def identification_latency(traj: list, target_support: int = 1):
+    """From an identification trajectory, extract the (step, infected,
+    infected_frac) at which the posterior support first drops to
+    ``target_support`` — the *sample complexity* of identifying (or
+    disambiguating to a small set) the payload. Returns ``None`` if the
+    trajectory never reaches ``target_support`` (the target is unidentifiable
+    or the outbreak didn't saturate)."""
+    for row in traj:
+        if row["support"] <= target_support:
+            return {"step": row["step"], "infected": row["infected"],
+                    "infected_frac": row["infected_frac"]}
+    return None
+
+
 def identifiability_report(g: nx.Graph) -> dict:
     """Per-CVE identifiability + residual confusers, plus the fleet summary."""
     n = g.graph["n_cves"]

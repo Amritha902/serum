@@ -11,7 +11,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from serum.inference.belief import CVEBelief
 from serum.inference.identifiability import (
     carriers, confusability_graph, confusers, identifiable_fraction,
-    is_identifiable, reachable_component, support_over,
+    identification_latency, identification_trajectory, is_identifiable,
+    reachable_component, support_over,
 )
 
 
@@ -97,6 +98,57 @@ def test_evasive_payload_is_confusable_but_spreads():
     assert ev.cve in range(3)
     score = payload_identifiability_score(g, 0)
     assert score["n_confusers"] == 1 and not score["identifiable"]
+
+
+def test_identification_trajectory_monotone_and_latency():
+    """Sample-complexity trajectory: support size is non-increasing over time
+    (a hard belief only excludes CVEs, never resurrects them); latency for an
+    identifiable target lands somewhere along the trajectory; unidentifiable
+    targets return None."""
+    from serum.sim.network import generate_network
+    g = generate_network(n=200, n_cves=12, vuln_lambda=4, popularity_alpha=0.7,
+                         rng=np.random.default_rng(0))
+    # any live CVE with a reasonable component
+    target = None
+    for c in range(g.graph["n_cves"]):
+        R = reachable_component(g, c)
+        if len(R) >= 15:
+            target = c
+            break
+    assert target is not None, "test needs at least one live component"
+    seeds = sorted(R)[:2]
+    traj = identification_trajectory(g, target, seeds, beta=1.0, horizon=200,
+                                     rng=np.random.default_rng(1))
+    supports = [r["support"] for r in traj]
+    infected = [r["infected"] for r in traj]
+    # monotonic non-increase (support) and non-decrease (infected)
+    assert all(a >= b for a, b in zip(supports, supports[1:]))
+    assert all(a <= b for a, b in zip(infected, infected[1:]))
+    # end state matches the theory: support equals 1 + |confusers|
+    conf = confusers(g, target)
+    assert traj[-1]["support"] == 1 + len(conf)
+    # latency semantics
+    lat = identification_latency(traj, target_support=1)
+    if is_identifiable(g, target):
+        # identification can happen anywhere from t=0 (seeds already pin the
+        # posterior) through the last step; must observe at least the seeds.
+        assert lat is not None and 0 <= lat["step"] <= traj[-1]["step"]
+        assert lat["infected"] > 0
+    else:
+        assert lat is None
+
+
+def test_identification_latency_none_when_unidentifiable():
+    """Toy graph: CVE 0 is not identifiable (confused with 2). A saturating
+    outbreak of it can never collapse support to 1, so latency is None."""
+    g = toy_graph()
+    seeds = ["a"]
+    traj = identification_trajectory(g, cve=0, seeds=seeds, beta=1.0,
+                                     rng=np.random.default_rng(0))
+    assert identification_latency(traj, target_support=1) is None
+    # but latency to support<=2 is reachable (a and 2 remain)
+    lat2 = identification_latency(traj, target_support=2)
+    assert lat2 is not None
 
 
 def test_spread_bounds_anonymity_prop4():

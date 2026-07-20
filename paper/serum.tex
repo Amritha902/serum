@@ -459,11 +459,50 @@ no sensing. That online-inference gap is what SERUM fills.
 uncertainty'' (belief-augmented features), and its LLM layer is a grounded prior
 over a fixed CVE candidate set, corrected online by the Bayesian tracker.
 
-\section{Limitations and responsible use}
-The propagation model is abstract (a probability over an exploitability graph);
-inventories are assumed known; adversarial payload design against the inference
-is future work. SERUM is defensive: it studies faster, lower-collateral
-containment and contains no weaponizable attack code.
+\section{Limitations}
+We state these plainly; several are load-bearing.
+
+\textbf{(L1) The favorable regime is not validated on real host-level data.}
+Content-awareness helps only when vulnerable \emph{zones diverge from network
+hubs} (\S\ref{sec:exp}); on hub-dominated graphs structure-only immunization
+already suffices. Whether real enterprise networks satisfy the favorable
+condition is an empirical question we \emph{cannot} answer with public data: the
+join of a real segmented topology with real per-host vulnerability inventories
+exists only as proprietary scan data (e.g.\ enterprise Tenable/Nessus exports),
+restricted by privacy. Our two real topologies are imperfect proxies---email-Eu-core
+is a communication graph, and the Autonomous-Systems graph's nodes are
+organisations, not hosts. Validating (or refuting) applicability on a real
+host-level segmented network with measured vulnerabilities is the single most
+important piece of future work.
+
+\textbf{(L2) Online inference is a refinement, not the driver.} Ablations
+(\S\ref{sec:exp}) show containment succeeds without identifying the exploit:
+defending the observation-\emph{consistent} vulnerable subgraph over-covers the
+true victims (Prop.~\ref{prop:conf}), so freezing the belief at its prior costs
+only $0.1$--$0.2$ points. The identifiability theory (\S\ref{sec:theory}) is thus
+a \emph{characterisation} of when full identification is possible and the
+group-testing bridge---not the mechanism behind the empirical win.
+
+\textbf{(L3) Semi-synthetic profiles.} CVE catalog and topology are real, but the
+host$\leftrightarrow$CVE assignment is \emph{modeled} (NVD product popularity plus
+software-monoculture zones), not measured.
+
+\textbf{(L4) Perfect infection observability} is assumed; real detection is noisy
+(we stress inventory noise but not infection-detection noise).
+
+\textbf{(L5) Self-designed adversaries.} Robustness is evaluated against the
+poisoning/evasion attacks we constructed with our parameters; an adaptive
+worst-case adversary that best-responds to the robust agent's audit rule is
+future work.
+
+\textbf{(L6) Multiplicity.} We report many paired comparisons; the marginal
+($p\!\in\![0.01,0.05]$) results should be read with a family-wise correction.
+
+\textbf{(L7) Abstract model.} Propagation is a probability over an exploitability
+graph; there is no real malware, packet-level emulation, or scanning/C2 layer.
+
+\paragraph{Responsible use.} SERUM is defensive---it studies faster,
+lower-collateral containment---and contains no weaponizable attack code.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}

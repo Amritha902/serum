@@ -148,3 +148,22 @@ item off here. Record negative results; never overclaim. Work top-down.
 - [x] Comprehensive verified literature review + 40-entry bibliography.
 - [x] Paper draft; Pareto front; N7 sensing; N8 evasion; N9 learned; N10 prior.
 - [x] Identifiability theorem (100% validated); real-topology flagship result.
+
+## Round 2 — loophole mitigations (from the hostile panel review, docs/REVIEW_MITIGATION.md)
+
+- [ ] **SR2 zone-hub divergence metric.** Define a measurable "divergence" score
+  (how much a CVE's vulnerable-degree anti-correlates with total degree). Show it
+  PREDICTS the content-aware advantage across a homophily sweep (turns the knob
+  into a measured property). `scripts/divergence.py`.
+- [ ] **SR6 multiplicity correction.** Add Holm-Bonferroni across the headline
+  paired comparisons; report family-wise-corrected p-values in a table. Update
+  the paper to cite corrected values. `scripts/multiplicity.py`.
+- [ ] **L4 infection-detection noise.** Add a detection-noise channel (missed /
+  false infection *observations*, distinct from inventory noise) and show
+  content-aware degradation vs structure-only. `scripts/detection_noise.py`.
+- [ ] **SR5 adaptive adversary.** An attacker that best-responds to the robust
+  agent's audit rule (e.g. decoys timed/placed to keep the trust weight high).
+  Does the robust agent still hold? `scripts/adaptive_attack.py`.
+- [ ] **Path A prune.** Produce `docs/CONTRIBUTIONS.md`: the 4 claims that
+  survive grilling, each with its single strongest result and its honest scope;
+  mark which of the 12 novelties move to appendix.

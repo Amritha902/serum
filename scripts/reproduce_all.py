@@ -161,6 +161,14 @@ MANIFEST: List[Experiment] = [
         tags=frozenset({"medium"}),
     ),
     Experiment(
+        name="divergence",
+        script="divergence.py",
+        outputs=("divergence.json", "divergence.png"),
+        tags=frozenset({"medium"}),
+        note="SR2 zone-hub divergence metric: measured property that "
+             "predicts content-aware advantage across a homophily sweep.",
+    ),
+    Experiment(
         name="optimal_stopping",
         script="optimal_stopping.py",
         outputs=("optimal_stopping.json", "optimal_stopping.png"),

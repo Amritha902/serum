@@ -617,6 +617,57 @@ Wilcoxon p < 0.01. New `tests/test_multi_topology.py` (3 tests) locks in
 the artifact and smoke-tests the harness on a synthetic BA graph so CI
 doesn't need the network. 94 tests green.
 
+### SR2 zone-hub divergence — measurable property that predicts content-aware advantage
+
+**What.** Converted the intuition "content-aware wins when the payload's
+vulnerable subgraph diverges from physical hubs" into a *measurable* per-CVE
+score (no synthetic knob needed), and empirically tested whether it predicts
+the observed delta over DegreeDefense.
+
+**Metrics** (`serum/inference/divergence.py`):
+- `rank_divergence(g, c) = 1 - Spearman(deg_G(v), vuln_deg(v)) over v ∈
+  carriers(c)`. Range [0, 2]; higher = physical-hub ranking within the carrier
+  set disagrees more with the vulnerable-hub ranking. Returns None when the
+  carrier set is <3 hosts or all ranks are tied.
+- `hub_swap(g, c, k) = 1 - Jaccard(top-k by deg all hosts, top-k by vuln_deg
+  on carriers)`. Direct operational analogue at defensive budget k.
+
+**Experiment** (`scripts/divergence.py`, N=90 real-NVD trials, K=12, n=400,
+budget=2, horizon=50, homophily ∈ {0.0, 0.2, ..., 1.0}, 15 trials each):
+
+| predictor        | Spearman r | permutation p | notes |
+|------------------|-----------:|--------------:|-------|
+| **rank_divergence** | **−0.263** | **0.0105**  | metric, defined only from graph + CVE |
+| hub_swap         |     −0.196 |        0.055 | operational, budget-parameterized |
+| homophily (knob) |     −0.027 |        0.808 | synthetic; drowned out by within-bin variation |
+
+**Finding.** rank_divergence significantly predicts the per-trial content-aware
+advantage (p_perm=0.010) and DOES SO BETTER THAN THE SYNTHETIC HOMOPHILY KNOB
+IT REPLACES (r=−0.263 vs r=−0.027, p=0.81). The metric captures per-trial
+structural variation the knob cannot — turning a nuisance parameter into a
+measured property of the (graph, payload) pair. Passes Bonferroni for 3 tests
+(α=0.017).
+
+**Grill / honest direction.** The sign is *opposite* the naive intuition. LOW
+divergence (physical hubs coincide with carrier hubs) predicts LARGER content-
+aware advantage, not smaller. Explanation: low divergence → carrier subgraph
+is well-connected → outbreak grows large enough for either policy to matter →
+content-aware pulls ahead. HIGH divergence → carrier subgraph fragmented →
+outbreak dies naturally → both policies do fine → tiny delta. The metric
+still predicts, just in the opposite direction — I've locked in this direction
+in a test (`test_experiment_result_hypothesis_holds_when_artifact_exists`) so
+a future re-run cannot silently flip the sign without failing CI.
+
+**Effect size.** r²≈0.07 — modest. Divergence is *one* signal among many, not
+a complete explanation of the delta. Reported as such.
+
+**Honest scope.** Synthetic BA topology with real NVD-derived CVE profiles;
+K=12, n=400. Not run on real SNAP topologies (email/AS) because we don't
+control homophily there. Direction may differ in a saturating regime with
+much larger budgets or different `beta`. Cross-checked artifact
+(`results/divergence.json`) against 11 tests including sign of the finding.
+Full suite 105 tests green.
+
 ## Open / next
 - (nothing at P2 unchecked; see BACKLOG.md P3)
 

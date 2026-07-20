@@ -151,10 +151,17 @@ item off here. Record negative results; never overclaim. Work top-down.
 
 ## Round 2 — loophole mitigations (from the hostile panel review, docs/REVIEW_MITIGATION.md)
 
-- [ ] **SR2 zone-hub divergence metric.** Define a measurable "divergence" score
-  (how much a CVE's vulnerable-degree anti-correlates with total degree). Show it
-  PREDICTS the content-aware advantage across a homophily sweep (turns the knob
-  into a measured property). `scripts/divergence.py`.
+- [x] **SR2 zone-hub divergence metric.** DONE — `serum/inference/divergence.py`
+  defines `rank_divergence(g, c) = 1 - Spearman(deg_G(v), vuln_deg(v)) over
+  v ∈ carriers(c)` and `hub_swap(g, c, k)` (top-k Jaccard). Experiment
+  `scripts/divergence.py` (N=90 real-NVD trials across homophily 0.0–1.0):
+  **rank_divergence predicts the per-trial content-aware advantage over
+  DegreeDefense (Spearman r=−0.263, permutation p=0.010)** and beats the
+  synthetic homophily knob itself (r=−0.027, p=0.81) — the metric captures
+  per-trial structural variation the knob cannot. Honest: sign is opposite the
+  naive intuition (LOW divergence → LARGER delta, because low divergence means
+  well-connected carrier subgraph → bigger outbreaks → more room for CA to
+  distinguish itself); locked in a directional test. r²≈0.07 = modest effect.
 - [ ] **SR6 multiplicity correction.** Add Holm-Bonferroni across the headline
   paired comparisons; report family-wise-corrected p-values in a table. Update
   the paper to cite corrected values. `scripts/multiplicity.py`.

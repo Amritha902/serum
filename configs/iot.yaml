@@ -1,0 +1,27 @@
+# IoT-botnet (Mirai-style) scenario for SERUM.
+# Consumed by scripts/iot_botnet.py; see docs/APPLICATION_IOT.md for the
+# framing. Note: the CVE universe and device catalog are wired inside
+# serum/scenarios/iot.py (DEFAULT_DEVICE_TYPES, DEFAULT_CVE_BETAS); this
+# config only controls the outbreak & experiment shape.
+
+scenario: iot-mirai
+
+network:
+  n: 600                # devices in the fleet
+  topology: rgg         # random geometric (physical-proximity IoT mesh)
+  m: 3                  # density parameter for the base topology
+
+payload:
+  # Mirai's flagship hook: default telnet credentials (cve index 0 in the
+  # scenario's CVE universe). Spans camera / DVR / router / hub in the
+  # default catalog.
+  target_cve: 0
+
+outbreak:
+  n_seeds: 5
+  budget_per_step: 3    # tight budget so containment matters
+  horizon: 25
+
+experiment:
+  n_trials: 20
+  base_seed: 0

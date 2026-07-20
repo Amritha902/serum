@@ -27,10 +27,17 @@ item off here. Record negative results; never overclaim. Work top-down.
 
 ## P1 — application & breadth
 
-- [ ] **IoT-botnet framing.** A scenario module: device-type firmware zones
-  (natural monoculture), a Mirai-style payload, blast radius = DDoS capacity ∝
-  infected devices. A config + a short `docs/APPLICATION_IOT.md` + one headline
-  experiment. Keep the framework general; IoT is the flagship application.
+- [x] **IoT-botnet framing.** DONE — `serum/scenarios/iot.py` (device-type
+  firmware monoculture: camera/dvr/router/thermostat/doorbell/light/hub/printer),
+  `mirai_payload` targets default telnet creds (spans camera/DVR/router/hub),
+  `value` = uplink Mbps so `blast_radius` = DDoS capacity conscripted. Config
+  `configs/iot.yaml`, doc `docs/APPLICATION_IOT.md`, experiment
+  `scripts/iot_botnet.py` (20 paired trials, n=600, rgg): **content-aware cuts
+  DDoS blast −8.71pp vs degree** (CI [−11.13, −6.47], 20/20 wins) while raising
+  availability (99.5% vs 91.25%) — Pareto-dominates here. Value-steering adds a
+  marginal −2.09pp on blast (CI [−3.98, −0.17], 12/20). Absolute infection is
+  high (60%+) because Mirai-style payloads on tight budgets do form botnets —
+  the deltas are what to read.
 - [ ] **Sample complexity of identification.** How much of the outbreak must the
   defender observe before the exploit is identified? Curve of support-size /
   identification-latency vs infected fraction, on real data. Ties to group-

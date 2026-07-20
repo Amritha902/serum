@@ -1,0 +1,859 @@
+{
+  "spec": {
+    "scenario": "iot-mirai",
+    "n": 600,
+    "topology": "rgg",
+    "budget_per_step": 3,
+    "horizon": 25,
+    "n_seeds": 5,
+    "target_cve": 0,
+    "trials": 20
+  },
+  "summary": {
+    "no-defense": {
+      "infected_fraction": {
+        "mean": 0.7096666666666667,
+        "se": 0.004776587639066639
+      },
+      "blast_radius": {
+        "mean": 0.937686559849977,
+        "se": 0.0019191976331784284
+      },
+      "availability": {
+        "mean": 1.0,
+        "se": 0.0
+      }
+    },
+    "degree": {
+      "infected_fraction": {
+        "mean": 0.6730833333333333,
+        "se": 0.00705375662013798
+      },
+      "blast_radius": {
+        "mean": 0.8925781450765731,
+        "se": 0.007808162311515127
+      },
+      "availability": {
+        "mean": 0.9125,
+        "se": 0.002958039891549811
+      }
+    },
+    "content-aware": {
+      "infected_fraction": {
+        "mean": 0.6003333333333333,
+        "se": 0.01217057135131888
+      },
+      "blast_radius": {
+        "mean": 0.8054447283419351,
+        "se": 0.015155432578392282
+      },
+      "availability": {
+        "mean": 0.9950000000000001,
+        "se": 2.54702629954375e-17
+      }
+    },
+    "content-aware+value": {
+      "infected_fraction": {
+        "mean": 0.59275,
+        "se": 0.012785496969165411
+      },
+      "blast_radius": {
+        "mean": 0.7845062148091424,
+        "se": 0.016016970508042586
+      },
+      "availability": {
+        "mean": 0.9950000000000001,
+        "se": 2.54702629954375e-17
+      }
+    }
+  },
+  "paired_content_aware_vs_degree_blast": {
+    "mean": -0.087133416734638,
+    "ci95": [
+      -0.11134147968072124,
+      -0.0646718216648653
+    ],
+    "wins_a_lower": 20,
+    "n": 20
+  },
+  "paired_steer_blast": {
+    "mean": -0.02093851353279271,
+    "ci95": [
+      -0.03978508810916571,
+      -0.0017157075652436374
+    ],
+    "wins_a_lower": 12,
+    "n": 20
+  },
+  "paired_steer_infected": {
+    "mean": -0.007583333333333331,
+    "ci95": [
+      -0.021083333333333325,
+      0.005083333333333337
+    ],
+    "wins_a_lower": 12,
+    "n": 20
+  },
+  "rows": [
+    {
+      "no-defense": {
+        "infected_fraction": 0.6866666666666666,
+        "blast_radius": 0.9327288680900848,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6466666666666666,
+        "blast_radius": 0.8560982743492249,
+        "availability": 0.915
+      },
+      "content-aware": {
+        "infected_fraction": 0.5983333333333334,
+        "blast_radius": 0.8242176074875694,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.5933333333333334,
+        "blast_radius": 0.7964317051769523,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3375,
+        "n_carriers": 413,
+        "carrier_share": 0.6883333333333334,
+        "capacity_by_type": {
+          "camera": 4830.0,
+          "doorbell": 825.0,
+          "light": 255.0,
+          "router": 19750.0,
+          "thermostat": 650.0,
+          "dvr": 5640.0,
+          "hub": 1920.0,
+          "printer": 320.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.7283333333333334,
+        "blast_radius": 0.941595211130885,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6833333333333333,
+        "blast_radius": 0.883028636143019,
+        "availability": 0.915
+      },
+      "content-aware": {
+        "infected_fraction": 0.6133333333333333,
+        "blast_radius": 0.8422585342177641,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.6516666666666666,
+        "blast_radius": 0.882705063905517,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3468,
+        "n_carriers": 437,
+        "carrier_share": 0.7283333333333334,
+        "capacity_by_type": {
+          "hub": 1920.0,
+          "camera": 5490.0,
+          "dvr": 6440.0,
+          "doorbell": 810.0,
+          "thermostat": 600.0,
+          "printer": 200.0,
+          "router": 15250.0,
+          "light": 195.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.6966666666666667,
+        "blast_radius": 0.9191278800061853,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6666666666666666,
+        "blast_radius": 0.8931498376372352,
+        "availability": 0.905
+      },
+      "content-aware": {
+        "infected_fraction": 0.585,
+        "blast_radius": 0.8053193134374517,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.6116666666666667,
+        "blast_radius": 0.8034637389825267,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3414,
+        "n_carriers": 428,
+        "carrier_share": 0.7133333333333334,
+        "capacity_by_type": {
+          "camera": 5790.0,
+          "doorbell": 780.0,
+          "router": 17500.0,
+          "thermostat": 640.0,
+          "dvr": 5320.0,
+          "hub": 1920.0,
+          "light": 245.0,
+          "printer": 140.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.735,
+        "blast_radius": 0.9522435435002164,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.71,
+        "blast_radius": 0.9245419131438465,
+        "availability": 0.935
+      },
+      "content-aware": {
+        "infected_fraction": 0.675,
+        "blast_radius": 0.8665416245851969,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.66,
+        "blast_radius": 0.867695859183379,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3509,
+        "n_carriers": 441,
+        "carrier_share": 0.735,
+        "capacity_by_type": {
+          "camera": 5490.0,
+          "doorbell": 690.0,
+          "router": 19750.0,
+          "dvr": 5960.0,
+          "thermostat": 620.0,
+          "hub": 1800.0,
+          "light": 225.0,
+          "printer": 120.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.6733333333333333,
+        "blast_radius": 0.9299221357063404,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.625,
+        "blast_radius": 0.8739869696488162,
+        "availability": 0.9
+      },
+      "content-aware": {
+        "infected_fraction": 0.58,
+        "blast_radius": 0.8037501986334022,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.58,
+        "blast_radius": 0.8104242809470841,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3301,
+        "n_carriers": 410,
+        "carrier_share": 0.6833333333333333,
+        "capacity_by_type": {
+          "dvr": 5960.0,
+          "hub": 1920.0,
+          "camera": 4860.0,
+          "router": 16750.0,
+          "doorbell": 795.0,
+          "light": 310.0,
+          "printer": 240.0,
+          "thermostat": 630.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.73,
+        "blast_radius": 0.9386863766168319,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.7083333333333334,
+        "blast_radius": 0.9158407525617336,
+        "availability": 0.915
+      },
+      "content-aware": {
+        "infected_fraction": 0.6266666666666667,
+        "blast_radius": 0.7982529816899042,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.625,
+        "blast_radius": 0.8046363178229464,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3452,
+        "n_carriers": 439,
+        "carrier_share": 0.7316666666666667,
+        "capacity_by_type": {
+          "doorbell": 795.0,
+          "dvr": 6680.0,
+          "camera": 5670.0,
+          "printer": 260.0,
+          "router": 14000.0,
+          "hub": 1620.0,
+          "light": 210.0,
+          "thermostat": 530.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.6933333333333334,
+        "blast_radius": 0.9410878408919693,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6566666666666666,
+        "blast_radius": 0.8829290342021998,
+        "availability": 0.935
+      },
+      "content-aware": {
+        "infected_fraction": 0.625,
+        "blast_radius": 0.8564110290794034,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.615,
+        "blast_radius": 0.8094018381799005,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3304,
+        "n_carriers": 416,
+        "carrier_share": 0.6933333333333334,
+        "capacity_by_type": {
+          "dvr": 5640.0,
+          "printer": 260.0,
+          "router": 18750.0,
+          "thermostat": 540.0,
+          "camera": 5160.0,
+          "light": 300.0,
+          "hub": 1680.0,
+          "doorbell": 855.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.7033333333333334,
+        "blast_radius": 0.9420727324996406,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.5916666666666667,
+        "blast_radius": 0.7690096305878971,
+        "availability": 0.9
+      },
+      "content-aware": {
+        "infected_fraction": 0.5033333333333333,
+        "blast_radius": 0.6603421014805232,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.5166666666666667,
+        "blast_radius": 0.6747161132672129,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3410,
+        "n_carriers": 427,
+        "carrier_share": 0.7116666666666667,
+        "capacity_by_type": {
+          "light": 240.0,
+          "doorbell": 765.0,
+          "camera": 5040.0,
+          "dvr": 6040.0,
+          "router": 20250.0,
+          "printer": 180.0,
+          "thermostat": 650.0,
+          "hub": 1620.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.7383333333333333,
+        "blast_radius": 0.9441939996891031,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.7,
+        "blast_radius": 0.9050209855432924,
+        "availability": 0.89
+      },
+      "content-aware": {
+        "infected_fraction": 0.5983333333333334,
+        "blast_radius": 0.8173480491217161,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.6283333333333333,
+        "blast_radius": 0.8248095756256801,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3368,
+        "n_carriers": 445,
+        "carrier_share": 0.7416666666666667,
+        "capacity_by_type": {
+          "printer": 180.0,
+          "dvr": 7320.0,
+          "doorbell": 750.0,
+          "light": 175.0,
+          "camera": 5130.0,
+          "router": 16500.0,
+          "thermostat": 610.0,
+          "hub": 1500.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.685,
+        "blast_radius": 0.9303400462198745,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6566666666666666,
+        "blast_radius": 0.9016176956091119,
+        "availability": 0.92
+      },
+      "content-aware": {
+        "infected_fraction": 0.6133333333333333,
+        "blast_radius": 0.8342687355562892,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.57,
+        "blast_radius": 0.7474413998019148,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3280,
+        "n_carriers": 413,
+        "carrier_share": 0.6883333333333334,
+        "capacity_by_type": {
+          "camera": 5310.0,
+          "router": 15500.0,
+          "doorbell": 870.0,
+          "thermostat": 720.0,
+          "light": 230.0,
+          "dvr": 6000.0,
+          "printer": 220.0,
+          "hub": 1440.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.7216666666666667,
+        "blast_radius": 0.93870112657389,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.695,
+        "blast_radius": 0.8966202783300199,
+        "availability": 0.915
+      },
+      "content-aware": {
+        "infected_fraction": 0.625,
+        "blast_radius": 0.8389662027833003,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.6333333333333333,
+        "blast_radius": 0.8608349900596421,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3405,
+        "n_carriers": 433,
+        "carrier_share": 0.7216666666666667,
+        "capacity_by_type": {
+          "camera": 5370.0,
+          "doorbell": 885.0,
+          "dvr": 6600.0,
+          "thermostat": 520.0,
+          "hub": 1860.0,
+          "router": 14500.0,
+          "light": 225.0,
+          "printer": 220.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.7133333333333334,
+        "blast_radius": 0.9417824254721399,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.685,
+        "blast_radius": 0.9214921179959419,
+        "availability": 0.91
+      },
+      "content-aware": {
+        "infected_fraction": 0.6333333333333333,
+        "blast_radius": 0.8487591696581863,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.5966666666666667,
+        "blast_radius": 0.769470891212736,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3346,
+        "n_carriers": 432,
+        "carrier_share": 0.72,
+        "capacity_by_type": {
+          "dvr": 6040.0,
+          "router": 17000.0,
+          "camera": 5520.0,
+          "light": 265.0,
+          "hub": 1740.0,
+          "doorbell": 660.0,
+          "thermostat": 610.0,
+          "printer": 200.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.6933333333333334,
+        "blast_radius": 0.9274252370532458,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6566666666666666,
+        "blast_radius": 0.8967906637490882,
+        "availability": 0.885
+      },
+      "content-aware": {
+        "infected_fraction": 0.49666666666666665,
+        "blast_radius": 0.6852662290299052,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.505,
+        "blast_radius": 0.6692195477753464,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3287,
+        "n_carriers": 417,
+        "carrier_share": 0.695,
+        "capacity_by_type": {
+          "hub": 2040.0,
+          "camera": 5940.0,
+          "dvr": 5480.0,
+          "thermostat": 600.0,
+          "light": 280.0,
+          "router": 12000.0,
+          "doorbell": 780.0,
+          "printer": 300.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.7316666666666667,
+        "blast_radius": 0.9479026720406031,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.7133333333333334,
+        "blast_radius": 0.9368562472010747,
+        "availability": 0.925
+      },
+      "content-aware": {
+        "infected_fraction": 0.6616666666666666,
+        "blast_radius": 0.8649052097327959,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.6533333333333333,
+        "blast_radius": 0.8625167935512763,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3422,
+        "n_carriers": 439,
+        "carrier_share": 0.7316666666666667,
+        "capacity_by_type": {
+          "light": 220.0,
+          "doorbell": 735.0,
+          "camera": 5550.0,
+          "hub": 1500.0,
+          "router": 18500.0,
+          "printer": 220.0,
+          "dvr": 6200.0,
+          "thermostat": 570.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.69,
+        "blast_radius": 0.9361896080218779,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6466666666666666,
+        "blast_radius": 0.8875721665147371,
+        "availability": 0.905
+      },
+      "content-aware": {
+        "infected_fraction": 0.495,
+        "blast_radius": 0.6706168337891218,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.53,
+        "blast_radius": 0.7456700091157703,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3387,
+        "n_carriers": 418,
+        "carrier_share": 0.6966666666666667,
+        "capacity_by_type": {
+          "dvr": 5760.0,
+          "thermostat": 740.0,
+          "light": 240.0,
+          "router": 18500.0,
+          "camera": 5280.0,
+          "hub": 1440.0,
+          "doorbell": 750.0,
+          "printer": 200.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.725,
+        "blast_radius": 0.9489431786988746,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6983333333333334,
+        "blast_radius": 0.9275322536371122,
+        "availability": 0.905
+      },
+      "content-aware": {
+        "infected_fraction": 0.6116666666666667,
+        "blast_radius": 0.8125171561899533,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.5866666666666667,
+        "blast_radius": 0.7348339280812517,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3421,
+        "n_carriers": 437,
+        "carrier_share": 0.7283333333333334,
+        "capacity_by_type": {
+          "doorbell": 735.0,
+          "dvr": 6040.0,
+          "camera": 5040.0,
+          "router": 21750.0,
+          "thermostat": 570.0,
+          "hub": 1860.0,
+          "light": 235.0,
+          "printer": 200.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.7183333333333334,
+        "blast_radius": 0.9429910781793437,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6933333333333334,
+        "blast_radius": 0.9003477997882958,
+        "availability": 0.925
+      },
+      "content-aware": {
+        "infected_fraction": 0.6483333333333333,
+        "blast_radius": 0.8737335551187055,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.6283333333333333,
+        "blast_radius": 0.8274610615454407,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3275,
+        "n_carriers": 432,
+        "carrier_share": 0.72,
+        "capacity_by_type": {
+          "dvr": 5920.0,
+          "camera": 5430.0,
+          "router": 18000.0,
+          "light": 210.0,
+          "doorbell": 765.0,
+          "thermostat": 620.0,
+          "hub": 1860.0,
+          "printer": 260.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.745,
+        "blast_radius": 0.9377361130544284,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.7,
+        "blast_radius": 0.8982789981810549,
+        "availability": 0.925
+      },
+      "content-aware": {
+        "infected_fraction": 0.6766666666666666,
+        "blast_radius": 0.8722540926262767,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.655,
+        "blast_radius": 0.824122009234644,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3318,
+        "n_carriers": 451,
+        "carrier_share": 0.7516666666666667,
+        "capacity_by_type": {
+          "camera": 5490.0,
+          "router": 20500.0,
+          "dvr": 6080.0,
+          "thermostat": 520.0,
+          "printer": 240.0,
+          "doorbell": 660.0,
+          "light": 205.0,
+          "hub": 2040.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.6866666666666666,
+        "blast_radius": 0.9225048341514205,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6566666666666666,
+        "blast_radius": 0.8850215677524914,
+        "availability": 0.915
+      },
+      "content-aware": {
+        "infected_fraction": 0.5983333333333334,
+        "blast_radius": 0.8204670533987803,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.57,
+        "blast_radius": 0.7642421538003867,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3371,
+        "n_carriers": 416,
+        "carrier_share": 0.6933333333333334,
+        "capacity_by_type": {
+          "thermostat": 810.0,
+          "camera": 5790.0,
+          "hub": 1440.0,
+          "router": 19500.0,
+          "dvr": 4840.0,
+          "light": 200.0,
+          "doorbell": 675.0,
+          "printer": 360.0
+        }
+      }
+    },
+    {
+      "no-defense": {
+        "infected_fraction": 0.6983333333333334,
+        "blast_radius": 0.9375562894025818,
+        "availability": 1.0
+      },
+      "degree": {
+        "infected_fraction": 0.6716666666666666,
+        "blast_radius": 0.8958270789552687,
+        "availability": 0.91
+      },
+      "content-aware": {
+        "infected_fraction": 0.5416666666666666,
+        "blast_radius": 0.7126988892224557,
+        "availability": 0.995
+      },
+      "content-aware+value": {
+        "infected_fraction": 0.445,
+        "blast_radius": 0.6100270189132393,
+        "availability": 0.995
+      },
+      "_fleet": {
+        "n_nodes": 600,
+        "n_edges": 3230,
+        "n_carriers": 426,
+        "carrier_share": 0.71,
+        "capacity_by_type": {
+          "light": 255.0,
+          "camera": 5280.0,
+          "dvr": 5720.0,
+          "thermostat": 640.0,
+          "doorbell": 735.0,
+          "router": 18500.0,
+          "hub": 1980.0,
+          "printer": 200.0
+        }
+      }
+    }
+  ]
+}

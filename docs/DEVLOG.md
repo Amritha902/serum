@@ -195,9 +195,70 @@ runs with `cost_budget=False`, to isolate the effect of the value-weighted
 score from the effect of a cost-metered budget. Both together is an open
 combination.
 
+## Phase 9 — IoT-botnet application (Mirai-style)
+
+Wired SERUM to its flagship application: Mirai-era IoT DDoS containment.
+`serum/scenarios/iot.py` builds a synthetic fleet from a compact device
+catalog (`camera / dvr / router / thermostat / doorbell / light / hub /
+printer`), each type carrying its own firmware CVE set — product-level
+monoculture, in contrast with the enterprise scenario's segment-level
+monoculture. `mirai_payload` targets default telnet credentials (cve=0),
+which spans camera / DVR / router / hub. `value` on each device = uplink
+Mbps, so SERUM's `blast_radius` metric reads directly as DDoS capacity
+conscripted (routers 250 Mbps ≫ bulbs 5 Mbps, so the ceiling is dominated
+by a small tail — the whole reason the metric matters).
+
+Config: `configs/iot.yaml`. Doc: `docs/APPLICATION_IOT.md`. Headline
+experiment: `scripts/iot_botnet.py` (20 paired trials, n=600 on an `rgg`
+mesh, budget=3, horizon=25, target=default telnet creds):
+
+| policy | inf% | blast% | avail% |
+|---|---|---|---|
+| no-defense | 70.97 | 93.77 | 100.00 |
+| degree | 67.31 | 89.26 | 91.25 |
+| **content-aware** | **60.03** | **80.54** | **99.50** |
+| content-aware+value | 59.27 | 78.45 | 99.50 |
+
+**Paired effects.**
+- `content-aware` − `degree` on `blast_radius`: **−8.71pp**
+  (95% CI [−11.13, −6.47], **20/20 wins**) — decisive.
+- `content-aware+value` − `content-aware` on `blast_radius`: −2.09pp
+  (95% CI [−3.98, −0.17], 12/20 wins) — the CI just excludes 0, so a real
+  but marginal steering effect.
+- `content-aware+value` − `content-aware` on `infected_fraction`: −0.76pp
+  (CI [−2.11, +0.51], 12/20). Here value-steering does not cost on plain
+  outbreak count — different from the enterprise blast-radius run.
+
+**Grilled honestly.**
+1. **Absolute numbers are high** (60–90% conscripted). Budget=3 per step on a
+   n=600 fleet with a `beta=0.45` (default-telnet-creds is easy) is a *very*
+   tight regime — content-aware buys 9pp on DDoS capacity but the botnet
+   still forms. This mirrors reality: Mirai conscripted 300k+ devices. Every
+   policy is asked to contain a virulent, wide-spread payload with scarce
+   response bandwidth; the deltas are what to read, not the levels.
+2. **Content-aware is Pareto-better than degree** here (higher availability,
+   lower blast, lower infected) — a stronger claim than the enterprise
+   blast-radius study, because content-aware mostly *patches* once the belief
+   narrows (99.5% avail) while degree keeps isolating (91.25% avail). This is
+   an artifact of the payload being very telnet-focused → belief narrows
+   fast → the `patch_when_support_leq` switch fires early.
+3. **Value-steering is smaller than in enterprise** (−2pp vs −1pp in
+   enterprise, but the CI here is nearly at 0). The reason is the same
+   mechanism, weaker at this budget: value-weighting redirects marginal
+   frontier picks toward router/hub neighbours, but the budget is so tight
+   most rounds are forced picks anyway.
+4. **No claim of a real-world calibration.** The device catalog is
+   illustrative Mirai-era archetypes, not a scanned inventory. The point of
+   the item is the *binding*: SERUM plugs into an IoT DDoS setting with no
+   simulator changes, and the metrics come out interpretable
+   (`blast_radius` = DDoS capacity share). Absolute deltas would move with
+   any recalibration, but the headline shape (content-awareness > topology
+   for value-weighted objectives) is baked into the model, not the numbers.
+
 ## Open / next
 
-- Application framing: **IoT botnet** (device-firmware zones, DDoS blast radius).
+- Sample complexity of identification (P1).
+- Confusability-graph analysis figure (P1).
 - Poison-robust defense: attack detection / budget-hedging (motivated by Phase 4).
 - Multi-exploit / polymorphic payloads (hidden state = exploit *set*).
 - Optimal-stopping: when to commit to acting vs keep watching (inference races spread).

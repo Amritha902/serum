@@ -535,6 +535,37 @@ published results are now surfaced in the paper and are cross-checked
 against `results/*.json` so drift can't silently ship. Total 80 tests
 green.
 
+## P3: reproduce-all script (2026-07-20)
+
+`scripts/reproduce_all.py` — one command to regenerate every checked-in
+`results/*` artifact from scratch. Declarative `MANIFEST` of 19 experiments
+(name, script, outputs, cost tag, dependencies), a small subprocess runner,
+and CLI flags `--only`, `--skip`, `--fast`, `--dry-run`, `--verify`,
+`--continue-on-error`. Dependency resolution goes both ways: `--only
+analyze_sweep` pulls in the `sweep` predecessor; `--skip sweep` / `--fast`
+transitively drops `analyze_sweep` so we never run an analysis without its
+input. Verified live on the cheapest entry (identifiability, no artifact,
+0.5s, rc=0).
+
+New `tests/test_reproduce_all.py` (11 tests) locks the manifest ↔ disk
+invariant: every checked-in `results/*.{json,jsonl,png}` must be produced
+by some manifest entry (no orphans), every declared output must exist on
+disk today (no phantom claims), every paper-claimed artifact from
+`test_paper_claims.py` must appear in the manifest, dependency names must
+resolve, and the CLI selection rules behave as documented. Full suite 91
+green (was 80).
+
+**Grill.** This is orchestration + a manifest, not a scientific claim. I
+did not do a full end-to-end fresh reproduction — running everything
+including `sweep.py` (built for hours) and `train_policy.py` would burn a
+night. So "reproduces every artifact" is a *plan* backed by the tests,
+not an empirical claim. The `--verify` mode does check every declared
+output is on disk today, and it passes. One honest edge case: `robust.py`
+writes `results/robust.json` when run, but that file isn't checked in
+(the BACKLOG item was about landing the agent, not its numbers) — the
+manifest declares `outputs=()` for robust with an inline comment; if
+that JSON is ever committed, promote the tuple.
+
 ## Open / next
 - (nothing at P2 unchecked; see BACKLOG.md P3)
 

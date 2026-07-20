@@ -109,8 +109,18 @@ item off here. Record negative results; never overclaim. Work top-down.
   stopping negative, RobustAgent, cost/blast-radius, and IoT-botnet. New
   `tests/test_paper_claims.py` (9 tests) cross-checks every numeric claim
   against `results/*.json` so drift cannot silently ship. 80 tests green.
-- [ ] **Reproduce-all script** (`scripts/reproduce_all.py`) that regenerates every
-  results/ artifact from scratch.
+- [x] **Reproduce-all script** (`scripts/reproduce_all.py`) that regenerates every
+  results/ artifact from scratch. DONE — 19-entry declarative manifest covers
+  every `results/*.json`/`*.png` on disk (test_no_orphan_result_files guards
+  this), with cost tags (fast/medium/slow/very_slow), `--only`, `--skip`,
+  `--fast`, `--dry-run`, `--verify` flags, and dependency resolution
+  (`analyze_sweep` needs `sweep`). Two-way dependency rule: `--only`
+  auto-includes upstream, `--skip`/`--fast` auto-drops downstream. Verified
+  subprocess invocation live on `identifiability` (0.5s, rc=0). New
+  `tests/test_reproduce_all.py` (11 tests) guards manifest ↔ disk drift.
+  Honest scope: this is a plan/orchestration artifact — reproducibility is
+  only as bit-perfect as the underlying scripts' seeds, which I did not
+  re-verify end-to-end (would take hours).
 - [ ] **More real topologies** (SNAP Autonomous-Systems graphs) alongside
   email-Eu-core; check the flagship result generalizes.
 

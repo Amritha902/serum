@@ -448,7 +448,56 @@ finding truthfully rather than manufacturing a regime where waiting wins.
 
 Artifacts: `results/optimal_stopping.json`, `results/optimal_stopping.png`.
 
-## Open / next
+## P2 — Diversity-for-observability (canary planning)
 
-- Diversity-for-observability: pick software reassignments that maximise the
-  identifiable fraction (a design lever for defenders).
+Question. Given a budget B of *canary hosts* (fresh machines the defender
+can provision with a chosen software profile), can we engineer the fleet
+so outbreaks self-reveal — pushing identifiable_fraction from the observed
+baseline (~50% global, ~43% operational at K=30 on real NVD nets) up to
+1.0?
+
+Built. `serum/inference/diversity.py`: `add_canary` (in-place insertion),
+`greedy_canary_plan` (dominance-aware singleton canaries), `random_canary_plan`
+(uniform baseline), `identifiability_curve`, and
+`budget_to_full_identifiability`. Monotonicity theorem: adding a host only
+*grows* each `carriers(c)`, and every existing subset-order witness stays a
+witness, so identifiable_count is non-decreasing in the canary set — planning
+greedily has no regret.
+
+Result (8 real NVD-derived networks, K=30, n=400, homophily 0.4):
+
+|  B | greedy global | random global | greedy op | random op |
+|---:|--------------:|--------------:|----------:|----------:|
+|  0 | 0.508 | 0.508 | 0.429 | 0.429 |
+|  4 | 0.642 | 0.558 | 0.562 | 0.475 |
+|  8 | 0.775 | 0.621 | 0.696 | 0.504 |
+| 12 | 0.904 | 0.671 | 0.829 | 0.521 |
+| 16 | 0.988 | 0.729 | 0.950 | 0.529 |
+| 20 | **1.000** | 0.775 | **1.000** | 0.558 |
+
+Greedy reaches 100% at **median B\*=15 canaries** (global; = K_live − I0_global
+exactly, matching the singleton upper bound) and B\*=17.5 (operational). Random
+takes ≥60=2K canaries in most trials (coupon-collector-limited: hits each
+unidentifiable CVE only w.p. 1/K per canary). Greedy wins 8/8 trials at every
+B > 0; the Δ CI95 lower bound is strictly positive at B ≥ 1 for both modes.
+
+Sanity / grill. (1) Singleton greedy is *not* provably minimum-canary optimal
+— a multi-CVE canary `{c1, c2}` can pin both when their dominators are
+disjoint. Set-cover framing is a natural follow-up; the docstring flags this.
+(2) The random baseline's B\*=60 is the cap `max_budget=2K` I used; a handful
+of trials converged at 44–59 (median = ceiling), so the "4× worse" ratio is a
+floor, not a fitted number. (3) Operational canaries require attachment to a
+host in the CVE's reachable component — otherwise they don't join the
+outbreak. The planner handles this; a canary with no attachable c-carrier
+would fail to pin c (this can't happen in these fleets since we only greedy
+over live CVEs). (4) A defender-augmentation experiment in a physical
+deployment would face constraints greedy ignores (only some software is
+installable on the honeypot; per-host cost isn't 1) — this result is the
+*information-theoretic ceiling*, not an ops budget.
+
+Artifacts: `serum/inference/diversity.py`, `scripts/diversity.py`,
+`tests/test_diversity.py`, `results/diversity.json`, `results/diversity.png`.
+
+## Open / next
+- (nothing at P2 unchecked; see BACKLOG.md P3)
+

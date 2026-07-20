@@ -84,9 +84,19 @@ item off here. Record negative results; never overclaim. Work top-down.
   perishable per-step budget and a hedged/inferring defender, optimal stopping
   collapses to "act immediately" — a stopping rule adds nothing. Would matter
   only under cumulative budgets or a pathological prior.
-- [ ] **Diversity-for-observability.** Given a budget of software reassignments,
-  *maximize the identifiable fraction* (design a separating family). Show a
-  defender can engineer the fleet so outbreaks self-reveal. Optimization + result.
+- [x] **Diversity-for-observability.** DONE — `serum/inference/diversity.py`
+  (`add_canary` / `greedy_canary_plan` / `identifiability_curve`); canaries are
+  monotone (adding a host only grows `carriers(c)`, so subset-order dominances
+  can only *break*, never appear). Experiment `scripts/diversity.py` on 8 real
+  NVD nets, K=30, n=400: baseline 50.8% global / 42.9% operational identifiable;
+  greedy hits 100% at **median B*=15 canaries global** (= K_live − I0_global,
+  the singleton upper bound) and B*=17.5 operational. Random singletons wander
+  to ~85% global / 60% operational at B=30 and typically need ≥2K canaries to
+  converge (coupon-collector). Greedy wins 8/8 at every B > 0, Δ CI95 > 0
+  throughout. Caveats: singleton greedy is not provably min-canary optimal
+  (multi-CVE canaries can pin two CVEs when their dominators are disjoint —
+  set-cover follow-up); result is the info-theoretic ceiling, not an ops
+  budget with per-host installation constraints.
 
 ## P3 — polish & reproduction
 

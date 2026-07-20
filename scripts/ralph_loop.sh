@@ -43,6 +43,14 @@ for i in $(seq 1 "$MAX_ITERS"); do
     echo "Backlog empty. Ralph loop complete after $i iteration(s)."
     break
   fi
+
+  # If we hit the account usage/session limit, don't burn iterations retrying --
+  # back off ~30 min and let the quota reset, then continue where we left off.
+  if grep -qiE "session limit|usage limit|hit your (session|usage)|rate limit" "$log"; then
+    echo "  Session/usage limit reached — backing off 30 min (quota will reset)."
+    sleep 1800
+    continue
+  fi
   # brief pause so bursts of API calls settle
   sleep "$SLEEP_S"
 done

@@ -21,3 +21,6 @@ data/raw/
 # Editor
 .vscode/
 .idea/
+
+# Ralph loop iteration logs
+results/ralph/

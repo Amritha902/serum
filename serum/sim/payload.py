@@ -1,15 +1,19 @@
 """The attacker's payload: which vulnerability it weaponises and how hard.
 
-A payload is deliberately minimal here -- a single target CVE plus a
-per-contact transmission probability. The defender does *not* observe the
+A payload has one or more *target CVEs* plus a per-contact transmission
+probability. In the single-CVE case (``Payload``) the worm exploits exactly
+one vulnerability; in the multi-exploit case (``MultiPayload``) it carries an
+*exploit set* and can infect any host that carries at least one CVE in that
+set — a polymorphic / kitchen-sink worm. The defender never observes the
 payload; it must be inferred from the shape of the outbreak (see
-``serum.inference``). Richer payloads (multi-CVE, polymorphic, dwell-time)
-are a planned extension and slot in behind this interface.
+``serum.inference``). Both dataclasses expose the same
+``can_infect(host_vuln)`` interface so the simulator is payload-agnostic.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Iterable
 
 import numpy as np
 
@@ -23,6 +27,41 @@ class Payload:
 
     def can_infect(self, host_vuln: frozenset) -> bool:
         return self.cve in host_vuln
+
+
+@dataclass(frozen=True)
+class MultiPayload:
+    """A polymorphic worm carrying an *exploit set* — a hidden subset of the
+    CVE universe. A host is vulnerable iff it carries at least one CVE in the
+    set (an OR-of-exploits payload; the canonical "kitchen-sink" worm).
+
+    Inference-side, this is the multi-defective analogue of vulnerability-
+    gated identification: each propagation-infected host v is a positive
+    test whose profile ``vuln(v)`` must intersect the true exploit set S*.
+    So the posterior support after observing infected set I is the family of
+    hitting sets: ``{S : ∀ v ∈ I, vuln(v) ∩ S ≠ ∅}``.
+    """
+    cves: frozenset   # the exploit set (a subset of the CVE universe)
+    beta: float
+
+    def __post_init__(self):
+        # normalise so equality and hashing are canonical
+        object.__setattr__(self, "cves", frozenset(int(c) for c in self.cves))
+
+    @property
+    def cve(self):
+        """The payload's identity for plumbing that expects a single field
+        (e.g. observation.captured_cve, EpisodeResult.payload_cve). Returns
+        the whole exploit set — downstream code should not assume it is int."""
+        return self.cves
+
+    def can_infect(self, host_vuln: frozenset) -> bool:
+        return bool(self.cves & host_vuln)
+
+
+def make_multi_payload(cves: Iterable[int], beta: float = 0.35) -> MultiPayload:
+    """Convenience constructor accepting any iterable of CVE ids."""
+    return MultiPayload(cves=frozenset(int(c) for c in cves), beta=float(beta))
 
 
 def sample_payload(

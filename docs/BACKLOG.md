@@ -61,9 +61,17 @@ item off here. Record negative results; never overclaim. Work top-down.
 
 ## P2 — depth & theory
 
-- [ ] **Multi-exploit / polymorphic payloads.** Hidden state = an exploit *set*;
-  belief over sets; identifiability becomes a combinatorial (group-testing with
-  multiple defectives) condition. Extend sim + belief + one experiment.
+- [x] **Multi-exploit / polymorphic payloads.** DONE — `MultiPayload` (OR-of-
+  exploits) plugs into `ContainmentEnv` unchanged; `serum/inference/multi_exploit.py`
+  has hitting-set identifiability + `MultiExploitBelief` (hard belief over size-k
+  subsets). Experiment `scripts/multi_exploit.py` on real NVD n=300, K=16:
+  identifiable fraction decays **77.8% → 49.6% → 38.2% → 27.1%** for k=1→4;
+  k=2 identifiable sets need **median 18 propagation infections** to pin
+  (vs 5 for single-CVE), ratio to log₂C(16,2)=6.9 bit-bound is **2.61** (real
+  profiles less informative than i.i.d. bits, correlation penalty compounds
+  with k). Caveats: brute-force capped at K=16; belief conditions on knowing
+  k; no end-to-end containment yet — this closes the *identifiability layer*
+  for polymorphic worms, not the defense layer.
 - [ ] **Optimal-stopping (inference races spread).** When should the defender
   commit to acting vs keep watching to identify better? A stopping rule + a
   comparison against fixed-time acting.

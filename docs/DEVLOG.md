@@ -350,8 +350,66 @@ of the decay rate on real profiles.
 
 Artifacts: `results/confusability.json`, `results/confusability.png`.
 
+### Multi-exploit / polymorphic payloads (P2, 2026-07-20)
+
+Extends SERUM to *polymorphic* worms that carry an exploit **set** S ⊆ C,
+infecting any host whose profile intersects S. This is the multi-defective
+analogue of vulnerability-gated group testing: each propagation infection is
+a positive test whose profile must *hit* S, and the posterior support after
+observing infected set I is the family of size-|S| hitting sets
+
+    supp(I) = { S : ∀ v ∈ I, vuln(v) ∩ S ≠ ∅ }.
+
+Built: `serum/sim/payload.py` gains `MultiPayload` (OR-of-exploits, plugs
+into `ContainmentEnv` unchanged); `serum/inference/multi_exploit.py` has
+`carriers_multi`, `reachable_component_multi`, `hitting_sets`,
+`is_identifiable_multi`, `MultiExploitBelief` (hard belief over size-k
+subsets), `identification_trajectory_multi`. Tests in
+`tests/test_multi_exploit.py` verify k=1 reduces to the single-CVE theory,
+that `MultiExploitBelief.support()` equals `support_over_multi(g, R, k)` at
+saturation (Prop 1 analogue), monotone shrinkage, and that a multi-payload
+sim never infects hosts outside the carrier component.
+
+Experiment `scripts/multi_exploit.py` (real NVD-derived n=300, K=16):
+
+  size k    live sets    identifiable    frac    median reach
+     1          9              7        0.778         16
+     2        117             58        0.496         44
+     3        560            214        0.382        104
+     4       1820            493        0.271        139
+
+Identifiable fraction decays **77.8% → 49.6% → 38.2% → 27.1%** as k grows
+1→4 — hitting-set ambiguity dominates as the exploit set enlarges. Sample
+complexity for identifiable k=2 sets (12 targets): **median 18 propagation
+infections** to collapse the hitting-set support to 1 (vs the single-CVE
+median of 5). Ratio to the information-theoretic bit-bound log₂C(16,2)=6.9
+is **2.61** — real correlated software profiles are strictly less
+informative than i.i.d. bits, and the correlation penalty compounds with k
+(the single-CVE ratio was ≈1.02).
+
+**Grill / caveats.**
+- Belief conditions on knowing k. This is standard multi-defective group
+  testing but is itself an oracle assumption; a defender that must
+  jointly-estimate |S| faces harder combinatorics. Not addressed here.
+- K=16 is small (bounded by brute-force enumeration; C(K, k) grows fast).
+  The decay direction is real, but absolute fractions at large K would
+  need Monte-Carlo sampling (already scaffolded in
+  `identifiable_fraction_multi(sample=...)`).
+- k=1 identifiability fraction (77.8%) here is higher than the flagship
+  P1 number (50.8%) because this network uses K=16 vs K=30 — smaller
+  universes give fewer subset-order dominators. Consistent with the
+  K-sweep trend from confusability.py; not a contradiction.
+- The reachable component grows sharply with k (16 → 139), so multi-
+  exploit worms *do* spread further even when less identifiable — the
+  defender loses on both axes as k grows. An honest bad-news finding.
+- No end-to-end containment result yet — this iteration establishes the
+  identifiability layer; a content-aware multi-exploit agent would need a
+  posterior-mean-of-hitting-sets scoring function (future work).
+
+Artifacts: `results/multi_exploit.json`, `results/multi_exploit.png`.
+
 ## Open / next
 
-- Poison-robust defense: attack detection / budget-hedging (motivated by Phase 4).
-- Multi-exploit / polymorphic payloads (hidden state = exploit *set*).
 - Optimal-stopping: when to commit to acting vs keep watching (inference races spread).
+- Diversity-for-observability: pick software reassignments that maximise the
+  identifiable fraction (a design lever for defenders).

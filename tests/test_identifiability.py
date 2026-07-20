@@ -151,6 +151,43 @@ def test_identification_latency_none_when_unidentifiable():
     assert lat2 is not None
 
 
+def test_confusability_distribution_helper_and_ordering():
+    """Sanity-check the confusability-graph analysis helper used by
+    ``scripts/confusability.py``: every row has consistent op/global fields,
+    both identifiability flags respect the ordering
+    ``operational => global`` (proof: operational identifiable means
+    supp(R) = {c*}; if any c' had carriers(c') ⊇ carriers(c*) ⊇ R, then c' ∈
+    supp(R), contradicting operational identifiability), and the global-
+    identifiable set equals the CVEs with no out-edges in the subset-order
+    graph."""
+    from serum.sim.network import generate_network
+    from scripts.confusability import confuser_distribution
+    from serum.inference.identifiability import confusability_graph
+    g = generate_network(n=250, n_cves=14, vuln_lambda=4, popularity_alpha=0.7,
+                         rng=np.random.default_rng(0))
+    rows = confuser_distribution(g)
+    assert rows, "expected at least one live CVE"
+    for r in rows:
+        # counts non-negative, identifiability flags match zero-counts
+        assert r["n_confusers_op"] >= 0 and r["n_confusers_global"] >= 0
+        assert r["identifiable_op"] == (r["n_confusers_op"] == 0)
+        assert r["identifiable_global"] == (r["n_confusers_global"] == 0)
+        # operational identifiable ⇒ global identifiable (see proof in docstring)
+        if r["identifiable_op"]:
+            assert r["identifiable_global"], (
+                f"CVE {r['cve']}: operational identifiable but global reports "
+                f"{r['n_confusers_global']} confusers — theorem violated")
+        # operational uses supp(R) which is a superset of supp(carriers(c)),
+        # so operational confusers are a superset of global confusers => n_op ≥ n_global
+        assert r["n_confusers_op"] >= r["n_confusers_global"]
+    # cross-check: identifiable_global rows are exactly nodes with out_degree 0
+    cg = confusability_graph(g)
+    global_ident_rows = {r["cve"] for r in rows if r["identifiable_global"]}
+    global_ident_cg = {c for c in cg.nodes() if cg.out_degree(c) == 0
+                       and any(r["cve"] == c for r in rows)}
+    assert global_ident_rows == global_ident_cg
+
+
 def test_spread_bounds_anonymity_prop4():
     """Proposition 4: for every CVE, #confusers <= N(S/n) - 1 (the spread bound).
     This is a theorem, so it must hold for every exploit in any network."""

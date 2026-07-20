@@ -299,9 +299,59 @@ information-theoretic scaling lands within a small constant of the i.i.d. bound.
 
 Artifacts: `results/sample_complexity.json`, `results/sample_complexity.png`.
 
+### Confusability-graph analysis figure (P1)
+
+Realising the *global* ambiguity structure of the fleet as a graph. Edge
+c → c' iff carriers(c) ⊆ carriers(c') — the subset partial order. A CVE with
+no out-edges is globally identifiable; the connected component around an
+edge-heavy CVE is its ambiguity neighbourhood. Complementarily, per-CVE
+`confusers(g, c)` gives the *operational* residual after a saturating outbreak
+on the largest reachable vulnerable component.
+
+**Result** (8 NVD-derived networks, n=400, K=30, homophily 0.4, 240 live CVEs):
+
+- Operational identifiable fraction: **50.8%**
+- Global identifiable fraction: **63.7%** (weakly larger, as it must be —
+  operational identifiable ⇒ global identifiable; see test docstring for the
+  1-line proof).
+- Confuser-count distribution has median 0 with a heavy tail: mean 1.08,
+  p90 = 3 (operational). Most CVEs are cleanly identifiable, a minority
+  irreducibly ambiguous.
+
+**K-sweep** (fraction identifiable vs CVE-universe size, real data):
+
+    K      live   ident-sat   ident-global
+    10     10.0       0.675          0.700
+    20     20.0       0.500          0.550
+    30     30.0       0.358          0.400
+    50     50.0       0.345          0.465
+    80     80.0       0.200          0.384
+
+Identifiability decays with K: more CVEs mean more subset-order dominators,
+so a smaller fraction of exploits stand alone. Not a surprise — the
+theorem's condition is combinatorial in K — but a first honest measurement
+of the decay rate on real profiles.
+
+**Grill / caveats.**
+- Flagship (`trials`) and sweep numbers at K=30 differ (op 0.51 vs 0.36)
+  because they use different RNG seeds and different trial counts. Both are
+  consistent with the same qualitative picture; neither is "the" answer.
+- The K sweep goes only to 80. Real fleets carry thousands of CVEs; the
+  trend suggests identifiable fraction would fall further, but I do not
+  extrapolate — the decay may saturate or accelerate. A larger sweep is
+  future work if it starts to matter.
+- The drawn example is picked to *maximise* edges over 6 seeds (`pick_drawing_network`)
+  so the figure has something to look at. This is a visualisation choice, not
+  a claim — the aggregate statistics above use unfiltered samples.
+- Operational identifiable is strictly stronger than global identifiable
+  (proof: op iff supp(R) = {c*}; if c' had carriers(c') ⊇ carriers(c*) ⊇ R,
+  then c' ∈ supp(R), contradicting op). The test cross-checks this on every
+  live CVE.
+
+Artifacts: `results/confusability.json`, `results/confusability.png`.
+
 ## Open / next
 
-- Confusability-graph analysis figure (P1).
 - Poison-robust defense: attack detection / budget-hedging (motivated by Phase 4).
 - Multi-exploit / polymorphic payloads (hidden state = exploit *set*).
 - Optimal-stopping: when to commit to acting vs keep watching (inference races spread).

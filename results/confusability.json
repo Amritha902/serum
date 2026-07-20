@@ -1,0 +1,2487 @@
+{
+  "trials": 8,
+  "data_source": "real",
+  "K_flagship": 30,
+  "n_live": 240,
+  "identifiable_fraction_op": 0.5083333333333333,
+  "identifiable_fraction_global": 0.6375,
+  "n_confusers_op_hist": {
+    "0": 122,
+    "1": 58,
+    "2": 23,
+    "3": 14,
+    "4": 11,
+    "5": 8,
+    "7": 3,
+    "8": 1
+  },
+  "n_confusers_global_hist": {
+    "0": 153,
+    "1": 49,
+    "2": 19,
+    "3": 8,
+    "4": 5,
+    "5": 6
+  },
+  "op_summary": {
+    "mean": 1.0791666666666666,
+    "median": 0.0,
+    "p90": 3.0,
+    "max": 8
+  },
+  "global_summary": {
+    "mean": 0.6708333333333333,
+    "median": 0.0,
+    "p90": 2.0,
+    "max": 5
+  },
+  "K_sweep": [
+    {
+      "K": 10,
+      "trials": 4,
+      "mean_live": 10.0,
+      "identifiable_op_mean": 0.675,
+      "identifiable_op_std": 0.1920286436967152,
+      "identifiable_global_mean": 0.7,
+      "identifiable_global_std": 0.22360679774997896
+    },
+    {
+      "K": 20,
+      "trials": 4,
+      "mean_live": 20.0,
+      "identifiable_op_mean": 0.5,
+      "identifiable_op_std": 0.11180339887498951,
+      "identifiable_global_mean": 0.55,
+      "identifiable_global_std": 0.1274754878398196
+    },
+    {
+      "K": 30,
+      "trials": 4,
+      "mean_live": 30.0,
+      "identifiable_op_mean": 0.3583333333333333,
+      "identifiable_op_std": 0.043301270189221946,
+      "identifiable_global_mean": 0.39999999999999997,
+      "identifiable_global_std": 0.062360956446232366
+    },
+    {
+      "K": 50,
+      "trials": 4,
+      "mean_live": 50.0,
+      "identifiable_op_mean": 0.345,
+      "identifiable_op_std": 0.02958039891549808,
+      "identifiable_global_mean": 0.465,
+      "identifiable_global_std": 0.05894913061275799
+    },
+    {
+      "K": 80,
+      "trials": 4,
+      "mean_live": 80.0,
+      "identifiable_op_mean": 0.19999999999999998,
+      "identifiable_op_std": 0.023385358667337132,
+      "identifiable_global_mean": 0.384375,
+      "identifiable_global_std": 0.02847010493482592
+    }
+  ],
+  "per_cve": [
+    {
+      "cve": 0,
+      "prevalence": 0.15,
+      "reachable": 18,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.075,
+      "reachable": 8,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.16,
+      "reachable": 12,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.15,
+      "reachable": 18,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.1175,
+      "reachable": 19,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.385,
+      "reachable": 135,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.065,
+      "reachable": 7,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.065,
+      "reachable": 13,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.02,
+      "reachable": 1,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.1,
+      "reachable": 7,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.065,
+      "reachable": 7,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.0325,
+      "reachable": 1,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.0275,
+      "reachable": 1,
+      "n_confusers_op": 3,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.09,
+      "reachable": 7,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.385,
+      "reachable": 135,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.385,
+      "reachable": 135,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.055,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.125,
+      "reachable": 26,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.0825,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.065,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.075,
+      "reachable": 3,
+      "n_confusers_op": 3,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.055,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.1175,
+      "reachable": 19,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.1275,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.15,
+      "reachable": 16,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.1175,
+      "reachable": 19,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.075,
+      "reachable": 8,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 0
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.115,
+      "reachable": 13,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.0425,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.295,
+      "reachable": 84,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 0
+    },
+    {
+      "cve": 0,
+      "prevalence": 0.2075,
+      "reachable": 59,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.0425,
+      "reachable": 4,
+      "n_confusers_op": 7,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.4025,
+      "reachable": 143,
+      "n_confusers_op": 5,
+      "n_confusers_global": 5,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.14,
+      "reachable": 15,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.32,
+      "reachable": 98,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.095,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.045,
+      "reachable": 1,
+      "n_confusers_op": 3,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.4025,
+      "reachable": 143,
+      "n_confusers_op": 5,
+      "n_confusers_global": 5,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.4025,
+      "reachable": 143,
+      "n_confusers_op": 5,
+      "n_confusers_global": 5,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.4025,
+      "reachable": 143,
+      "n_confusers_op": 5,
+      "n_confusers_global": 5,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.04,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.0425,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.0725,
+      "reachable": 10,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.2475,
+      "reachable": 62,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.32,
+      "reachable": 81,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.0725,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.045,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.4025,
+      "reachable": 143,
+      "n_confusers_op": 5,
+      "n_confusers_global": 5,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.14,
+      "reachable": 15,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.5,
+      "reachable": 162,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.1275,
+      "reachable": 11,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.0875,
+      "reachable": 12,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.0725,
+      "reachable": 5,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.32,
+      "reachable": 98,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.2075,
+      "reachable": 59,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.04,
+      "reachable": 1,
+      "n_confusers_op": 2,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.0325,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.07,
+      "reachable": 2,
+      "n_confusers_op": 2,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 1
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.4025,
+      "reachable": 143,
+      "n_confusers_op": 5,
+      "n_confusers_global": 5,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.0725,
+      "reachable": 5,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 1
+    },
+    {
+      "cve": 0,
+      "prevalence": 0.0475,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.165,
+      "reachable": 14,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.3075,
+      "reachable": 97,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.145,
+      "reachable": 4,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.3775,
+      "reachable": 110,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.1175,
+      "reachable": 37,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.0475,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.0575,
+      "reachable": 8,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.0575,
+      "reachable": 8,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.2275,
+      "reachable": 37,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.0475,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.0425,
+      "reachable": 1,
+      "n_confusers_op": 2,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.07,
+      "reachable": 6,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.0575,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.145,
+      "reachable": 4,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.3575,
+      "reachable": 123,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.2525,
+      "reachable": 60,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.06,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.0625,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.2275,
+      "reachable": 37,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.1125,
+      "reachable": 7,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.05,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.065,
+      "reachable": 5,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.3775,
+      "reachable": 110,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.0575,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.15,
+      "reachable": 30,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.125,
+      "reachable": 6,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.3775,
+      "reachable": 110,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 2
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.1,
+      "reachable": 10,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.06,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 2
+    },
+    {
+      "cve": 0,
+      "prevalence": 0.05,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.39,
+      "reachable": 134,
+      "n_confusers_op": 4,
+      "n_confusers_global": 4,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.125,
+      "reachable": 11,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.05,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.0425,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.0675,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.24,
+      "reachable": 50,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.03,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.0675,
+      "reachable": 12,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.1,
+      "reachable": 16,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.155,
+      "reachable": 34,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.39,
+      "reachable": 134,
+      "n_confusers_op": 4,
+      "n_confusers_global": 4,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.39,
+      "reachable": 134,
+      "n_confusers_op": 4,
+      "n_confusers_global": 4,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.0375,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.1275,
+      "reachable": 27,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.06,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.39,
+      "reachable": 134,
+      "n_confusers_op": 4,
+      "n_confusers_global": 4,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.075,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.03,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.0475,
+      "reachable": 1,
+      "n_confusers_op": 7,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.0325,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.0525,
+      "reachable": 6,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.0475,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.39,
+      "reachable": 134,
+      "n_confusers_op": 4,
+      "n_confusers_global": 4,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.0325,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.17,
+      "reachable": 30,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.0225,
+      "reachable": 1,
+      "n_confusers_op": 3,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.075,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.0825,
+      "reachable": 8,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 3
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.17,
+      "reachable": 30,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 3
+    },
+    {
+      "cve": 0,
+      "prevalence": 0.125,
+      "reachable": 10,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.035,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.1125,
+      "reachable": 4,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 4
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.12,
+      "reachable": 18,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.115,
+      "reachable": 15,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.045,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.1475,
+      "reachable": 23,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.07,
+      "reachable": 5,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.1675,
+      "reachable": 40,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.3725,
+      "reachable": 114,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 4
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.115,
+      "reachable": 8,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.16,
+      "reachable": 17,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 4
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.3725,
+      "reachable": 114,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 4
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.11,
+      "reachable": 5,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.0575,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.04,
+      "reachable": 5,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.1125,
+      "reachable": 4,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 4
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.125,
+      "reachable": 19,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.05,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.1975,
+      "reachable": 25,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.1075,
+      "reachable": 15,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.08,
+      "reachable": 8,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.0425,
+      "reachable": 4,
+      "n_confusers_op": 3,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.16,
+      "reachable": 17,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 4
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.1575,
+      "reachable": 7,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.3725,
+      "reachable": 114,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 4
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.0325,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.0425,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.26,
+      "reachable": 64,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.08,
+      "reachable": 5,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 4
+    },
+    {
+      "cve": 0,
+      "prevalence": 0.175,
+      "reachable": 15,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.0575,
+      "reachable": 6,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.18,
+      "reachable": 37,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.1025,
+      "reachable": 3,
+      "n_confusers_op": 4,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.0425,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.21,
+      "reachable": 44,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.1025,
+      "reachable": 3,
+      "n_confusers_op": 4,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.04,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.175,
+      "reachable": 15,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.2375,
+      "reachable": 71,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.1325,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.2525,
+      "reachable": 46,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.02,
+      "reachable": 1,
+      "n_confusers_op": 7,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.0325,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.0475,
+      "reachable": 2,
+      "n_confusers_op": 2,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.2525,
+      "reachable": 46,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.1025,
+      "reachable": 3,
+      "n_confusers_op": 4,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.17,
+      "reachable": 17,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.095,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.215,
+      "reachable": 58,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.115,
+      "reachable": 5,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.405,
+      "reachable": 134,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.2525,
+      "reachable": 46,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.135,
+      "reachable": 6,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.03,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.115,
+      "reachable": 17,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.2525,
+      "reachable": 46,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 5
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.115,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.0925,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.04,
+      "reachable": 1,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 5
+    },
+    {
+      "cve": 0,
+      "prevalence": 0.3675,
+      "reachable": 117,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.0475,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.08,
+      "reachable": 7,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.0225,
+      "reachable": 3,
+      "n_confusers_op": 3,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.04,
+      "reachable": 2,
+      "n_confusers_op": 4,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.0925,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.1375,
+      "reachable": 4,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.2525,
+      "reachable": 68,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.0175,
+      "reachable": 1,
+      "n_confusers_op": 5,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.06,
+      "reachable": 6,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.0275,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.3675,
+      "reachable": 117,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.1025,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.3075,
+      "reachable": 84,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.06,
+      "reachable": 6,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.0875,
+      "reachable": 3,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.3675,
+      "reachable": 117,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.115,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.015,
+      "reachable": 1,
+      "n_confusers_op": 8,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.065,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.3675,
+      "reachable": 117,
+      "n_confusers_op": 3,
+      "n_confusers_global": 3,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.06,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.075,
+      "reachable": 4,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.3075,
+      "reachable": 84,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.1725,
+      "reachable": 14,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.535,
+      "reachable": 197,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.1025,
+      "reachable": 12,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.0775,
+      "reachable": 4,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 6
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.3075,
+      "reachable": 84,
+      "n_confusers_op": 2,
+      "n_confusers_global": 2,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.0875,
+      "reachable": 3,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 6
+    },
+    {
+      "cve": 0,
+      "prevalence": 0.1375,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 1,
+      "prevalence": 0.055,
+      "reachable": 2,
+      "n_confusers_op": 4,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 2,
+      "prevalence": 0.1225,
+      "reachable": 9,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 3,
+      "prevalence": 0.1,
+      "reachable": 5,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 4,
+      "prevalence": 0.03,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 5,
+      "prevalence": 0.265,
+      "reachable": 71,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 6,
+      "prevalence": 0.275,
+      "reachable": 102,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 7,
+      "prevalence": 0.1175,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 8,
+      "prevalence": 0.0325,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 9,
+      "prevalence": 0.14,
+      "reachable": 13,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 10,
+      "prevalence": 0.3075,
+      "reachable": 77,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 11,
+      "prevalence": 0.1925,
+      "reachable": 19,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 12,
+      "prevalence": 0.3975,
+      "reachable": 128,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 13,
+      "prevalence": 0.12,
+      "reachable": 11,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 14,
+      "prevalence": 0.04,
+      "reachable": 3,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 15,
+      "prevalence": 0.06,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 16,
+      "prevalence": 0.1925,
+      "reachable": 19,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 17,
+      "prevalence": 0.3975,
+      "reachable": 128,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 18,
+      "prevalence": 0.0475,
+      "reachable": 2,
+      "n_confusers_op": 2,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 19,
+      "prevalence": 0.0325,
+      "reachable": 1,
+      "n_confusers_op": 5,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 20,
+      "prevalence": 0.055,
+      "reachable": 2,
+      "n_confusers_op": 4,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 21,
+      "prevalence": 0.14,
+      "reachable": 13,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 22,
+      "prevalence": 0.3075,
+      "reachable": 77,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 23,
+      "prevalence": 0.0775,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 24,
+      "prevalence": 0.275,
+      "reachable": 102,
+      "n_confusers_op": 1,
+      "n_confusers_global": 1,
+      "identifiable_op": false,
+      "identifiable_global": false,
+      "net": 7
+    },
+    {
+      "cve": 25,
+      "prevalence": 0.045,
+      "reachable": 2,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 26,
+      "prevalence": 0.1725,
+      "reachable": 40,
+      "n_confusers_op": 0,
+      "n_confusers_global": 0,
+      "identifiable_op": true,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 27,
+      "prevalence": 0.0425,
+      "reachable": 2,
+      "n_confusers_op": 2,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 28,
+      "prevalence": 0.0775,
+      "reachable": 2,
+      "n_confusers_op": 1,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 7
+    },
+    {
+      "cve": 29,
+      "prevalence": 0.0875,
+      "reachable": 3,
+      "n_confusers_op": 2,
+      "n_confusers_global": 0,
+      "identifiable_op": false,
+      "identifiable_global": true,
+      "net": 7
+    }
+  ]
+}

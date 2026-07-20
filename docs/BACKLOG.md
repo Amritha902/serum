@@ -50,9 +50,14 @@ item off here. Record negative results; never overclaim. Work top-down.
   theoretically-identifiable CVEs identify in practice. Caveat: synth K=16 gives
   ratio 2× log₂K, so the "matches the bound" line depends on real profiles
   being more informative than the Zipf toy — not a universal claim.
-- [ ] **Confusability-graph analysis figure.** From `confusability_graph`: on
-  real data, the distribution of confuser counts, the identifiable fraction, and
-  a small drawn example. `scripts/confusability.py`.
+- [x] **Confusability-graph analysis figure.** DONE — `scripts/confusability.py`
+  (8 NVD-derived nets, n=400, K=30, 240 live CVEs). Operational identifiable
+  fraction **50.8%**, global (subset-order) **63.7%**; median confuser count 0,
+  p90 = 3. K-sweep {10, 20, 30, 50, 80} shows identifiable fraction decays
+  67.5% → 20.0% (operational). Figure has three panels: confuser-count
+  histogram, identifiable-fraction-vs-K, and a drawn subset-order subgraph.
+  Op ≤ global identifiability is cross-checked as a theorem in the tests
+  (`test_confusability_distribution_helper_and_ordering`).
 
 ## P2 — depth & theory
 

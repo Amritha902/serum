@@ -161,7 +161,16 @@ parameters; no adaptive adversary targeting the robust agent.
 audit rule.
 
 **SR6 (multiplicity).** Many p-values, no correction.
-→ **Mitigation:** Holm/Bonferroni across the headline claims; report family-wise.
+→ **Mitigation:** DONE — `serum/inference/multiplicity.py` implements Holm-
+Bonferroni step-down; `scripts/multiplicity.py` curates the 11 headline paired
+comparisons (synth-flagship ×2, SNAP email-Eu-core ×2, SNAP AS ×2, BA/WS/RGG
+synth topologies, adversarial evasive/identifiable) — duplicates removed. At
+α=0.05: Holm rejects **11/11**, Bonferroni rejects 9/11 (SNAP-AS drops both);
+largest Holm-adjusted p among survivors = 0.042. Every best-fixed-baseline
+headline holds at p_adj < 10⁻³. Paper §Extended results now has a
+Multiplicity paragraph, and Limitation L6 is downgraded to "addressed".
+Artifact: `results/multiplicity.json`. Guarded by `tests/test_multiplicity.py`
+(12 tests).
 
 **SR7 (time-dependent data).** NVD snapshot depends on fetch date.
 → **Mitigation:** pin a dated NVD snapshot in the repo; version it.

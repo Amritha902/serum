@@ -403,6 +403,24 @@ deltas are what to read. Artifact: \texttt{results/iot\_botnet.json},
 scenario: \texttt{serum/scenarios/iot.py}, doc:
 \texttt{docs/APPLICATION\_IOT.md}.
 
+\paragraph{Multiplicity: family-wise-corrected p-values.}
+We report $11$ headline paired-Wilcoxon comparisons across seven experiments
+(synthetic-CVE flagship, both SNAP topologies, BA/WS/RGG synthetic sweeps, and
+two adversarial regimes). The Holm-Bonferroni step-down procedure at $\alpha{=}
+0.05$ rejects \textbf{all $11/11$}; the more conservative Bonferroni rejects
+$9/11$ (only the two marginal SNAP autonomous-systems comparisons drop). The
+largest Holm-adjusted $p$ among the surviving comparisons is $p_\text{adj}{=}
+0.042$ (SNAP-AS vs ensemble oracle). Five of the eleven remain below
+$p_\text{adj}{<}10^{-3}$ after correction, including both the synthetic-CVE
+and SNAP email-Eu-core flagship comparisons against the best-fixed baseline;
+the BA/WS synthetic-topology and adversarial-identifiable comparisons land at
+$p_\text{adj}\!\in\![10^{-3},10^{-2}]$, still comfortably rejecting. Artifact:
+\texttt{results/multiplicity.json}, script: \texttt{scripts/multiplicity.py}.
+\emph{Scope.} The family excludes clear duplicates (identical seeds/spec
+across scripts) and only includes p-values already backing headline claims;
+per-experiment secondary comparisons (e.g.\ value-steering deltas) are not
+aggregated here.
+
 \section{Related work}
 A full, source-verified survey is in the supplementary \texttt{docs/LITERATURE\_REVIEW.md};
 we summarise the five neighbouring literatures and our position in each.
@@ -495,8 +513,11 @@ poisoning/evasion attacks we constructed with our parameters; an adaptive
 worst-case adversary that best-responds to the robust agent's audit rule is
 future work.
 
-\textbf{(L6) Multiplicity.} We report many paired comparisons; the marginal
-($p\!\in\![0.01,0.05]$) results should be read with a family-wise correction.
+\textbf{(L6) Multiplicity (addressed).} The $11$ headline paired comparisons
+were corrected family-wise (\S\ref{sec:extended}, "Multiplicity"): all $11/11$
+survive Holm-Bonferroni at $\alpha{=}0.05$ and $9/11$ under the stricter
+Bonferroni. The two marginal SNAP-AS drops are honestly reported; five of the
+eleven remain at $p_\text{adj}\!<\!10^{-3}$.
 
 \textbf{(L7) Abstract model.} Propagation is a probability over an exploitability
 graph; there is no real malware, packet-level emulation, or scanning/C2 layer.

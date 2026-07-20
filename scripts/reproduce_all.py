@@ -197,6 +197,15 @@ MANIFEST: List[Experiment] = [
         note="Flagship generalization: content-aware vs baselines on "
              "SNAP email-Eu-core AND SNAP Autonomous-Systems.",
     ),
+    Experiment(
+        name="multiplicity",
+        script="multiplicity.py",
+        outputs=("multiplicity.json",),
+        needs=("run_experiment", "adversarial", "multi_topology"),
+        tags=frozenset({"fast"}),
+        note="SR6 Holm-Bonferroni across the headline paired comparisons; "
+             "pure post-hoc pass over already-computed p-values.",
+    ),
     # -- learned policy + sweep (expensive) ---------------------------------
     Experiment(
         name="train_policy",

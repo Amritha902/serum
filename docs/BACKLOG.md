@@ -162,9 +162,18 @@ item off here. Record negative results; never overclaim. Work top-down.
   naive intuition (LOW divergence → LARGER delta, because low divergence means
   well-connected carrier subgraph → bigger outbreaks → more room for CA to
   distinguish itself); locked in a directional test. r²≈0.07 = modest effect.
-- [ ] **SR6 multiplicity correction.** Add Holm-Bonferroni across the headline
-  paired comparisons; report family-wise-corrected p-values in a table. Update
-  the paper to cite corrected values. `scripts/multiplicity.py`.
+- [x] **SR6 multiplicity correction.** DONE — `serum/inference/multiplicity.py`
+  implements Holm-Bonferroni step-down + plain Bonferroni; `scripts/multiplicity.py`
+  curates 11 headline paired-Wilcoxon p-values from JSON artifacts (synth-flagship
+  ×2, SNAP email-Eu-core ×2, SNAP AS ×2, BA/WS/RGG synth topologies, adversarial
+  evasive + identifiable), deduplicated by seeds/spec. At α=0.05: **Holm rejects
+  11/11**; Bonferroni rejects 9/11 (SNAP-AS marginal drops). Largest surviving
+  Holm-adj p = 0.042; 5/11 at p_adj < 10⁻³. New Multiplicity paragraph in
+  §Extended results, L6 downgraded from "open ack" to "addressed". Guarded by
+  `tests/test_multiplicity.py` (12 tests). Honest scope: this corrects
+  multiplicity *within* the pre-registered headline set, not researcher
+  degrees-of-freedom in which comparisons to headline (a broader problem no
+  correction fixes).
 - [ ] **L4 infection-detection noise.** Add a detection-noise channel (missed /
   false infection *observations*, distinct from inventory noise) and show
   content-aware degradation vs structure-only. `scripts/detection_noise.py`.

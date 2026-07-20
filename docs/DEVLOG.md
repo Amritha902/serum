@@ -668,6 +668,64 @@ much larger budgets or different `beta`. Cross-checked artifact
 (`results/divergence.json`) against 11 tests including sign of the finding.
 Full suite 105 tests green.
 
+## Phase 20 — SR6 multiplicity correction (Round 2)
+
+**Goal.** L6 in the paper conceded "many paired comparisons; the marginal
+results should be read with a family-wise correction" — an honest ack we then
+didn't actually compute. Do the correction.
+
+**Build.**
+- `serum/inference/multiplicity.py`: pure-python `holm_bonferroni` (step-down,
+  monotonicity enforced by running max, clipped to [0,1]) and `bonferroni`
+  (uniform multiplier) — both return a `MultiplicityRow` per input test in
+  original input order with `p_raw`, `p_adj`, ascending `rank`, and a
+  `rejected` flag at α.
+- `scripts/multiplicity.py`: curates a family of 11 headline paired-Wilcoxon
+  p-values from JSON artifacts on disk, applies both corrections, writes
+  `results/multiplicity.json`, prints a markdown table. Explicitly excludes
+  duplicates (adversarial "band" = multitopo "ba" — same seeds, same p, would
+  double-count).
+- `tests/test_multiplicity.py`: 12 tests — worked example, monotonicity,
+  clipping, invariants (Holm ≤ Bonferroni), artifact ↔ recompute consistency,
+  paper cross-check.
+
+**Family** (m=11): synth-flagship vs best-fixed + vs ensemble oracle; SNAP
+email-Eu-core vs best-fixed + vs ensemble; SNAP autonomous-systems vs
+best-fixed + vs ensemble; synth BA/WS/RGG topologies vs best-fixed;
+adversarial evasive + identifiable attackers vs best-fixed.
+
+**Result (α=0.05).** All **11/11** survive Holm-Bonferroni. Bonferroni
+rejects 9/11 (the two SNAP-AS comparisons are the marginal drops). Largest
+Holm-adj p among the surviving comparisons: 0.042 (SNAP-AS vs ensemble).
+Five of the eleven remain at p_adj < 10⁻³.
+
+**Grill.** (i) Overclaimed initial paper text said "every best-fixed-baseline
+headline holds at p_adj < 10⁻³" — false, only 3 of 6 do (synth-flagship,
+SNAP email, synth-RGG). Corrected to the honest "five of the eleven" phrasing
+before commit. (ii) Family scope is a judgment call; I could have inflated
+m by including every incidental sub-comparison (e.g. per-attacker sub-analyses,
+value-steering deltas, canary-budget sweeps), which would have been
+dishonestly conservative in the *other* direction. Restricted to genuine
+headline claims, deduplicated by seeds/spec. (iii) Holm-Bonferroni is valid
+under arbitrary dependence between tests, so I don't need to argue
+independence — correct choice given how many of these comparisons share the
+same underlying random source.
+
+**Honest scope.** Correcting for m=11 does not correct for the "garden of
+forking paths" — we ran many *experiments*, of which these 11 are the
+headline set. The correction protects against multiplicity within that set;
+it does not protect against the researcher-degrees-of-freedom in choosing
+which paired comparison to headline. That is a broader problem no p-value
+adjustment fixes; the preregister-and-fix-in-advance would be the honest
+solution and we don't do that.
+
+**Paper update.** New "Multiplicity" paragraph in §Extended results (cites
+11/11 Holm, 9/11 Bonf, p_adj_max=0.042, artifact path); L6 downgraded from
+"open ack" to "addressed" with pointer. Guarded by
+`test_paper_reports_holm_corrected_family`.
+
+**Suite.** 117 tests green (12 new).
+
 ## Open / next
-- (nothing at P2 unchecked; see BACKLOG.md P3)
+- (nothing at P2 unchecked; see BACKLOG.md P3 / Round 2)
 

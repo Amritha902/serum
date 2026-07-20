@@ -72,9 +72,18 @@ item off here. Record negative results; never overclaim. Work top-down.
   with k). Caveats: brute-force capped at K=16; belief conditions on knowing
   k; no end-to-end containment yet — this closes the *identifiability layer*
   for polymorphic worms, not the defense layer.
-- [ ] **Optimal-stopping (inference races spread).** When should the defender
-  commit to acting vs keep watching to identify better? A stopping rule + a
-  comparison against fixed-time acting.
+- [x] **Optimal-stopping (inference races spread).** DONE — honest negative.
+  `serum/agents/stopping.py` (`FixedStopAgent`, `AdaptiveStopAgent`) with two act
+  modes (hedge / MAP-commit); experiment `scripts/optimal_stopping.py` on 24
+  paired real-NVD trials sweeps T ∈ {0,1,2,3,5,8,12} vs three support-threshold
+  adaptive rules. **Wait-vs-spread curve is monotonically increasing** — mean
+  infected goes 0.020 → 0.155 (hedge, 7.7×) and 0.021 → 0.153 (commit) as T
+  grows; per-trial oracle-best T is **T=0 in 24/24 (hedge)** and 22/24 (commit,
+  the 2 exceptions win by ≤1pp at T=1). Every adaptive rule has strictly
+  positive gap vs the oracle (all CI95 lower bounds > 0). Takeaway: with a
+  perishable per-step budget and a hedged/inferring defender, optimal stopping
+  collapses to "act immediately" — a stopping rule adds nothing. Would matter
+  only under cumulative budgets or a pathological prior.
 - [ ] **Diversity-for-observability.** Given a budget of software reassignments,
   *maximize the identifiable fraction* (design a separating family). Show a
   defender can engineer the fleet so outbreaks self-reveal. Optimization + result.

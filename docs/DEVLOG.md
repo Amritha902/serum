@@ -408,8 +408,47 @@ informative than i.i.d. bits, and the correlation penalty compounds with k
 
 Artifacts: `results/multi_exploit.json`, `results/multi_exploit.png`.
 
+## 2026-07-20 — Optimal stopping is trivially T=0 (honest negative)
+
+New agent `serum/agents/stopping.py` (`FixedStopAgent`, `AdaptiveStopAgent`):
+watch for T steps (no interventions, belief still folds in propagation
+evidence), then delegate. Two act modes: **hedge** (posterior-expectation over
+the score, i.e. plain ContentAwareAgent) and **commit** (patch only hosts
+vulnerable to the MAP CVE — a classical Wald-style commitment).
+Adaptive triggers: `support_leq`, `entropy_leq`, `top_mass_geq`, `map_stable_for`.
+
+Experiment `scripts/optimal_stopping.py` (24 paired real-NVD trials, n=400,
+K=30, budget=5, horizon=30) sweeps T ∈ {0,1,2,3,5,8,12} vs three adaptive
+support-threshold rules, in both act modes.
+
+**Finding: the wait-vs-spread curve is monotonically increasing in T.**
+Hedge means: T=0 0.020 → T=12 0.155 (7.7×). Commit means: T=0 0.021 →
+T=12 0.153. Per-trial oracle-best T is **T=0 in 24/24 trials (hedge) and
+22/24 (commit)** — the two commit exceptions win by ≤1pp at T=1. Every
+adaptive rule (S≤5/3/1) has significantly positive gap vs the oracle
+(all CI95 lower bounds > 0). None of them win a single trial at S≤1.
+
+**Interpretation** (self-grill). Per-step budget is *perishable*: an unused
+step is spread you can never re-contain. Value-of-information from waiting
+< cost of the outbreak growing meanwhile — even in commit-mode where the
+naïve intuition ("wrong MAP wastes the step") points the other way. Two
+reasons commit still dominates at T=0: (i) the prevalence prior + seed
+profiles already peak the MAP on a plausible CVE at t=0, and (ii) with
+homophily-clustered profiles, even a wrong MAP overlaps the true carrier
+set enough that its patches are not fully wasted.
+
+Honest scope. This *is* the takeaway, not a bug: **when your inference
+already hedges well and budget is per-step, optimal stopping collapses to
+"act immediately"**. Rules that add a waiting rule to SERUM's defender
+add nothing. Stopping *would* matter if (a) budget were saveable across
+steps (a cumulative-budget environment change we did not make), (b) the
+prior were pathologically wrong, or (c) acting had a fixed activation
+cost. None of those apply to the SERUM setup — so we report the flat
+finding truthfully rather than manufacturing a regime where waiting wins.
+
+Artifacts: `results/optimal_stopping.json`, `results/optimal_stopping.png`.
+
 ## Open / next
 
-- Optimal-stopping: when to commit to acting vs keep watching (inference races spread).
 - Diversity-for-observability: pick software reassignments that maximise the
   identifiable fraction (a design lever for defenders).

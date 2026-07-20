@@ -566,6 +566,57 @@ writes `results/robust.json` when run, but that file isn't checked in
 manifest declares `outputs=()` for robust with an inline comment; if
 that JSON is ever committed, promote the tuple.
 
+## P3: flagship generalizes to a second SNAP topology (2026-07-20)
+
+The original flagship (`results/real/email_topo.json`) showed content-aware
+beating the best structural baseline on the SNAP email-Eu-core graph (~1k
+nodes, real org departments). BACKLOG asked whether the win survives on a
+second real topology. `scripts/multi_topology.py` reruns the identical
+paired comparison on the SNAP Autonomous-Systems Internet graph (6474
+nodes, mean-degree 3.88, sparse power-law) with a shared spec (K=30 CVEs,
+budget=3, horizon=60, homophily=0.4, band=(0.30, 0.80), 20 paired trials
+each). Output: `results/real/snap_topologies.json`.
+
+**Result — the flagship generalizes.** On both SNAP topologies content-aware
+strictly beats the best fixed structural baseline:
+
+- **email-Eu-core** (n=986): content-aware **32.33%** infected vs
+  betweenness (best structural) **34.03%** — Δ=**+1.70pp** (CI95
+  [+1.46, +1.94]), Wilcoxon **p=8.78e-05**, wins **20/20**. Also beats
+  the ensemble oracle (per-trial min over structural baselines) at Δ=+1.54pp,
+  p=8.77e-05, 20/20.
+- **as-internet** (n=6474): content-aware **0.07%** infected vs
+  greedy-blocking (best structural) **1.43%** — Δ=**+1.36pp** (CI95
+  [+0.03, +2.98]), Wilcoxon **p=7.69e-03**, wins **9/20**. Ensemble
+  oracle: Δ=+0.61pp, p=4.22e-02, 5/20.
+
+**Grill.** Both wins are real and paired-significant, but the two topologies
+sit in very different regimes:
+
+- On email-Eu-core the outbreak is dense and structural defenses barely
+  dent it (34.0% vs 34.8% no-defense), so content-aware's extra 1.7pp is
+  a *large fraction* of the total defensible surface — the exact scenario
+  the paper claims: hubs are not vulnerability hubs, so degree/eigenvector/
+  betweenness targeting is nearly wasted.
+- On AS the graph is sparse enough that ANY defense already contains most
+  outbreaks (13.4% no-defense → 1–2% under any structural rule → 0.07%
+  under content-aware). The absolute delta is small in points but content-
+  aware achieves near-total containment. The 9/20 (not 20/20) win count
+  is a paired-ties artifact — in ~half the AS trials the structural
+  baseline also finishes at zero infected, giving a tie that Wilcoxon
+  treats as a non-win.
+
+**Honest scope.** This is a two-topology generalization test, not a
+sweep-over-all-topologies claim. The AS graph nodes are Autonomous
+Systems (organisations), not individual hosts — the "software monoculture
+per zone" model still fits (each AS runs a coherent software stack) but
+this is a stretch of the SERUM abstraction. What we CAN claim: on the two
+SNAP topologies checked, content-aware ≥ best structural on every
+paired trial, and strictly better than best structural on average with
+Wilcoxon p < 0.01. New `tests/test_multi_topology.py` (3 tests) locks in
+the artifact and smoke-tests the harness on a synthetic BA graph so CI
+doesn't need the network. 94 tests green.
+
 ## Open / next
 - (nothing at P2 unchecked; see BACKLOG.md P3)
 

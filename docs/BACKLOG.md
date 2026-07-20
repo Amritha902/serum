@@ -121,8 +121,22 @@ item off here. Record negative results; never overclaim. Work top-down.
   Honest scope: this is a plan/orchestration artifact — reproducibility is
   only as bit-perfect as the underlying scripts' seeds, which I did not
   re-verify end-to-end (would take hours).
-- [ ] **More real topologies** (SNAP Autonomous-Systems graphs) alongside
-  email-Eu-core; check the flagship result generalizes.
+- [x] **More real topologies** (SNAP Autonomous-Systems graphs) alongside
+  email-Eu-core; check the flagship result generalizes. DONE — new
+  `scripts/multi_topology.py` runs the identical paired flagship on both
+  SNAP topologies (K=30, budget=3, horizon=60, 20 trials each, shared spec).
+  **Flagship generalizes on both:** email-Eu-core content-aware **32.33%**
+  vs betweenness **34.03%** (Δ=+1.70pp, CI95 [+1.46, +1.94], Wilcoxon
+  **p=8.8e-5**, **20/20 wins**); as-internet content-aware **0.07%** vs
+  greedy-blocking **1.43%** (Δ=+1.36pp, CI95 [+0.03, +2.98], **p=7.7e-3**,
+  9/20 wins — 11 ties, both policies at 0 infected). Absolute deltas are
+  smaller on AS because sparse graphs let any defense contain a worm
+  fast; the *relative* reduction is 95%+. Artifact
+  `results/real/snap_topologies.json`, guarded by
+  `tests/test_multi_topology.py` (3 tests) + added to `reproduce_all` manifest.
+  Honest caveat: two topologies checked (email + AS), not a sweep across
+  every SNAP graph; the AS "one node = one AS" abstraction stretches the
+  software-monoculture model but the paired result still passes.
 
 ## Done (moved from queue — newest first)
 

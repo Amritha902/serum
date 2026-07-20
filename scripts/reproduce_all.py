@@ -178,6 +178,17 @@ MANIFEST: List[Experiment] = [
         outputs=("iot_botnet.json",),
         tags=frozenset({"medium"}),
     ),
+    Experiment(
+        name="multi_topology",
+        script="multi_topology.py",
+        # outputs live under results/real/, which the orphan-check ignores
+        # (subdirectories are excluded), so we don't declare them here — the
+        # test in tests/test_multi_topology.py guards the artifact instead.
+        outputs=(),
+        tags=frozenset({"medium"}),
+        note="Flagship generalization: content-aware vs baselines on "
+             "SNAP email-Eu-core AND SNAP Autonomous-Systems.",
+    ),
     # -- learned policy + sweep (expensive) ---------------------------------
     Experiment(
         name="train_policy",

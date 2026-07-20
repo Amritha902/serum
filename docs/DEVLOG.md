@@ -498,6 +498,43 @@ installable on the honeypot; per-host cost isn't 1) — this result is the
 Artifacts: `serum/inference/diversity.py`, `scripts/diversity.py`,
 `tests/test_diversity.py`, `results/diversity.json`, `results/diversity.png`.
 
+## Paper expansion (P3, 2026-07-20)
+
+Brought `paper/serum.tex` up to date with the P0/P1/P2 results that had landed
+since the last draft, and moved the group-testing framing from the abstract
+into the introduction as its own paragraph (Rényi separating systems,
+Kautz–Singleton cover-free families, Atia–Saligrama noisy group testing,
+Aldridge–Johnson–Scarlett multi-defective extension, and the log₂K bit-bound
+that the sample-complexity experiment matches empirically).
+
+Added `\section{Extended results}` (§6) with eight paragraphs, each with a
+one-liner artifact pointer and honest caveats: **sample complexity** (median 5
+propagation infections, ≈1.02·log₂K on real data), **confusability decay**
+(K-sweep table 10→80), **polymorphic payloads** (77.8%→27.1% k=1→4,
+median 18 infections for k=2), **canary diversity** (greedy B\*=15,
+random ≥60, 4× ratio, greedy is regret-free but not min-canary optimal),
+**optimal stopping negative** (T=0 dominates 24/24 hedge, 22/24 commit; full
+mean-vs-T table for both modes), **poison-robust defender** (RobustAgent
+tracks the better of belief/degree), **cost & blast-radius** (−1.00pp on
+blast for +0.83pp on infection — an honest trade, not a Pareto win, effect
+vanishes for value_max=20), **IoT-botnet** (−8.71pp DDoS blast vs degree,
+20/20 wins, absolute infection still 60%+).
+
+New test `tests/test_paper_claims.py` (9 tests) reads every result artifact
+the paper cites and asserts the number that ends up in the .tex matches the
+JSON. Caught two drift issues during authoring — the paper table had
+`0.032` where the data was `0.031`, and I initially referenced two BibTeX
+keys (`atia2012groupnoisy`, `aldridge2019groupsurvey`) that did not exist
+in `refs.bib`; both fixed. Also verifies the group-testing paragraph
+survives future edits to the intro (specifically: presence of "group
+testing", `\log_2 K`, Rényi, Kautz–Singleton).
+
+**Honest scope.** This is a paper-hygiene commit, not a new scientific
+finding. It does not claim any new result, only that the previously
+published results are now surfaced in the paper and are cross-checked
+against `results/*.json` so drift can't silently ship. Total 80 tests
+green.
+
 ## Open / next
 - (nothing at P2 unchecked; see BACKLOG.md P3)
 

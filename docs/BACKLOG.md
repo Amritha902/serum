@@ -100,8 +100,15 @@ item off here. Record negative results; never overclaim. Work top-down.
 
 ## P3 — polish & reproduction
 
-- [ ] **Expand the paper** (`paper/serum.tex`) with each new result as it lands;
-  keep tables/figures in sync. Add group-testing framing to the intro.
+- [x] **Expand the paper** (`paper/serum.tex`) with each new result as it lands;
+  keep tables/figures in sync. Add group-testing framing to the intro. DONE —
+  intro gains a "Formal framing: online, graph-induced group testing" paragraph
+  (Rényi/Kautz–Singleton/Atia–Saligrama/Aldridge–Johnson–Scarlett, `log₂K`
+  bit-bound); new `\section{Extended results}` covers sample complexity,
+  confusability K-sweep, polymorphic payloads, canary diversity, optimal-
+  stopping negative, RobustAgent, cost/blast-radius, and IoT-botnet. New
+  `tests/test_paper_claims.py` (9 tests) cross-checks every numeric claim
+  against `results/*.json` so drift cannot silently ship. 80 tests green.
 - [ ] **Reproduce-all script** (`scripts/reproduce_all.py`) that regenerates every
   results/ artifact from scratch.
 - [ ] **More real topologies** (SNAP Autonomous-Systems graphs) alongside

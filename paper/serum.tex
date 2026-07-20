@@ -81,6 +81,19 @@ software-monoculture zones, with paired statistics and an honest account of wher
 content-awareness does and does not help.
 \end{itemize}
 
+\paragraph{Formal framing: online, graph-induced group testing.}
+The identifiability condition of \S\ref{sec:theory} is a \emph{separating-system}
+condition in the sense of R\'enyi (1961); confusers are cover-free-family
+violations (Kautz--Singleton 1964); imperfect inventories give \emph{noisy}
+group testing \citep{atia2012boolean}; honeypot canaries
+(\S\ref{sec:extended}) make it \emph{adaptive}; multi-exploit payloads are the
+\emph{multi-defective} extension \citep{aldridge2019grouptesting}. Each
+propagation infection is one positive test whose profile-set is intersected into
+the running support (Prop.~\ref{prop:supp}). So the number of infections to
+identify inherits the same $\Omega(\log_2 K)$ bit-count that group testing does,
+a rate we verify empirically (\S\ref{sec:extended}, median~$5$ infections at
+$K{=}30$, $\approx\!1.02\log_2 K$).
+
 \paragraph{What is \emph{not} novel.} The gated-propagation model is a special
 case of multitype bond percolation \citep{allard2009multitype} and the premise of
 software-diversity worm models; classical worm models already gate on a
@@ -251,6 +264,144 @@ oracle ensemble that cherry-picks the best structural heuristic per outbreak
 geometric/small-world topologies structure-only can win, since almost every host
 is vulnerable. Content-awareness helps when the exploit is stealthy enough that
 its victims are a distinctive, mislocated-from-the-hubs zone.
+
+\section{Extended results}\label{sec:extended}
+Since the flagship containment experiments, we have measured the theory's group-testing
+rate on real data, characterised the ambiguity structure, extended to polymorphic
+payloads, addressed poisoning robustness, added value-weighted objectives, and
+instantiated the framework on IoT-botnet containment. Each subsection is one
+paragraph plus, where the number is a curve, one small table. Every table is
+regenerated from a single \texttt{results/*.json} artifact, and the numbers here
+are cross-checked in \texttt{tests/test\_paper\_claims.py}.
+
+\paragraph{Sample complexity of identification.}
+The information-theoretic bit-bound of adaptive group testing with one defective
+in $K$ items is $\lceil\log_2 K\rceil$. Empirically, on 12 real-NVD networks
+($n{=}400$, $K{=}30$, homophily $0.4$, 76 identifiable-CVE trials), the belief
+support collapses to a single CVE after a \textbf{median of 5 propagation
+infections} --- $1.25\%$ of the fleet, $p90{=}2.25\%$, $18.5\%$ of the reachable
+vulnerable component. Median $\text{hosts}/\log_2 K\approx 1.02$: the empirical
+median lands essentially on the bit-bound despite profile correlations. All $76$
+theoretically identifiable CVEs identified in practice ($100\%$; verifies
+Thm.~\ref{thm:id}). Artifact: \texttt{results/sample\_complexity.json}, script
+\texttt{scripts/sample\_complexity.py}. \emph{Caveat.} On a $K{=}16$ Zipf
+synthetic the ratio is $\approx\!2.0\log_2 K$; real product-based profiles are
+more informative than the toy.
+
+\paragraph{Confusability decays with $K$.}
+We measure per-CVE confuser counts and identifiable fractions as $K$ grows on
+real NVD-derived networks ($n{=}400$, homophily $0.4$, 8 nets, 240 live CVEs at
+$K{=}30$). Flagship at $K{=}30$: operational identifiable fraction $50.8\%$,
+global $63.7\%$ (weakly larger, as it must be: operational $\Rightarrow$ global;
+cross-checked as a theorem in the test suite). Median confuser count is $0$;
+p90 is $3$ (operational). Sweep:
+\begin{center}\small
+\begin{tabular}{rrrr}
+\toprule
+$K$ & live CVEs & op.\ ident. & global ident. \\
+\midrule
+10 & 10.0 & 0.675 & 0.700 \\
+20 & 20.0 & 0.500 & 0.550 \\
+30 & 30.0 & 0.358 & 0.400 \\
+50 & 50.0 & 0.345 & 0.465 \\
+80 & 80.0 & 0.200 & 0.384 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Identifiable fraction decays monotonically in $K$ --- more CVEs mean more
+subset-order dominators. Artifact: \texttt{results/confusability.\{json,png\}}.
+
+\paragraph{Polymorphic (multi-exploit) payloads.}
+A polymorphic worm carries a set $S\subseteq C$ and infects any host whose
+profile intersects $S$ (the OR-of-exploits payload). The posterior support after
+observing infected set $I$ becomes the family of size-$|S|$ hitting sets
+$\{S: \forall v\!\in\!I,\ X(v)\cap S\neq\emptyset\}$: the multi-defective
+analogue of Prop.~\ref{prop:supp}. On real NVD ($n{=}300$, $K{=}16$)
+identifiable fraction decays $77.8\%{\to}49.6\%{\to}38.2\%{\to}27.1\%$ for
+$k{=}1{\to}4$; $k{=}2$ needs a \textbf{median of 18 propagation infections} to
+pin the hitting set (vs $5$ for single-CVE), a ratio of $2.61$ to the bit-bound
+$\log_2\binom{16}{2}\!=\!6.9$ --- profile correlation compounds with $k$.
+Artifact: \texttt{results/multi\_exploit.\{json,png\}}. \emph{Scope.} Belief
+conditions on knowing $|S|$; end-to-end containment for polymorphic payloads is
+future work --- this closes the identifiability layer only.
+
+\paragraph{Diversity-for-observability: canary planning.}
+Given a canary budget $B$, greedily insert canary hosts to \emph{engineer}
+identifiability. Adding a host only grows each $\carriers(c)$, so no subset-order
+witness can be destroyed: greedy singleton canaries are regret-free with respect
+to the identifiable count. On $8$ real-NVD nets ($K{=}30$, $n{=}400$) greedy
+reaches $100\%$ global identifiability at \textbf{median $B^\star=15$} canaries
+(exactly $K_\text{live}-I_0^\text{global}$, matching the singleton upper bound)
+vs $B^\star\!\geq\!60=2K$ for random (coupon-collector), a $4\times$ ratio.
+Greedy wins $8/8$ trials at every $B>0$ with $\Delta\text{CI95}>0$. Artifact:
+\texttt{results/diversity.\{json,png\}}. \emph{Scope.} Singleton greedy is not
+provably minimum-canary-optimal (a multi-CVE canary can pin two CVEs when
+their dominators are disjoint); a set-cover LP is the natural follow-up.
+
+\paragraph{Optimal stopping is trivially T{=}0 (honest negative).}
+A defender who waits $T$ steps before acting still folds the propagation into its
+belief. If waiting sharpens the belief enough to place patches better, the
+wait-vs-spread curve should be U-shaped. It is not. Sweeping fixed and adaptive
+stops on $24$ paired real-NVD trials ($K{=}30$, $n{=}400$, budget $5$):
+\begin{center}\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+$T$ & 0 & 1 & 2 & 3 & 5 & 8 & 12 \\
+\midrule
+hedge  & 0.020 & 0.033 & 0.048 & 0.065 & 0.090 & 0.124 & 0.155 \\
+commit & 0.021 & 0.031 & 0.047 & 0.062 & 0.089 & 0.124 & 0.153 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Per-trial oracle-best $T$ is $T{=}0$ in $24/24$ (hedge) and $22/24$ (commit; the
+two exceptions win by $\leq 1$pp at $T{=}1$). Every adaptive rule has strictly
+positive CI95 gap versus the per-trial oracle. \emph{Reading.} With a perishable
+per-step budget and a hedged/inferring defender, optimal stopping collapses to
+``act immediately.'' Stopping would matter under cumulative budgets, an
+activation cost, or a pathological prior --- none apply here. Artifact:
+\texttt{results/optimal\_stopping.\{json,png\}}.
+
+\paragraph{Poison-robust defender.}
+A committee of diverse belief-agents does not defeat belief-poisoning attacks
+(belief members fail in correlated ways). The fix is \emph{detection~+~hedging}:
+\texttt{RobustAgent} measures the fraction of new propagation-infected hosts
+that carry its current MAP CVE and moves a trust weight $\alpha\!\in\![0,1]$
+toward it, scoring hosts as
+$\alpha\cdot\text{content} + (1-\alpha)\cdot\text{structural}$. Poisoning is
+one-shot; the real worm keeps revealing the truth, so $\alpha$ falls under
+attack. On the poison-decoys sweep it tracks \emph{the better} of
+\{content-aware, degree\} at every level: $1.13\%$ clean (vs degree $1.71\%$),
+$1.49\%$ at $15$ decoys (beats both), $1.77\%$ at $30$ decoys (vs single-soft's
+collapse to $4.94\%$). Script: \texttt{scripts/robust.py}.
+
+\paragraph{Cost \& blast-radius: value-weighted steering.}
+Real fleets are lopsided: a small tail (DBs, DCs, gateways) matters far more
+than the rest. We add heavy-tailed \texttt{value} and \texttt{cost\_isolate} on
+hosts (Pareto tail, $\alpha{=}1.2$), a \texttt{blast\_radius} metric (fraction
+of total value ever infected), and a \texttt{value\_weighted} flag on the
+content-aware agent (score neighbours by \texttt{value}). Paired enterprise
+sweep (30 trials, $n{=}500$, \texttt{value\_max}$=100$): value-steering
+\textbf{cuts blast\_radius by $-1.00$pp} (CI95 $[-1.82,-0.19]$, $18/30$ wins)
+while raising \texttt{infected\_fraction} by $+0.83$pp --- an honest trade, not
+a Pareto win. Effect vanishes at \texttt{value\_max}$=20$ (a caveat, not a
+fudge: real fleets are skewed). Artifact:
+\texttt{results/blast\_radius.json}.
+
+\paragraph{IoT-botnet application (Mirai-style).}
+Instantiate SERUM on a device-type firmware monoculture
+(camera/dvr/router/thermostat/doorbell/light/hub/printer);
+\texttt{mirai\_payload} targets default telnet credentials (spans
+camera/DVR/router/hub); host \texttt{value}~$=$~uplink Mbps so
+\texttt{blast\_radius}~$=$~DDoS capacity conscripted. Paired sweep (20 trials,
+$n{=}600$, RGG, budget $3$): content-aware cuts DDoS blast \textbf{$-8.71$pp
+vs degree} (CI95 $[-11.13,-6.47]$, $20/20$ wins) at higher availability
+($99.5\%$ vs $91.25\%$), Pareto-dominating here because the belief narrows fast
+enough to switch from isolation to patching. Value-steering adds a marginal
+$-2.09$pp on blast (CI95 $[-3.98,-0.17]$, $12/20$). Absolute infection is high
+($60\%+$): Mirai-style payloads on tight budgets \emph{do} form botnets; the
+deltas are what to read. Artifact: \texttt{results/iot\_botnet.json},
+scenario: \texttt{serum/scenarios/iot.py}, doc:
+\texttt{docs/APPLICATION\_IOT.md}.
 
 \section{Related work}
 A full, source-verified survey is in the supplementary \texttt{docs/LITERATURE\_REVIEW.md};

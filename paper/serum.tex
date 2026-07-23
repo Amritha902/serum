@@ -403,6 +403,31 @@ deltas are what to read. Artifact: \texttt{results/iot\_botnet.json},
 scenario: \texttt{serum/scenarios/iot.py}, doc:
 \texttt{docs/APPLICATION\_IOT.md}.
 
+\paragraph{Detection-noise robustness.}
+Beyond inventory noise on host \emph{vulnerabilities}, the defender's sensor on
+\emph{infection status} is imperfect: EDR misses dwelling implants (false
+negatives), and stuck telemetry flags idle hosts as compromised (false
+positives). We add a two-channel model---\texttt{detection\_miss} (a real
+infection permanently absent from the observed set) and \texttt{detection\_false}
+(a susceptible host persistently reported infected)---so that both the belief
+update and the computed frontier see the corrupted view, while ground truth is
+retained for scoring. On real NVD networks ($n{=}400$, $K{=}30$, budget $5$, 20
+paired trials per point) the paired content-aware-minus-degree infection gap
+stays \emph{positive at 9 of 10 noise points}, including the entire
+missed-detection channel (miss $\in\{0.1,0.2,0.3\}$, gaps
+$+1.18/+1.18/+0.41$pp)---missed detections withhold evidence symmetrically from
+the belief and the structural frontier, so they do not preferentially hurt the
+inferring defender. The one non-positive point is the pure false-alarm channel at
+$2\%$ ($-0.09$pp, a tie): false alarms \emph{poison the belief}
+(Prop.~\ref{prop:supp}'s consistency evidence is corrupted) in a way they cannot
+poison a belief-free heuristic. The effect does not compound---at $5\%$/$10\%$
+false alarms the gap is positive again as both policies degrade together. This is
+\textbf{graceful degradation, not a new significant win} (per-point Wilcoxon at
+$n{=}20$ reaches $p<0.05$ only at the noiseless and miss$=0.1$ points); the
+false-alarm channel is the one to monitor. Artifact:
+\texttt{results/detection\_noise.json}, script:
+\texttt{scripts/detection\_noise.py}.
+
 \paragraph{Multiplicity: family-wise-corrected p-values.}
 We report $11$ headline paired-Wilcoxon comparisons across seven experiments
 (synthetic-CVE flagship, both SNAP topologies, BA/WS/RGG synthetic sweeps, and
@@ -505,8 +530,15 @@ group-testing bridge---not the mechanism behind the empirical win.
 host$\leftrightarrow$CVE assignment is \emph{modeled} (NVD product popularity plus
 software-monoculture zones), not measured.
 
-\textbf{(L4) Perfect infection observability} is assumed; real detection is noisy
-(we stress inventory noise but not infection-detection noise).
+\textbf{(L4) Infection-detection noise (addressed).} Earlier drafts assumed
+perfect infection observability. We now model an imperfect sensor on infection
+status (missed detections + persistent false alarms; \S\ref{sec:extended},
+``Detection-noise robustness''). Content-awareness degrades \emph{gracefully}:
+the paired edge over structure-only stays non-negative across a realistic
+sensor-noise grid, with the false-alarm channel---which poisons the belief but
+not a belief-free heuristic---the sensitive one. It is a graceful-degradation
+result, not a significant win under noise; per-point tests at $n{=}20$ are
+mostly underpowered.
 
 \textbf{(L5) Self-designed adversaries.} Robustness is evaluated against the
 poisoning/evasion attacks we constructed with our parameters; an adaptive

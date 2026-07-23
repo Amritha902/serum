@@ -16,9 +16,19 @@ from serum.sim.environment import Action, Status
 
 
 def frontier(env) -> list:
-    """Susceptible hosts adjacent to the current infected set."""
+    """Susceptible hosts adjacent to the current infected set.
+
+    Reads the defender's *observed* infected set when the environment exposes
+    one (detection-noise channel active), otherwise ground truth. The
+    susceptibility check itself is ground truth: a defender still can't spend
+    budget on a host that has already been isolated or patched, whatever the
+    sensor says. What the noise controls is *who counts as a spreader source*.
+    """
+    src = getattr(env, "_observed_infected", None)
+    if src is None:
+        src = env._infected
     front = set()
-    for u in env._infected:
+    for u in src:
         if u in env.isolated:
             continue
         for v in env.g.neighbors(u):
@@ -177,7 +187,7 @@ class AcquaintanceDefense:
             return []
         actions, tries = [], 0
         chosen = set()
-        infected = list(env._infected)
+        infected = list(getattr(env, "_observed_infected", None) or env._infected)
         while len(actions) < env.budget_per_step and tries < 20 * env.budget_per_step:
             tries += 1
             if not infected:

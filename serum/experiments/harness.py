@@ -67,6 +67,8 @@ class TrialSpec:
     homophily: float = 0.5        # real-data: software monoculture within a zone
     inventory_miss: float = 0.0   # defender fails to see a true vuln (undetected)
     inventory_false: float = 0.0  # defender sees a vuln the host lacks (stale)
+    detection_miss: float = 0.0   # sensor misses an actual infection (permanent)
+    detection_false: float = 0.0  # sensor flags a susceptible host as infected
     n_decoys: int = 0             # belief-poisoning decoy infections planted by attacker
 
 
@@ -136,6 +138,8 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
             horizon=spec.horizon,
             recovery_time=spec.recovery_time,
             decoys=decoys,
+            detection_miss=spec.detection_miss,
+            detection_false=spec.detection_false,
             rng=dyn_rng,
         )
 

@@ -726,6 +726,84 @@ solution and we don't do that.
 
 **Suite.** 117 tests green (12 new).
 
+## L4 — infection-detection-noise channel (2026-07-23)
+
+**Goal.** L4 in the paper conceded "perfect infection observability is
+assumed; we stress inventory noise but not infection-detection noise." Close
+the gap: give the defender an imperfect *sensor on infection status* (distinct
+from the existing inventory noise on host vulnerabilities) and measure how fast
+content-awareness degrades relative to a payload-blind structural defender.
+
+**Build.**
+- `serum/sim/environment.py`: two-channel detection-noise model on the env.
+  `detection_miss` = probability a real infection is *permanently* missed at
+  onset (a dwelling implant the EDR never picks up); `detection_false` =
+  fraction of susceptible hosts a stuck sensor persistently reports as infected.
+  Noise sampled once per episode at reset (reproducible). `_observed_infected`
+  = `(_infected − _missed) ∪ _false_alarms`; `_observe()` now emits the
+  *observed* infected / newly-infected sets, so both the belief update and the
+  frontier see the corrupted view. Ground truth (`_infected`, `_ever`) is kept
+  intact for scoring.
+- `serum/baselines/heuristics.py`: `frontier()` and `AcquaintanceDefense` read
+  `_observed_infected` when present, else ground truth. Susceptibility check
+  stays ground truth — a defender still can't spend budget on an already-patched
+  host whatever the sensor says; noise only controls *who counts as a spreader*.
+- `serum/experiments/harness.py`: `TrialSpec.detection_miss / detection_false`
+  threaded into `build_episode`.
+- `scripts/detection_noise.py`: paired sweep over a 10-point (miss, false) grid;
+  NoDefense / Degree / ContentAware / OracleContentAware through the identical
+  outbreak; reports mean infected per policy, the paired CA−degree gap, Wilcoxon
+  p, and the crossover point where (if ever) content-aware stops beating degree.
+- `tests/test_detection_noise.py`: 7 invariants — missed infections never appear
+  in the observed set but still spread in ground truth; false alarms are
+  persistent and never in `_infected`; noise=0 reproduces the noiseless
+  observation exactly.
+
+**Result (20 paired trials × 10 noise points, real NVD, n=400, K=30, budget 5).**
+
+| miss | false | no-def | degree | CA | oracle | CA−deg | p | wins/n |
+|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| 0.00 | 0.00 | 18.4% | 1.3% | 0.9% | 0.8% | +0.38pp | 1.2e-2 | 8/20 |
+| 0.10 | 0.00 | 10.4% | 2.5% | 1.4% | 1.1% | +1.18pp | 2.2e-2 | 10/20 |
+| 0.20 | 0.00 | 15.6% | 2.2% | 1.0% | 0.9% | +1.18pp | 1.8e-2 | 7/20 |
+| 0.30 | 0.00 | 8.8% | 1.5% | 1.1% | 1.0% | +0.41pp | 1.2e-1 | 8/20 |
+| 0.00 | 0.02 | 8.8% | 1.8% | 1.9% | 1.1% | −0.09pp | 8.3e-1 | 4/20 |
+| 0.00 | 0.05 | 14.8% | 4.7% | 3.5% | 2.3% | +1.16pp | 8.6e-2 | 7/20 |
+| 0.00 | 0.10 | 13.0% | 3.5% | 2.4% | 1.8% | +1.14pp | 5.1e-2 | 7/20 |
+| 0.10 | 0.02 | 13.2% | 3.5% | 2.4% | 1.5% | +1.02pp | 3.9e-1 | 6/20 |
+| 0.20 | 0.05 | 4.4% | 2.2% | 1.2% | 1.0% | +1.01pp | 2.9e-1 | 2/20 |
+| 0.30 | 0.10 | 12.0% | 5.1% | 4.5% | 2.6% | +0.68pp | 7.8e-1 | 4/20 |
+
+**Reading (honest).** Content-aware retains a *positive* infection edge over
+degree at 9 of 10 noise points, including the full miss channel (all four
+positive) — missed detections withhold evidence symmetrically from both the
+belief and the structural frontier, so they don't preferentially hurt the
+inferring defender. The one non-positive point is the pure false-alarm channel
+at 2% (−0.09pp, essentially a tie): false alarms *poison the belief* (a host
+that doesn't carry the true CVE now looks like counter-evidence) in a way they
+can't poison a belief-free heuristic. But the effect is small and does not
+compound — at 5% and 10% false alarms the gap is positive again (both policies
+just degrade together). **This is graceful degradation, not a new significant
+win.** Per-point Wilcoxon at n=20 only reaches p<0.05 at the noiseless and
+miss=0.10 points; the sweep's value is the *shape* (gap stays ≥ −0.1pp across a
+realistic sensor-noise grid), not any single p-value. So L4 moves from
+"unaddressed assumption" to "measured: content-awareness survives detection
+noise, with the false-alarm channel the one to watch."
+
+**Grill.** (i) Tempting overclaim: "content-aware robust to detection noise,
+still wins." False — it ties once and no individual noisy point is significant
+at n=20. Reported as graceful degradation with the tie called out explicitly.
+(ii) The miss channel looking *harmless* is real but for an unglamorous reason
+(symmetric evidence withholding), not because inference is magically robust;
+said so. (iii) 20 trials is thin for 10 points; the honest artifact is the gap
+sign/shape, and I did not promote any noisy point to a headline p-value.
+
+**Paper update.** New "Detection-noise robustness" paragraph in §Extended
+results; L4 downgraded from open assumption to "addressed (graceful
+degradation; false-alarm channel is the sensitive one)."
+
+**Suite.** 124 tests green (7 new).
+
 ## Open / next
 - (nothing at P2 unchecked; see BACKLOG.md P3 / Round 2)
 

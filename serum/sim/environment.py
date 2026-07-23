@@ -103,6 +103,8 @@ class ContainmentEnv:
         recovery_time: int = 0,
         decoys=None,
         cost_budget: bool = False,
+        detection_miss: float = 0.0,
+        detection_false: float = 0.0,
         rng: np.random.Generator | None = None,
     ):
         self.g0 = g
@@ -122,6 +124,14 @@ class ContainmentEnv:
         # cost_budget=True: isolation of host v consumes ``cost_isolate(v)`` units;
         # patching / segmenting stay at 1 unit each (cheap policy actions).
         self.cost_budget = bool(cost_budget)
+        # Detection-noise channel (defender's *sensor* on infection status is
+        # imperfect; distinct from inventory noise on host vulnerabilities).
+        #  - detection_miss: probability that a real infection is *permanently*
+        #    missed at its onset -- it never appears in the observed infected set.
+        #  - detection_false: fraction of susceptible hosts flagged as infected
+        #    at reset and persistently reported that way (a stuck EDR sensor).
+        self.detection_miss = float(detection_miss)
+        self.detection_false = float(detection_false)
         self.rng = rng or np.random.default_rng()
         self.reset()
 
@@ -147,14 +157,47 @@ class ContainmentEnv:
         self._newly = set(self.seeds) | set(self.decoys)
         self._ever = set(self.seeds)               # every host ever infected (real)
         self._age = {s: 0 for s in self.seeds}     # steps since infection (SIR)
+        # Detection-noise state (sensor imperfection).
+        # _missed: hosts whose real infection was never detected -- persistent.
+        # _false_alarms: susceptible hosts that a broken sensor reports as
+        # infected for the whole episode. Sampled once at reset from non-seed
+        # non-decoy hosts so noise is per-episode reproducible.
+        self._missed: set = set()
+        self._false_alarms: set = set()
+        if self.detection_false > 0.0:
+            skip = set(self.seeds) | set(self.decoys)
+            for v in self.g.nodes():
+                if v in skip:
+                    continue
+                if self.rng.random() < self.detection_false:
+                    self._false_alarms.add(v)
+        # Observed infected view used by frontier() / heuristics; equals _infected
+        # when noise is off. Kept as an attribute so `_observe` can populate it
+        # once per step and consumers avoid recomputing the difference.
+        self._observed_infected: set = self._compute_observed_infected()
         self.trace.append(len(self._infected))
         return self._observe()
 
+    def _compute_observed_infected(self) -> set:
+        """Defender's view of who's infected right now."""
+        return (self._infected - self._missed) | self._false_alarms
+
     def _observe(self) -> Observation:
+        self._observed_infected = self._compute_observed_infected()
+        if self.detection_miss > 0.0 or self.detection_false > 0.0:
+            if self.t == 0:
+                # seeds + decoys (already in _newly) plus the persistent false alarms
+                observed_newly = (set(self._newly) - self._missed) | self._false_alarms
+            else:
+                # Only real spread infections that weren't missed; false alarms
+                # were already reported at t=0 so they aren't "new" again.
+                observed_newly = set(self._newly) - self._missed
+        else:
+            observed_newly = set(self._newly)
         return Observation(
             t=self.t,
-            infected=frozenset(self._infected),
-            newly_infected=frozenset(self._newly),
+            infected=frozenset(self._observed_infected),
+            newly_infected=frozenset(observed_newly),
             isolated=frozenset(self.isolated),
             patched=frozenset(self.patched),
             seeds=frozenset(self.seeds),
@@ -232,6 +275,10 @@ class ContainmentEnv:
             self._infected.add(v)
             self._ever.add(v)
             self._age[v] = 0
+            # Detection-noise: with prob detection_miss the sensor never picks up
+            # this new infection. Persistent for the rest of the episode.
+            if self.detection_miss > 0.0 and self.rng.random() < self.detection_miss:
+                self._missed.add(v)
         return newly
 
     def _recover(self) -> None:

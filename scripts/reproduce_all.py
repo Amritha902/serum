@@ -116,6 +116,23 @@ MANIFEST: List[Experiment] = [
         tags=frozenset({"medium"}),
         note="Poison-robust defender vs belief poisoning.",
     ),
+    Experiment(
+        name="adaptive_attack",
+        script="adaptive_attack.py",
+        outputs=("adaptive_attack.json",),
+        tags=frozenset({"medium"}),
+        note="SR5 audit-aware best-response poisoner vs RobustAgent; bounds "
+             "the poison-robustness claim (holds to ~6% of fleet, marginal "
+             "breach only at 10%).",
+    ),
+    Experiment(
+        name="detection_noise",
+        script="detection_noise.py",
+        outputs=("detection_noise.json",),
+        tags=frozenset({"medium"}),
+        note="L4 infection-detection-noise channel; content-aware degrades "
+             "gracefully vs structure-only across a sensor-noise grid.",
+    ),
     # -- containment headline & pareto --------------------------------------
     Experiment(
         name="run_experiment",

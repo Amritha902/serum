@@ -804,6 +804,75 @@ degradation; false-alarm channel is the sensitive one)."
 
 **Suite.** 124 tests green (7 new).
 
+## SR5 — adaptive adversary vs the poison-robust defender (2026-07-24)
+
+**Goal.** L5 conceded our robustness attacks are self-designed strawmen. Close
+it: build the white-box attacker that *best-responds to the RobustAgent's trust
+audit* and honestly test whether the defense still holds.
+
+**The audit, and its best response.** RobustAgent keeps a trust weight α that
+moves toward the fraction of new *real* infections carrying its MAP CVE. Real
+spread is gated on c*, so the audit's pass-rate for a poisoned MAP c' converges
+to the carrier overlap `|car(c*)∩car(c')| / |car(c*)|`. The naive poisoner
+(deception.py) picks a disjoint high-prevalence c' → overlap→0 → α collapses →
+agent falls back to structure (why naive poisoning fails). The best response
+maximises `overlap · |car(c*)\car(c')|`: keep the audit passing *and* leave part
+of the true victim set undefended. A pure superset c' over-covers the truth
+(Prop. 3) and is useless — the attacker is forced onto this knife-edge.
+
+**Build.**
+- `serum/attack/adaptive.py`: `best_response_cve` (picks c' maximising the
+  overlap·leak damage score subject to overlap ≥ τ; falls back to max-overlap,
+  then to naive) + `choose_decoys_adaptive` (plants k decoys on car(c')\car(c*)).
+- `serum/experiments/harness.py`: `TrialSpec.decoy_strategy ∈ {naive, adaptive}`
+  dispatched in `build_episode`.
+- `scripts/adaptive_attack.py`: paired sweep over decoy budgets; arms =
+  {degree floor, single-soft vs adaptive, robust vs naive, robust vs adaptive};
+  reports the paired (robust-adaptive − degree) gap, Wilcoxon p, and whether the
+  robust agent holds (infection ≤ structural floor).
+- `tests/test_adaptive_attack.py`: 4 invariants (decoys never carry c*; best-
+  response overlaps AND leaks the truth; adaptive ≠ naive placement).
+- `scripts/reproduce_all.py`: registered `adaptive_attack` AND the previously
+  unregistered `detection_noise` (fixes a test_no_orphan_result_files failure).
+
+**Result (60 paired trials/point, real NVD, n=500, K=40, budget 5).**
+
+| decoys (% fleet) | degree | soft/adaptive | robust/naive | robust/adaptive | gap vs floor | p | holds |
+|--:|--:|--:|--:|--:|--:|--:|:--:|
+| 0 | 1.49% | 0.94% | 1.07% | 1.07% | −0.42pp | — | yes |
+| 5 (1%) | 1.49% | 2.45% | 1.41% | 1.46% | −0.03pp | 0.57 | yes |
+| 10 (2%) | 1.49% | 2.88% | 1.54% | 1.61% | +0.12pp | 0.26 | yes |
+| 15 (3%) | 1.49% | 3.11% | 1.44% | 1.71% | +0.22pp | 0.083 | yes |
+| 20 (4%) | 1.49% | 3.61% | 1.66% | 1.77% | +0.28pp | 0.081 | yes |
+| 30 (6%) | 1.49% | 4.02% | 1.65% | 1.83% | +0.33pp | 0.056 | yes |
+| 50 (10%) | 1.49% | 4.48% | 1.79% | 1.92% | +0.42pp | 0.022 | **NO** |
+
+**Reading (honest).** The adaptive attack is *real* — it drives a single
+audit-free soft belief to 2.5–4.5% (vs the naive attack, which the robust agent
+shrugs off). But **RobustAgent holds against the best response up to 30 decoys
+(6% of the fleet)**: its gap over the structural floor is not significant there.
+The edge grows monotonically and becomes marginally significant only at an
+extreme 50 decoys (10% of the fleet, +0.42pp, uncorrected p=0.022) — and that
+single grid point does **not** survive Holm across the 7 budgets (0.022×7≈0.15).
+So the audit is not unbreakable, but breaching it costs a poisoning budget
+*twice* the defender's containment budget (50 decoys vs budget 5) — a poor trade.
+
+**Grill.** (i) Tempting overclaim: "robust to adaptive poisoning." False — it
+breaches at 10%. Reported as a bounded hold with the breach point named. (ii)
+Tempting opposite overclaim: "adaptive attack beats the robust agent." Also
+false/misleading — one uncorrected point at an extreme budget that fails Holm.
+Stated both bounds. (iii) The best response is on *placement* against a *known*
+audit; a joint payload+timing+placement adversary is still open (said so in L5).
+(iv) Confirmed at 60 trials after a 30-trial run showed the breach marginal, per
+honest-check discipline.
+
+**Paper update.** New "Adaptive adversary (SR5)" paragraph in §Extended results
+after the poison-robust paragraph; L5 downgraded from open to "addressed, with a
+bounded caveat."
+
+**Suite.** 128 tests green (4 new).
+
 ## Open / next
+- SR5 done; remaining Round-2 item: Path A prune (docs/CONTRIBUTIONS.md).
 - (nothing at P2 unchecked; see BACKLOG.md P3 / Round 2)
 

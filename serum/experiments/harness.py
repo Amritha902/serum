@@ -70,6 +70,7 @@ class TrialSpec:
     detection_miss: float = 0.0   # sensor misses an actual infection (permanent)
     detection_false: float = 0.0  # sensor flags a susceptible host as infected
     n_decoys: int = 0             # belief-poisoning decoy infections planted by attacker
+    decoy_strategy: str = "naive" # "naive" (prevalence misdirection) | "adaptive" (audit-aware best response)
 
 
 def build_episode(spec: TrialSpec, seed: int, records=None):
@@ -123,8 +124,12 @@ def build_episode(spec: TrialSpec, seed: int, records=None):
 
     decoys = []
     if spec.n_decoys > 0:
-        from serum.attack.deception import choose_decoys
-        decoys = choose_decoys(g, payload, spec.n_decoys, rng=gen_rng)
+        if spec.decoy_strategy == "adaptive":
+            from serum.attack.adaptive import choose_decoys_adaptive
+            decoys = choose_decoys_adaptive(g, payload, spec.n_decoys, rng=gen_rng)
+        else:
+            from serum.attack.deception import choose_decoys
+            decoys = choose_decoys(g, payload, spec.n_decoys, rng=gen_rng)
 
     def factory():
         # A per-episode dynamics RNG, re-derived from the same seed so that

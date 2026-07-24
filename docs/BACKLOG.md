@@ -174,12 +174,24 @@ item off here. Record negative results; never overclaim. Work top-down.
   multiplicity *within* the pre-registered headline set, not researcher
   degrees-of-freedom in which comparisons to headline (a broader problem no
   correction fixes).
-- [ ] **L4 infection-detection noise.** Add a detection-noise channel (missed /
-  false infection *observations*, distinct from inventory noise) and show
-  content-aware degradation vs structure-only. `scripts/detection_noise.py`.
-- [ ] **SR5 adaptive adversary.** An attacker that best-responds to the robust
-  agent's audit rule (e.g. decoys timed/placed to keep the trust weight high).
-  Does the robust agent still hold? `scripts/adaptive_attack.py`.
+- [x] **L4 infection-detection noise.** DONE — two-channel detection-noise model
+  (`detection_miss` / `detection_false`) on `ContainmentEnv`; `frontier()` and
+  the belief read the corrupted observed set. `scripts/detection_noise.py` (20
+  paired trials × 10-point grid, real NVD): content-aware keeps a positive gap
+  over degree at 9/10 noise points; the pure 2% false-alarm point ties
+  (−0.09pp). Graceful degradation, not a significant win under noise; false
+  alarms (which poison the belief) are the sensitive channel. L4 downgraded to
+  "addressed".
+- [x] **SR5 adaptive adversary.** DONE — `serum/attack/adaptive.py` best-responds
+  to the RobustAgent trust audit (maximise carrier-overlap·leak so α stays high
+  while true victims leak). `scripts/adaptive_attack.py` (60 paired trials/point,
+  real NVD, n=500, K=40): the attack has teeth (drives single soft belief to
+  2.5–4.5%) but **RobustAgent holds up to 30 decoys = 6% of fleet** (gap vs
+  structural floor not significant, p≥0.056); marginal breach only at 50 decoys
+  = 10% of fleet (+0.42pp, uncorrected p=0.022, fails Holm across the grid).
+  Bounds L5: audit not unbreakable, but breaching costs 2× the containment
+  budget. L5 downgraded to "addressed, bounded caveat". Joint payload+timing
+  best-response still open.
 - [ ] **Path A prune.** Produce `docs/CONTRIBUTIONS.md`: the 4 claims that
   survive grilling, each with its single strongest result and its honest scope;
   mark which of the 12 novelties move to appendix.

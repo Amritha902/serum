@@ -1,0 +1,78 @@
+{
+  "n_trials": 60,
+  "n_hosts": 500,
+  "K": 40,
+  "grid": [
+    {
+      "decoys": 0,
+      "degree": 0.014933333333333335,
+      "soft_adaptive": 0.0094,
+      "robust_naive": 0.010700000000000003,
+      "robust_adaptive": 0.010700000000000003,
+      "gap_robAdaptive_minus_degree": -0.004233333333333334,
+      "paired_wilcoxon_p": 1.0,
+      "robust_holds": true
+    },
+    {
+      "decoys": 5,
+      "degree": 0.014933333333333335,
+      "soft_adaptive": 0.024500000000000008,
+      "robust_naive": 0.014066666666666668,
+      "robust_adaptive": 0.014600000000000002,
+      "gap_robAdaptive_minus_degree": -0.0003333333333333331,
+      "paired_wilcoxon_p": 0.5702869033712938,
+      "robust_holds": true
+    },
+    {
+      "decoys": 10,
+      "degree": 0.014933333333333335,
+      "soft_adaptive": 0.02876666666666667,
+      "robust_naive": 0.015400000000000002,
+      "robust_adaptive": 0.0161,
+      "gap_robAdaptive_minus_degree": 0.0011666666666666668,
+      "paired_wilcoxon_p": 0.25976568865310934,
+      "robust_holds": true
+    },
+    {
+      "decoys": 15,
+      "degree": 0.014933333333333335,
+      "soft_adaptive": 0.03106666666666667,
+      "robust_naive": 0.014400000000000001,
+      "robust_adaptive": 0.0171,
+      "gap_robAdaptive_minus_degree": 0.0021666666666666666,
+      "paired_wilcoxon_p": 0.08279776087842464,
+      "robust_holds": true
+    },
+    {
+      "decoys": 20,
+      "degree": 0.014933333333333335,
+      "soft_adaptive": 0.036066666666666664,
+      "robust_naive": 0.016566666666666667,
+      "robust_adaptive": 0.0177,
+      "gap_robAdaptive_minus_degree": 0.002766666666666667,
+      "paired_wilcoxon_p": 0.08089434673702718,
+      "robust_holds": true
+    },
+    {
+      "decoys": 30,
+      "degree": 0.014933333333333335,
+      "soft_adaptive": 0.04019999999999999,
+      "robust_naive": 0.016533333333333334,
+      "robust_adaptive": 0.018266666666666667,
+      "gap_robAdaptive_minus_degree": 0.0033333333333333335,
+      "paired_wilcoxon_p": 0.05637954424609943,
+      "robust_holds": true
+    },
+    {
+      "decoys": 50,
+      "degree": 0.014933333333333335,
+      "soft_adaptive": 0.044766666666666656,
+      "robust_naive": 0.017933333333333336,
+      "robust_adaptive": 0.01916666666666667,
+      "gap_robAdaptive_minus_degree": 0.004233333333333334,
+      "paired_wilcoxon_p": 0.021540084598337193,
+      "robust_holds": false
+    }
+  ],
+  "verdict": "ADAPTIVE ATTACK BREACHES the robust agent at 50 decoys (gap +0.42pp, p=2.2e-02)"
+}

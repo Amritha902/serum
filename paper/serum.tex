@@ -374,6 +374,31 @@ attack. On the poison-decoys sweep it tracks \emph{the better} of
 $1.49\%$ at $15$ decoys (beats both), $1.77\%$ at $30$ decoys (vs single-soft's
 collapse to $4.94\%$). Script: \texttt{scripts/robust.py}.
 
+\paragraph{Adaptive adversary: best-responding to the audit (SR5).}
+The poison-robustness above was tested against a \emph{naive} poisoner, inviting
+the objection that it is a strawman. We therefore build the white-box attacker
+that \emph{best-responds to the trust audit itself}. Since real spread is gated
+on $c^\star$, the audit's pass rate for a poisoned MAP $c'$ converges to the
+carrier overlap $|\carriers(c^\star)\cap\carriers(c')|/|\carriers(c^\star)|$: a
+naive poisoner picks a disjoint $c'$, so overlap $\to 0$, $\alpha$ collapses, and
+the agent falls back to structure. The best response instead maximises
+$\text{overlap}\cdot|\carriers(c^\star)\setminus\carriers(c')|$ --- keeping the
+audit passing while still leaving part of the true victim set undefended (a pure
+superset $c'$ over-covers the truth by Prop.~\ref{prop:conf} and is useless, so
+the attacker is forced onto this knife-edge). On real NVD ($n{=}500$, $K{=}40$,
+budget $5$, 60 paired trials/point) this attack has genuine teeth --- it drives a
+single audit-free soft belief to $2.5$--$4.5\%$ infection --- yet
+\textbf{RobustAgent holds against it up to $30$ decoys ($6\%$ of the fleet)}: its
+paired gap over the structure-only floor is not significant there
+($p\!\geq\!0.056$). The attacker's edge grows monotonically with the poisoning
+budget and becomes marginally significant only at an extreme $50$ decoys ($10\%$
+of the fleet: $+0.42$pp, uncorrected $p=0.022$) --- and that single grid point
+does \emph{not} survive Holm correction across the seven budgets
+($0.022\times7\approx0.15$). So the audit is not unbreakable, but breaching it
+costs a poisoning budget \emph{twice} the defender's own containment budget; the
+robust agent degrades gracefully rather than collapsing. Artifact:
+\texttt{results/adaptive\_attack.json}, attacker: \texttt{serum/attack/adaptive.py}.
+
 \paragraph{Cost \& blast-radius: value-weighted steering.}
 Real fleets are lopsided: a small tail (DBs, DCs, gateways) matters far more
 than the rest. We add heavy-tailed \texttt{value} and \texttt{cost\_isolate} on
@@ -540,10 +565,16 @@ not a belief-free heuristic---the sensitive one. It is a graceful-degradation
 result, not a significant win under noise; per-point tests at $n{=}20$ are
 mostly underpowered.
 
-\textbf{(L5) Self-designed adversaries.} Robustness is evaluated against the
-poisoning/evasion attacks we constructed with our parameters; an adaptive
-worst-case adversary that best-responds to the robust agent's audit rule is
-future work.
+\textbf{(L5) Adaptive adversary (addressed, with a bounded caveat).} Beyond the
+naive poisoner we now evaluate a white-box attacker that \emph{best-responds to
+the robust agent's audit rule} (\S\ref{sec:extended}, ``Adaptive adversary'').
+The RobustAgent holds against it up to a large poisoning budget ($6\%$ of the
+fleet); the attacker gains only a small, single-point, Holm-uncorrected edge at
+an extreme $10\%$-of-fleet poisoning. This bounds the poison-robustness claim
+honestly: the audit is not unbreakable, but breaching it requires a poisoning
+budget larger than the defender's own. A fully adaptive adversary that also
+best-responds on payload \emph{and} timing jointly (not only decoy placement)
+remains future work.
 
 \textbf{(L6) Multiplicity (addressed).} The $11$ headline paired comparisons
 were corrected family-wise (\S\ref{sec:extended}, "Multiplicity"): all $11/11$

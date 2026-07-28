@@ -188,3 +188,160 @@ Artifact: `results/multiplicity.json`. Guarded by `tests/test_multiplicity.py`
 - [ ] R2 — multi-exploit
 - Reframes (R5, R9, R11–R14, R17–R20) folded into the paper's framing pass.
 - Acks (R3, R15, R16, CyGym) go in a Limitations section.
+
+---
+
+# Round 3 — results & closest-prior-work grill (2026-07-24)
+
+A maximally hostile PC pass focused where the author asked: (1) do the headline
+*numbers* support the contribution, and (2) has the *closest prior work* already
+done this? Every point is grounded in a committed artifact. Ranked
+existential → cosmetic. Fixing is deferred to the `mitigate` skill.
+
+## Existential
+
+**G1 — The closest systems are never run; every beaten baseline predates 2016.**
+The paper names CyGym (2025) as "THE nearest system" (`paper/serum.tex`,
+Related work) and DAVA (Zhang & Prakash 2015) as "the nearest data-aware
+method," yet **neither appears in a single results table**. Every baseline
+actually beaten — degree, betweenness, eigenvector, acquaintance,
+greedy-blocking (`results/real/email_topo.json` keys) — is a structure-only
+heuristic from 2002–2016, none content- or data-aware. A PC reads this as:
+"authors clear a field of deliberately weak baselines and merely *argue*
+superiority over the one system that matters." Positioning prose is not an
+experiment. → **[FIX]** implement CyGym's static-zero-day-prior defender and
+DAVA (data-aware, conditions on observed-infected subgraph) in the harness and
+run them head-to-head on the same paired outbreaks. If CyGym cannot be
+reimplemented, the "we fill the online-inference gap CyGym leaves" claim must be
+downgraded from a demonstrated result to a conjecture.
+
+**G2 — The paper's own ablation (L2) says the headline contribution is nearly
+irrelevant.** The conceptual lead is *online inference of the exploit* (C1).
+Limitation L2 concedes that freezing the belief at its prior costs only
+**0.1–0.2 points**. So the online inference — the entire novelty of C1 — is
+empirically almost inert for the containment win; what remains is "apply a known
+immunization score to the (observation-consistent) vulnerable subgraph," which
+is DAVA-adjacent and not novel. The paper refutes its own thesis in its
+Limitations. → **[FIX]/[REFRAME]** either exhibit a regime where inference is
+load-bearing (a payload that shifts `c*` mid-outbreak; genuine cold-start with no
+prevalence prior; multi-wave campaigns) and make *that* the headline, or drop the
+inference framing and sell the identifiability characterization + Pareto honestly.
+
+**G3 — The identifiability "theorem" is a restatement of the observation model,
+and its "100% validation" is circular.** The belief update zeroes posterior mass
+on any CVE absent from an infected host's profile (`serum/inference/belief.py`).
+Hence the surviving support *is*, by construction, the intersection of infected
+profiles. "Theorem 1: identifiable iff the intersection is a singleton" is
+therefore definitional, not a derived result. The reported "116/116 = 100%
+agreement between the Bayesian belief and the theorem" checks the belief against
+itself — the same set intersection computed twice — so it validates nothing. →
+**[REFRAME]** present Prop 1/Thm 1 as a *characterization/definition* of the
+observation model, not a theorem with empirical support. The only non-tautological
+content is the group-testing sample-complexity *rate* (median 5 ≈ log₂K); lead
+with that and stop citing "100% validated" as evidence.
+
+## Major
+
+**G4 — The headline effects are a few hosts, and you lose the majority of
+individual matchups.** Real-NVD flagship: 0.9% vs 1.5% = **0.6pp ≈ 3 hosts** on
+n=500. Worse, the prevalence sweep (`results/prevalence_curve.json`): in 3 of 5
+bands content-aware wins **fewer than half** the paired trials — 16/40, 18/40,
+12/40 — and the [0.3,0.4] band is **not significant (p=0.139)**, yet all are
+sold as "significant relative reductions." A mean advantage driven by a minority
+of heavy-tailed wins, while losing most head-to-head matchups, is precisely the
+rigor failure a PC pounces on. → **[ACK]+[REFRAME]** report per-trial win rates
+next to every mean; stop leading with relative-% reductions on sub-1% absolute
+infection numbers.
+
+**G5 — The real-topology flagship's variance dwarfs its effect.** email-Eu-core
+(`results/real/email_topo.json`): content-aware **0.117 ± 0.103**, betweenness
+**0.176 ± 0.101**. Each arm's SD is ~90% of the content-aware mean and ~1.7× the
+effect size (5.9pp). The p=1.7×10⁻⁷ is real but rides entirely on paired
+within-trial correlation; the marginal outcome distributions overlap almost
+completely (outbreaks swing ~2%→~40%). Statistical significance ≠ operational
+guarantee. → **[ACK]** report outcome quantiles/distributions, not just means;
+discuss the variance a defender actually faces.
+
+**G6 — You manufacture the favorable regime, then report winning in it.** The
+condition the method needs (vulnerable zones misaligned from hubs) is produced by
+the software-monoculture zone assignment governed by a `homophily` knob the
+author sets; even on email-Eu-core the host↔CVE mapping is modeled, not measured
+(L3). This is assuming the conclusion. `serum/inference/divergence.py` already
+shows the advantage tracks zone-hub divergence — which cuts both ways: it is also
+proof the win is a function of a dialed-in parameter. → **[ACK]** (L1/L3) but the
+PC weights this near-existential until real host-level data exists; add a
+sensitivity curve showing the advantage → 0 as homophily → 0, presented as a
+threat, not a feature.
+
+**G7 — C4 "robustness" is "our method degrades to no better than a trivial
+heuristic."** Under the adaptive poisoner (`results/adaptive_attack.json`),
+content-aware's gap over plain degree is **+0.12 to +0.42pp (worse)**, and
+"robust holds" only means "not significantly worse than degree." So the honest
+statement is: under a realistic poisoning attack, the content-aware advantage
+*evaporates* and the agent is at best tied with 2002-era degree immunization
+(robust_naive 1.41% vs degree 1.49% even at 5 decoys). A safety net sold as a
+strength. → **[REFRAME]** state plainly that poisoning erases the content-aware
+edge; position the robust agent as graceful degradation, not a win.
+
+## Moderate
+
+**G8 — Novelty vs SCENARIOID (KDD 2023) is an engineering delta, not a research
+one.** "Online vs offline" is an implementation choice, and the "identifiability
+guarantee" differentiator is definitional (G3). SCENARIOID classifies arbitrary
+scenarios from partial cascades — arguably a *harder* inference problem than
+recovering a categorical label by set-intersection under a hard consistency
+model. A PC may read SERUM's inference as an easier special case, not a
+generalization. → **[REFRAME]** state precisely what is harder/new, or concede
+the task is easier-but-security-relevant.
+
+**G9 — Novelty vs Hoffmann et al. (ICML 2020) is overstated.** "Observable
+attributes vs latent edges" is true, but observability is exactly what makes the
+problem easy; Hoffmann's difficulty comes from latency. Removing the hard part is
+a weaker problem, not a stronger theorem. → **[REFRAME]**.
+
+**G10 — Multiplicity correction covers only 11 hand-picked headlines.** Dozens of
+experiments were run; correcting within a chosen family of 11 does not address
+the garden of forking paths across all of them (SR6's own scope note concedes
+this). Selecting which 11 to correct is itself a researcher degree of freedom. →
+**[ACK]**.
+
+**G11 — NVD snapshot date-dependence (SR7 still open).** Results depend on an
+unpinned NVD fetch date; not reproducible bit-for-bit by a third party. →
+**[FIX]** pin and version a dated NVD snapshot in the repo.
+
+## Cosmetic
+
+**G12 — Kitchen-sink breadth undercuts the prune.** `docs/CONTRIBUTIONS.md`
+distills four claims, but `paper/serum.tex` still carries all 12 novelties and
+10+ extended results, diluting reviewer attention across attack surfaces the
+prune was meant to retire. → **[REFRAME]** enforce the four-claim prune in the
+paper body; push the rest to an appendix.
+
+## Second-round penalties (mitigations that opened new holes)
+
+- The **detection-noise** and **adaptive-adversary** additions (L4/SR5), while
+  honest, both landed as *graceful-degradation / no-significant-win* results —
+  they enlarge the "content-aware advantage is fragile" narrative (G7) more than
+  they shore up robustness. Net effect on the pitch is ambiguous.
+
+## Ranked verdict
+
+Existential (G1–G3) must be answered before submission: **run the closest
+systems (G1)**, **prove inference is load-bearing or drop it (G2)**, **stop
+calling the definitional condition a validated theorem (G3)**. G4–G7 are
+accept-blocking rigor/honesty issues that are mostly fixable by reporting the
+numbers you already have more honestly. G8–G12 are positioning/cleanup.
+
+## Mitigation status (Round 3)
+
+- [ ] G1 — implement + run CyGym-static and DAVA baselines (existential)
+- [ ] G2 — find the inference-load-bearing regime, or reframe off inference
+- [ ] G3 — reframe Thm 1 as characterization; lead theory with the GT rate
+- [ ] G4 — report per-trial win rates; drop relative-% on sub-1% numbers
+- [ ] G5 — report outcome distributions/quantiles on the flagship
+- [ ] G6 — homophily→0 sensitivity curve as a stated threat
+- [ ] G7 — reframe C4 as graceful degradation, not robustness win
+- [ ] G8/G9 — sharpen or concede the SCENARIOID/Hoffmann deltas
+- [ ] G10 — ACK forking-paths beyond the family of 11
+- [ ] G11 — pin a dated NVD snapshot
+- [ ] G12 — enforce the four-claim prune in serum.tex

@@ -334,7 +334,22 @@ numbers you already have more honestly. G8–G12 are positioning/cleanup.
 
 ## Mitigation status (Round 3)
 
-- [ ] G1 — implement + run CyGym-static and DAVA baselines (existential)
+- [x] **G1 — DONE.** Implemented both closest systems (`serum/baselines/closest.py`)
+  and ran them head-to-head (`scripts/closest_baselines.py`, 40 paired real-NVD
+  outbreaks). **Content-aware beats both:** vs DAVA (data-aware, exploit-blind)
+  +0.74pp / +43.8% / p=2.8e-4 (DAVA is even worse than degree — vaccinating
+  exposed-but-non-exploitable hosts wastes budget, i.e. the thesis); vs
+  CyGym-static (static prior, no online update) +0.19pp / +16.6% / p=1.1e-2,
+  winning only 8/40 individual trials. Paper §Experiments gains a "Head-to-head
+  vs the closest prior systems" paragraph; 4 tests added; suite 132 green.
+  *Self-grill of the fix:* (i) it **partially confirms G2** — the online-inference
+  edge over a static prior is genuinely small (0.19pp, minority of trials); we now
+  state this honestly rather than implying online inference is the main driver.
+  (ii) **Fairness caveat (new, minor):** CyGym-static reproduces CyGym's static-
+  prior *stance*, not its offline PSRO game; DAVA is a per-step shield-value proxy,
+  not the exact dominator-tree — a reviewer could ask for the originals. Recorded
+  as scope, not hidden. (iii) The 8/40 and 17/40 win rates re-expose **G4** (mean
+  advantage on a minority of trials) — reported, not smoothed.
 - [ ] G2 — find the inference-load-bearing regime, or reframe off inference
 - [ ] G3 — reframe Thm 1 as characterization; lead theory with the GT rate
 - [ ] G4 — report per-trial win rates; drop relative-% on sub-1% numbers

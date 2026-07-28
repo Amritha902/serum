@@ -226,6 +226,29 @@ Content-aware cuts infection by $28.4\%$ vs the best fixed baseline
 result is significant across BA/WS/RGG topologies (rel.\ reductions
 $+17.7/+11.5/+30.2\%$, all $p<10^{-3}$).
 
+\paragraph{Head-to-head vs the closest prior systems.} The two nearest systems
+are the fairest test of the contribution, so we run both on identical paired
+outbreaks (real NVD, $n{=}500$, $K{=}40$, 40 trials): \textbf{CyGym} (a static,
+common-knowledge exploit prior with \emph{no} online belief update) and
+\textbf{DAVA} (data-aware allocation conditioned on the observed-infected
+subgraph, but \emph{exploit-blind}). Against DAVA the content-aware agent wins by
+$+0.74$pp ($+43.8\%$ rel., paired Wilcoxon $p=2.8\times10^{-4}$): defending the
+\emph{inferred} vulnerable subgraph beats vaccinating the observed-infection
+frontier---indeed DAVA underperforms even degree immunization ($1.70\%$ vs
+$1.52\%$), because vaccinating exposed-but-non-exploitable hosts wastes budget,
+which is precisely the thesis. Against CyGym-static the edge is smaller but
+significant: $+0.19$pp ($+16.6\%$ rel., $p=1.1\times10^{-2}$), and content-aware
+wins only $8/40$ \emph{individual} outbreaks---online inference changes the
+outcome in a minority of trials (those where the prevalence prior is wrong enough
+to matter) and is a wash otherwise, consistent with the belief-freezing ablation
+(L2). \emph{Reading.} Content-awareness---defending the exploit-specific
+subgraph---is the dominant source of the advantage; online inference of the
+exploit adds a small, significant, minority-of-trials refinement on top. Artifact:
+\texttt{results/closest\_baselines.json}, baselines: \texttt{serum/baselines/closest.py}.
+\emph{Scope.} CyGym-static reproduces CyGym's static-prior epistemic stance on our
+substrate, not its full offline PSRO game; DAVA is a per-step greedy shield-value
+proxy for its dominator-tree allocation.
+
 \paragraph{Pareto dominance (infection vs availability).} Sweeping the budget
 ($2$--$12$), content-aware occupies the low-infection, high-availability corner:
 at every budget it is simultaneously lower-infection and higher-availability than

@@ -133,6 +133,16 @@ MANIFEST: List[Experiment] = [
         note="L4 infection-detection-noise channel; content-aware degrades "
              "gracefully vs structure-only across a sensor-noise grid.",
     ),
+    Experiment(
+        name="closest_baselines",
+        script="closest_baselines.py",
+        outputs=("closest_baselines.json",),
+        tags=frozenset({"medium"}),
+        note="G1: content-aware head-to-head vs the closest prior systems "
+             "(CyGym-static prior + DAVA data-aware). Beats both; the online-"
+             "inference edge over the static prior is small (0.19pp) but "
+             "significant.",
+    ),
     # -- containment headline & pareto --------------------------------------
     Experiment(
         name="run_experiment",

@@ -872,7 +872,67 @@ bounded caveat."
 
 **Suite.** 128 tests green (4 new).
 
+## G1 — run the closest prior systems as baselines (2026-07-24)
+
+**Goal.** Round-3 grill's existential finding: CyGym (2025) and DAVA (2015) are
+named as the nearest systems but never run — every beaten baseline predates 2016.
+Put both in the harness and report the honest head-to-head.
+
+**Build.**
+- `serum/baselines/closest.py`:
+  - `StaticPriorDefense` (CyGym-style) = the content-aware planner with the belief
+    frozen at its prior (`update_belief=False`) — reproduces CyGym's static-prior,
+    no-online-update *stance* (not its offline PSRO game), which is the axis SERUM
+    claims to improve.
+  - `DavaDefense` = data-aware, exploit-blind vaccination: per-step greedy
+    shield-value (exposure to observed-infected × onward degree) on the observed
+    frontier, patching (availability-preserving) the top-budget hosts. A proxy for
+    DAVA's dominator-tree allocation.
+- `scripts/closest_baselines.py`: 6-policy paired sweep (no-defense, degree, DAVA,
+  CyGym-static, content-aware, oracle) on real NVD; reports means + paired
+  Wilcoxon of content-aware vs each closest system, with per-trial win counts.
+- `tests/test_closest_baselines.py` (4): CyGym-static belief never drifts; DAVA
+  spends budget and is exploit-blind (invariant to removing the payload); both
+  beat no-defense.
+- `scripts/reproduce_all.py`: registered `closest_baselines`.
+
+**Result (40 paired outbreaks, real NVD, n=500, K=40).**
+
+| policy | infected | availability |
+|---|--:|--:|
+| no-defense | 14.02% | 100.0% |
+| degree | 1.52% | 96.95% |
+| DAVA (data-aware, exploit-blind) | 1.70% | 100.0% |
+| CyGym-static (static prior) | 1.15% | 97.70% |
+| **content-aware (ours)** | **0.95%** | 98.35% |
+| content-aware-oracle (bound) | 0.85% | 100.0% |
+
+- vs **DAVA**: +0.74pp, +43.8% rel., wins 17/40, **p=2.8e-4**. DAVA is *worse than
+  degree* — vaccinating exposed-but-non-exploitable hosts wastes budget, i.e. the
+  thesis, demonstrated against the actual data-aware prior method.
+- vs **CyGym-static**: +0.19pp, +16.6% rel., wins **8/40**, **p=1.1e-2**. Small
+  but significant; online inference helps in a minority of outbreaks (wrong-prior
+  ones) and is a wash otherwise — consistent with the L2 belief-freezing ablation.
+
+**Reading (honest).** Content-*awareness* (defending the exploit-specific
+subgraph) is the dominant advantage — it beats both the data-aware and the
+static-prior prior systems. Online *inference* specifically adds a small,
+significant, minority-of-trials refinement. This is the honest bound: the paper
+should lead with content-awareness, not imply online inference is the main driver.
+
+**Grill of the fix.** (i) Partially confirms G2 — online-inference edge is small;
+now stated, not implied away. (ii) Fairness: reproductions are of each system's
+*stance*, not its full original algorithm — recorded as scope. (iii) 8/40 win
+rate re-exposes G4 (minority-of-trials advantage) — reported.
+
+**Paper.** New "Head-to-head vs the closest prior systems" paragraph in
+§Experiments. **G1 status → addressed** in REVIEW_MITIGATION.md.
+
+**Suite.** 132 tests green (4 new).
+
 ## Open / next
-- SR5 done; remaining Round-2 item: Path A prune (docs/CONTRIBUTIONS.md).
-- (nothing at P2 unchecked; see BACKLOG.md P3 / Round 2)
+- Round-3 grill: G1 done. Highest remaining: G2 (find an inference-load-bearing
+  regime or reframe off inference), G3 (reframe the theorem as characterization),
+  G4-G7 (report win rates / variance / homophily-sensitivity / C4 honestly).
+- SR5 done; Path A prune (docs/CONTRIBUTIONS.md) done.
 

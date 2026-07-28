@@ -1,0 +1,37 @@
+{
+  "n_trials": 40,
+  "n_hosts": 500,
+  "K": 40,
+  "means_infected": {
+    "no-defense": 0.1402,
+    "degree": 0.015150000000000002,
+    "dava": 0.016999999999999998,
+    "cygym-static": 0.01145,
+    "content-aware": 0.00955,
+    "content-aware-oracle": 0.008499999999999999
+  },
+  "means_availability": {
+    "no-defense": 1.0,
+    "degree": 0.9695,
+    "dava": 1.0,
+    "cygym-static": 0.97705,
+    "content-aware": 0.9835499999999999,
+    "content-aware-oracle": 1.0
+  },
+  "content_aware_vs_dava": {
+    "mean_ours": 0.00955,
+    "mean_them": 0.016999999999999998,
+    "abs_reduction": 0.007449999999999998,
+    "rel_reduction": 0.438235294117647,
+    "wins_of_n": "17/40",
+    "paired_wilcoxon_p": 0.0002800502079751163
+  },
+  "content_aware_vs_cygym_static": {
+    "mean_ours": 0.00955,
+    "mean_them": 0.01145,
+    "abs_reduction": 0.0019000000000000006,
+    "rel_reduction": 0.16593886462882101,
+    "wins_of_n": "8/40",
+    "paired_wilcoxon_p": 0.011310671074428624
+  }
+}

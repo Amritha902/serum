@@ -1,0 +1,20 @@
+{
+  "n_trials": 40,
+  "good_prior": {
+    "online_mean": 0.00955,
+    "static_mean": 0.01145,
+    "abs_reduction": 0.0019000000000000006,
+    "rel_reduction": 0.16593886462882101,
+    "wins_of_n": "8/40",
+    "p": 0.011310671074428624
+  },
+  "misleading_prior": {
+    "online_mean": 0.01,
+    "static_mean": 0.014350000000000002,
+    "abs_reduction": 0.0043500000000000014,
+    "rel_reduction": 0.3031358885017422,
+    "wins_of_n": "7/40",
+    "p": 0.017960477526078763
+  },
+  "verdict": "online inference is load-bearing under a misleading prior: gap +0.44pp (p=1.8e-02) vs only +0.19pp under a good prior (~2x larger)"
+}

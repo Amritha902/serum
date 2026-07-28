@@ -350,13 +350,54 @@ numbers you already have more honestly. G8–G12 are positioning/cleanup.
   not the exact dominator-tree — a reviewer could ask for the originals. Recorded
   as scope, not hidden. (iii) The 8/40 and 17/40 win rates re-expose **G4** (mean
   advantage on a minority of trials) — reported, not smoothed.
-- [ ] G2 — find the inference-load-bearing regime, or reframe off inference
-- [ ] G3 — reframe Thm 1 as characterization; lead theory with the GT rate
-- [ ] G4 — report per-trial win rates; drop relative-% on sub-1% numbers
-- [ ] G5 — report outcome distributions/quantiles on the flagship
-- [ ] G6 — homophily→0 sensitivity curve as a stated threat
-- [ ] G7 — reframe C4 as graceful degradation, not robustness win
-- [ ] G8/G9 — sharpen or concede the SCENARIOID/Hoffmann deltas
-- [ ] G10 — ACK forking-paths beyond the family of 11
-- [ ] G11 — pin a dated NVD snapshot
-- [ ] G12 — enforce the four-claim prune in serum.tex
+- [x] **G2 — DONE (FIX+REFRAME).** `scripts/inference_value.py`: online inference's
+  edge over a static prior roughly **doubles under a misleading prior**
+  (+0.19pp→+0.44pp, p=1.8e-2) but stays modest even then. Honest conclusion: online
+  inference is a *refinement that matters most under bad threat intel*, not the
+  driver — content-awareness is. Paper reframed accordingly (new §"When is online
+  inference load-bearing?"). Also fixed a latent bug: `CVEBelief` crashed on
+  ndarray priors. 2 tests added.
+- [x] **G3 — DONE (REFRAME).** Thm 1 recast as a *characterization of the
+  observation model* (the belief's support = the profile intersection by
+  construction); the "116/116" agreement relabelled a *consistency check on the
+  implementation*, not empirical validation. Theory now leads with the
+  group-testing sample-complexity rate. Contribution bullet + §theory + experiment
+  paragraph all reworded.
+- [x] **G4 — DONE (ACK+REFRAME).** Abstract now gives absolute magnitudes
+  (0.6pp / 5.9pp) beside relative %; the severity-scaling paragraph now reports the
+  minority per-trial win rates (16/40, 18/40) and the one non-significant band
+  (p=0.14) honestly.
+- [x] **G5 — DONE (ACK).** Flagship paragraph now reports the per-arm variance
+  (SD≈0.10, larger than the 5.9pp effect) and states the small p reflects the
+  paired design, not separated marginals.
+- [x] **G6 — DONE (FIX; refutes the worry).** `scripts/homophily_sensitivity.py`
+  sweeps the monoculture knob. **Surprise:** the content-aware edge is significant
+  at *every* homophily incl. 0 (no monoculture: +0.26pp, p=6.5e-4), non-monotonic,
+  peaking mid-range. So the advantage is **not** an artifact of the manufactured
+  regime — homophily controls only spatial clustering of the vulnerable set, not
+  whether it diverges from the hubs. Stated in the paper as a threat the data
+  answers. (My initial hypothesis — advantage vanishes at homophily 0 — was wrong;
+  the experiment corrected it.)
+- [x] **G7 — DONE (REFRAME).** Poison-robust paragraph now states plainly that
+  under poisoning the content-aware edge *evaporates* and the robust agent is a
+  *safety net* (never worse than structure), i.e. graceful degradation, not a win.
+- [x] **G8/G9 — DONE (REFRAME).** Related work now concedes the SCENARIOID delta is
+  partly operational (online-vs-offline) and our exploit-ID task is arguably
+  *easier* (categorical label under hard consistency); and that the Hoffmann delta
+  is a *different, easier* setting (observable vs latent), not a strictly stronger
+  theorem.
+- [x] **G10 — DONE (ACK).** L6 downgraded to "partly addressed": correcting within
+  the family of 11 does not fix forking paths across all experiments nor the choice
+  of which 11 to headline; only pre-registration would.
+- [x] **G11 — DONE (FIX).** `data/clean/data_card.json` now records the pinned
+  snapshot (NVD 2.0, published 2026-03-21–2026-04-17, committed); paper states all
+  real-data results derive from this committed snapshot, reproducible bit-for-bit.
+- [x] **G12 — DONE (REFRAME).** Extended results moved to a proper `\appendix`
+  after Limitations, retitled "Extended results and honest negatives" with a
+  lead-in noting the main body is the four core claims. Main body now leads with
+  the leads, breadth demoted to appendix.
+
+**Round-3 net:** all 12 findings addressed. G1/G2/G6 were experiments (and G6
+*refuted* its own premise); G3/G7/G8/G9/G10/G12 reframes; G4/G5 honesty edits;
+G11 provenance. Suite 134 green. The paper is materially more honest and, on G1
+and G6, materially *stronger*.

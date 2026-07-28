@@ -49,7 +49,9 @@ class CVEBelief:
         self.mode = mode
         self.noise = float(noise)
         self.known_seeds = known_seeds
-        if prior == "prevalence":
+        if isinstance(prior, np.ndarray):
+            base = np.asarray(prior, dtype=float) + eps
+        elif prior == "prevalence":
             # the defender's prevalence estimate comes from its (possibly
             # imperfect) inventory, not ground truth
             base = defender_prevalence(g) + eps
@@ -65,8 +67,6 @@ class CVEBelief:
                 base = (w - w.min()) + eps
             else:
                 base = cve_prevalence(g) + eps
-        elif isinstance(prior, np.ndarray):
-            base = np.asarray(prior, dtype=float) + eps
         else:
             raise ValueError(f"unknown prior: {prior!r}")
         self.log_prior = np.log(base / base.sum())

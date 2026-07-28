@@ -143,6 +143,24 @@ MANIFEST: List[Experiment] = [
              "inference edge over the static prior is small (0.19pp) but "
              "significant.",
     ),
+    Experiment(
+        name="inference_value",
+        script="inference_value.py",
+        outputs=("inference_value.json",),
+        tags=frozenset({"medium"}),
+        note="G2: when is online inference load-bearing? Its edge over a static "
+             "prior roughly doubles under a misleading prior (0.19->0.44pp) but "
+             "stays modest -- content-awareness is the dominant driver.",
+    ),
+    Experiment(
+        name="homophily_sensitivity",
+        script="homophily_sensitivity.py",
+        outputs=("homophily_sensitivity.json",),
+        tags=frozenset({"medium"}),
+        note="G6: sweep the monoculture knob. The content-aware edge is "
+             "significant even at homophily 0 -- the advantage is NOT an artifact "
+             "of the manufactured zone assumption.",
+    ),
     # -- containment headline & pareto --------------------------------------
     Experiment(
         name="run_experiment",

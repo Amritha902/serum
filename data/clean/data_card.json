@@ -1,4 +1,10 @@
 {
+  "snapshot": {
+    "source": "NVD 2.0 API (nvd.nist.gov)",
+    "published_date_range": ["2026-03-21", "2026-04-17"],
+    "committed_to_repo": true,
+    "note": "PINNED snapshot: this cleaned CSV is committed so all real-data results reproduce bit-for-bit from the exact same CVEs, independent of a live fetch date (mitigates review point SR7/G11). Re-running scripts/ingest_nvd.py on another date draws a different window and is NOT required to reproduce the paper."
+  },
   "n_records": 5816,
   "n_worm_relevant": 2281,
   "worm_relevant_frac": 0.392,

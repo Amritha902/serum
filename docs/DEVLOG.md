@@ -930,9 +930,58 @@ rate re-exposes G4 (minority-of-trials advantage) — reported.
 
 **Suite.** 132 tests green (4 new).
 
+## Round-3 grill mitigations G2–G12 (2026-07-24)
+
+Worked the entire remaining Round-3 backlog in one pass. Two new experiments,
+several honest reframes, one provenance fix; suite 134 green.
+
+**G2 (inference load-bearing?)** — `scripts/inference_value.py`: online inference's
+edge over a static (CyGym-style) prior doubles under a *misleading* prior
+(+0.19→+0.44pp, p=1.8e-2) but stays modest. Reframe: content-awareness is the
+driver; online inference is a refinement that matters most under bad threat intel.
+Fixed a latent bug — `CVEBelief` threw on ndarray priors (string compare ran
+before the isinstance check). +2 tests.
+
+**G3 (theorem is definitional)** — recast Thm 1 as a *characterization of the
+observation model*; relabelled "116/116" a consistency check, not validation;
+theory now leads with the group-testing rate.
+
+**G4/G5 (tiny effects, huge variance, minority win rates)** — abstract now gives
+absolute magnitudes beside relative %; severity paragraph reports the minority
+per-trial win rates (16/40, 18/40) and the non-significant band; flagship
+paragraph reports per-arm SD≈0.10 (> the 5.9pp effect) and that the small p is a
+paired-design artifact.
+
+**G6 (manufactured regime?)** — `scripts/homophily_sensitivity.py` sweeps the
+monoculture knob. **My hypothesis was wrong**: the content-aware edge is
+significant at *every* homophily incl. 0 (+0.26pp, p=6.5e-4), non-monotonic,
+peaking mid-range. So the advantage is NOT an artifact of the homophily knob —
+the experiment refuted the worry and *strengthens* the paper. Corrected the
+canned verdict to match the data.
+
+**G7** — poison-robust paragraph reframed: under poisoning the edge evaporates;
+the robust agent is a safety net (graceful degradation), not a win.
+
+**G8/G9** — related work concedes the SCENARIOID delta is partly operational and
+our exploit-ID task arguably easier; the Hoffmann delta a different/easier setting,
+not a stronger theorem.
+
+**G10** — L6 downgraded to "partly addressed" (forking paths beyond the family of
+11 unaddressed without pre-registration).
+
+**G11** — `data/clean/data_card.json` records the pinned NVD snapshot
+(2026-03-21–2026-04-17, committed); paper states results reproduce bit-for-bit.
+
+**G12** — Extended results moved to a proper `\appendix` after Limitations; main
+body now leads with the four core claims.
+
+**Net.** All 12 Round-3 findings addressed (G1 earlier). Experiments: G1, G2, G6
+(+ 4 new tests total this pass, +8 across the round). Reframes/acks for the rest.
+The paper is materially more honest and, on G1/G6, materially stronger. 134 green.
+
 ## Open / next
-- Round-3 grill: G1 done. Highest remaining: G2 (find an inference-load-bearing
-  regime or reframe off inference), G3 (reframe the theorem as characterization),
-  G4-G7 (report win rates / variance / homophily-sensitivity / C4 honestly).
-- SR5 done; Path A prune (docs/CONTRIBUTIONS.md) done.
+- Round-3 fully mitigated. A fresh grill (Round 4) is the natural next check.
+- The one irreducible gap remains L1: real host-level enterprise validation
+  (blocked by proprietary scan data).
+- SR5 done; Path A prune done.
 

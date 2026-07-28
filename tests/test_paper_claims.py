@@ -125,7 +125,10 @@ def test_group_testing_framing_in_intro(tex: str) -> None:
 
 
 def test_extended_section_exists(tex: str) -> None:
-    assert "\\section{Extended results}" in tex
+    # Extended results were moved to a proper appendix (grill G12: enforce the
+    # four-claim prune so the main body leads with the core claims).
+    assert "\\section{Extended results and honest negatives}" in tex
+    assert "\\appendix" in tex
     assert "\\label{sec:extended}" in tex
     for anchor in (
         "Sample complexity of identification",

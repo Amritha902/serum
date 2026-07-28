@@ -1,0 +1,56 @@
+{
+  "n_trials": 40,
+  "grid": [
+    {
+      "homophily": 0.0,
+      "no_defense": 0.11375000000000002,
+      "best_structural": 0.0109,
+      "best_name": "degree",
+      "content_aware": 0.0083,
+      "edge_pp": 0.0026,
+      "wins_of_n": "18/40",
+      "p": 0.0006501310172260027
+    },
+    {
+      "homophily": 0.2,
+      "no_defense": 0.13294999999999998,
+      "best_structural": 0.016150000000000005,
+      "best_name": "degree",
+      "content_aware": 0.0102,
+      "edge_pp": 0.005950000000000004,
+      "wins_of_n": "13/40",
+      "p": 0.012276828257983307
+    },
+    {
+      "homophily": 0.4,
+      "no_defense": 0.1402,
+      "best_structural": 0.015150000000000002,
+      "best_name": "degree",
+      "content_aware": 0.00955,
+      "edge_pp": 0.0056000000000000025,
+      "wins_of_n": "17/40",
+      "p": 0.00031488006307371413
+    },
+    {
+      "homophily": 0.6,
+      "no_defense": 0.10694999999999999,
+      "best_structural": 0.0128,
+      "best_name": "betweenness",
+      "content_aware": 0.008499999999999999,
+      "edge_pp": 0.004300000000000002,
+      "wins_of_n": "18/40",
+      "p": 0.003034210443765862
+    },
+    {
+      "homophily": 0.8,
+      "no_defense": 0.1251,
+      "best_structural": 0.010350000000000002,
+      "best_name": "degree",
+      "content_aware": 0.008550000000000002,
+      "edge_pp": 0.0017999999999999995,
+      "wins_of_n": "13/40",
+      "p": 0.0020810854324777874
+    }
+  ],
+  "verdict": "UNEXPECTED (refutes the 'manufactured regime' worry): the content-aware edge is significant at EVERY homophily level including 0 (no monoculture: +0.26pp, p=6.5e-04); it is non-monotonic, peaking at homophily 0.2 (+0.60pp). The advantage is NOT an artifact of the monoculture knob -- the vulnerable set diverges from the hubs even without zone clustering; homophily controls only how spatially clustered that set is."
+}

@@ -1007,9 +1007,31 @@ Round-3 G6 refutation is sound, not a generator artifact.
 Round 4 was a framing round — exactly what a paper needs pre-submission. The
 result is a more honest paper that leads with its strongest real evidence.
 
+## Paper compiles end-to-end (2026-07-29)
+
+First real build verification (previously only brace/env balance was checked).
+Installed `tectonic` (self-contained LaTeX engine) and compiled `paper/serum.tex`:
+**0 undefined references or citations** in the multi-pass build; all cross-refs
+and the 46-entry bibliography resolve; produces a 141 KiB `serum.pdf`. Only
+cosmetic overfull-\hbox warnings remain (≤90pt, mostly long \texttt{} paths in the
+appendix — visible margin overrun, not errors). Build artifacts (pdf/log/aux/blg)
+gitignored under `paper/`.
+
+## Round 5 — verified + hardened the H1 reframe (2026-07-29)
+
+Linchpin check: does the new lead result (real-topology flagship) also suffer the
+minority-win-rate flaw (G4)? **Verified NO** — content-aware wins 20/20 paired
+outbreaks vs betweenness AND the ensemble oracle (p=8.8e-5, committed
+snap_topologies.json), 37/40 in a budget-8 replication, 7.85pp absolute. Added the
+win-rate fact to the flagship paragraph and reordered the intro contribution
+bullets to lead with the empirical finding. Rounds 1–5 exhausted the reachable
+self-review.
+
 ## Open / next
-- Round 4 mitigated. A Round-5 sanity grill on the reframes is the natural check.
+- **Paper verified to compile.** Optional polish: fix the ~5 overfull hboxes
+  (cosmetic).
 - The one irreducible gap remains **L1**: real host-level enterprise validation
-  (blocked by proprietary scan data) — the single most valuable future work.
-- SR5 done; Path A prune done; Rounds 1–4 all mitigated.
+  (blocked by proprietary scan data) — the single most valuable future work, and
+  external, not more self-review.
+- SR5 done; Path A prune done; grill Rounds 1–5 all mitigated; PDF builds clean.
 

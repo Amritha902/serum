@@ -24,3 +24,11 @@ data/raw/
 
 # Ralph loop iteration logs
 results/ralph/
+
+# LaTeX build artifacts
+paper/*.pdf
+paper/*.aux
+paper/*.log
+paper/*.blg
+paper/*.bbl
+paper/*.out

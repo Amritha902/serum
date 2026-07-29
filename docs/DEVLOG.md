@@ -1047,7 +1047,36 @@ Full health check before review. Everything green; nothing needed fixing.
   16 pages, 4 figures embedded.
 - **Repo:** working tree clean; HEAD == origin/main.
 
+## L1 readiness: measured-inventory import pipeline (2026-07-29)
+
+L1 (favorable regime not validated on real host-level data) cannot be *closed*
+without proprietary scan data we won't fabricate. But it can be made *ready to
+close in one command the moment data exists*, which is the honest maximum.
+
+- `serum/data/real_inventory.py`: builds a SERUM graph from a scan (long table of
+  measured (host, CVE) findings; CSV or in-memory) + a topology edge list, taking
+  each host's vulnerability set **verbatim from the scan** (measured, not modeled
+  -- the sole difference from the generators). Auto-detects host/CVE columns
+  (host/asset/ip/fqdn; cve/cve_id/plugin_cve/...). Interns CVE ids to a contiguous
+  universe; stores the index->real-CVE map on `g.graph["cve_ids"]`.
+- `scripts/validate_real_inventory.py`: `--scan CSV --edges FILE` runs the full
+  flagship lineup (no-defense/degree/betweenness/content-aware/oracle) on the
+  measured network and reports the paired content-aware vs best-structural result.
+  With no args it runs a SELF-TEST on a synthetic fixture (clearly NOT real data;
+  writes nothing) to prove the pipeline runs end-to-end.
+- `tests/test_real_inventory.py` (4): host->CVE is verbatim; topology-only hosts
+  get empty vuln; CSV parsing with alternate column names; a loaded network runs
+  an episode under the content-aware agent unchanged.
+
+Honest framing (paper L1 reworded, not "fixed"): the result remains open, but it
+is now gated on **data access**, not on method or engineering. Every downstream
+component works on a measured-inventory graph unchanged (the only contract is node
+`vuln` + `g.graph["n_cves"]`). Not added to reproduce_all (needs external data).
+Suite 141 green; paper compiles 0/0/0.
+
 ## Open / next
+- **L1 pipeline shipped and tested.** Closing L1 for real needs a proprietary
+  host-level scan export (Nessus/Tenable CSV + subnet edge list) -> one command.
 - **Verified pakka.** Paper compiles clean, all scripts run, all tests pass, all
   numbers backed by committed artifacts.
 - The one irreducible gap remains **L1**: real host-level enterprise validation

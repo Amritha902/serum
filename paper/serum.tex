@@ -437,18 +437,27 @@ over a fixed CVE candidate set, corrected online by the Bayesian tracker.
 \section{Limitations}
 We state these plainly; several are load-bearing.
 
-\textbf{(L1) The favorable regime is not validated on real host-level data.}
-Content-awareness helps only when vulnerable \emph{zones diverge from network
-hubs} (\S\ref{sec:exp}); on hub-dominated graphs structure-only immunization
-already suffices. Whether real enterprise networks satisfy the favorable
-condition is an empirical question we \emph{cannot} answer with public data: the
-join of a real segmented topology with real per-host vulnerability inventories
-exists only as proprietary scan data (e.g.\ enterprise Tenable/Nessus exports),
-restricted by privacy. Our two real topologies are imperfect proxies---email-Eu-core
-is a communication graph, and the Autonomous-Systems graph's nodes are
-organisations, not hosts. Validating (or refuting) applicability on a real
-host-level segmented network with measured vulnerabilities is the single most
-important piece of future work.
+\textbf{(L1) Not yet validated on real host-level data --- but the pipeline is
+ready, gated only on data access.} Content-awareness helps only when vulnerable
+\emph{zones diverge from network hubs} (\S\ref{sec:exp}); on hub-dominated graphs
+structure-only immunization already suffices. Whether real enterprise networks
+satisfy the favorable condition is an empirical question we cannot answer with
+\emph{public} data: the join of a real segmented topology with measured per-host
+vulnerability inventories exists only as proprietary scan data (e.g.\ enterprise
+Tenable/Nessus exports), restricted by privacy---and we will not fabricate it. Our
+two real topologies are imperfect proxies (email-Eu-core is a communication graph;
+the Autonomous-Systems graph's nodes are organisations, not hosts), and the
+host$\leftrightarrow$CVE mapping in every experiment is \emph{modeled} (L3), not
+measured. To make this validation \emph{one command away the moment such data is
+available}, we ship a tested import pipeline
+(\texttt{serum/data/real\_inventory.py}, \texttt{scripts/validate\_real\_inventory.py})
+that builds the network directly from a scan---a long table of measured
+$(\text{host},\text{CVE})$ findings---and a topology edge list, taking each host's
+vulnerability set \emph{verbatim from the scan}, then runs the full policy lineup;
+every downstream component (belief, baselines, agent, environment) works unchanged.
+Running this on a real segmented enterprise inventory is the single most important
+remaining piece of work; it is gated on \emph{data access}, not on method or
+engineering.
 
 \textbf{(L2) Online inference is a refinement, not the driver.} Ablations
 (\S\ref{sec:exp}) show containment succeeds without identifying the exploit:

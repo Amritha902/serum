@@ -169,6 +169,19 @@ pytest -q
 
 Everything runs on `numpy` + `networkx` — no GPU, no heavy dependencies.
 
+**Validating on a real host-level inventory (the L1 experiment).** If you have a
+real vulnerability scan (a table of measured `host, cve` findings) and a topology
+edge list, you can run the full evaluation on *measured* data in one command:
+
+```bash
+python scripts/validate_real_inventory.py --scan scan.csv --edges edges.csv
+# (no arguments -> a self-test on a synthetic fixture, proving the pipeline runs)
+```
+
+The host↔CVE mapping is taken verbatim from the scan (not modeled). This is the
+single most valuable validation the project still needs; it is gated only on
+access to such (typically proprietary) scan data — see limitation L1.
+
 ---
 
 ## 8. What's honest about it (the caveats we state up front)

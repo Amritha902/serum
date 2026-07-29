@@ -14,6 +14,11 @@
 \newcommand{\carriers}{\mathrm{car}}
 \newcommand{\supp}{\mathrm{supp}}
 
+% Let TeX relax spacing as a last resort so long \texttt{} paths and dense math
+% paragraphs do not overrun the margin (avoids overfull \hbox warnings).
+\emergencystretch=2em
+\hbadness=10000
+
 \title{\textbf{SERUM}: Content-Aware Agentic Containment of Malware\\
 Under an Unobserved Payload}
 \author{Amritha S.}

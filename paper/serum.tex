@@ -74,19 +74,23 @@ carry the target CVE---so the infected set is itself evidence about the exploit.
 SERUM turns this into an online Bayesian inference (a POMDP whose hidden state is
 the exploit) and acts under the resulting belief.
 
-\paragraph{Contributions.}
+\paragraph{Contributions.} We lead with the empirical finding and treat the
+inference machinery and theory as its enablers.
 \begin{itemize}
+\item The central result: a \textbf{content-aware agent} (\S\ref{sec:method},
+\S\ref{sec:exp}) that defends the payload-specific vulnerable subgraph and, on a
+\emph{real} organisational topology where vulnerable zones diverge from the hubs,
+\textbf{substantially outperforms every structure-only baseline}---winning
+essentially every paired outbreak ($-28.4\%$, $p=1.7\times10^{-7}$)---while on
+hub-aligned regimes the edge is small. It plans under a Bayesian belief with a
+payload-conditioned exposed-vulnerable-degree score, switching isolation to
+patching as the belief sharpens.
 \item A combinatorial \textbf{identifiability characterization} for the
-unobserved exploit (\S\ref{sec:theory}): identifiable iff the intersection of
-infected profiles is a singleton; confusability is exactly the subset order on
-carrier sets. The Bayesian belief's surviving support \emph{equals} this
-intersection by construction, so the condition is exact, not heuristic; the
-non-trivial, testable content is the \emph{sample-complexity rate} it implies
+unobserved exploit (\S\ref{sec:theory}) that explains \emph{when} the method helps:
+identifiable iff the intersection of infected profiles is a singleton; confusability
+is exactly the subset order on carrier sets. The condition is exact by construction;
+its non-trivial content is the measured \emph{sample-complexity rate}
 (\S\ref{sec:extended}).
-\item A \textbf{content-aware agent} (\S\ref{sec:method}) that plans under the
-belief with a payload-conditioned exposed-vulnerable-degree score, switching from
-isolation to precise patching as the belief sharpens, and an optional
-CVSS/LLM-grounded threat-intel prior for cold starts.
 \item A \textbf{real-data evaluation} (\S\ref{sec:exp}) on NVD/CVE with
 software-monoculture zones, with paired statistics and an honest account of where
 content-awareness does and does not help.
@@ -253,7 +257,13 @@ content-aware oracle (bound) & 9.1\% & 100.0\% \\
 Content-aware cuts infection by $28.4\%$ vs the best fixed baseline
 ($p=1.7\times10^{-7}$) and beats the ensemble oracle ($p=1.9\times10^{-7}$). The
 result is significant across BA/WS/RGG topologies (rel.\ reductions
-$+17.7/+11.5/+30.2\%$, all $p<10^{-3}$). \emph{Variance caveat.} Outbreak
+$+17.7/+11.5/+30.2\%$, all $p<10^{-3}$). \emph{Crucially, and unlike the
+synthetic-CVE regime where content-aware wins only a minority of individual
+outbreaks, on the real topology it wins essentially every paired trial}---$20/20$
+vs betweenness \emph{and} vs the ensemble oracle ($p=8.8\times10^{-5}$) in the
+multi-topology run (\texttt{results/real/snap\_topologies.json}), and $37/40$ in a
+budget-$8$ replication. The lead result is therefore not a heavy-tailed minority
+effect; it is where content-awareness matters most. \emph{Variance caveat.} Outbreak
 outcomes are highly dispersed---per-arm SD $\approx 0.10$, comparable to the means
 and larger than the $5.9$-point effect (content-aware $0.117\pm0.103$, betweenness
 $0.176\pm0.101$)---so a given outbreak's outcome swings widely; the small $p$

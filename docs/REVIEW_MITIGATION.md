@@ -519,3 +519,31 @@ no numbers changed, suite 134 green. The paper now leads with its one strong,
 real-data result and is honest that the rest is machinery, scope, and a null
 robustness result. Verified en route: homophily=0 truly decorrelates zone from
 vulnerability (Jaccard ratio 0.96), so the G6 refutation is sound.
+
+---
+
+# Round 5 — sanity check on the Round-4 reframes (2026-07-29)
+
+A short pass asking whether "lead with the real-topology flagship" (H1) is itself
+sound. The linchpin worry: if the flagship *also* wins only a minority of paired
+trials (like the synthetic-CVE regime, G4), then leading with it just relocates
+the flaw.
+
+**Verified — the opposite is true.** On the real topology the content-aware agent
+wins **20/20** paired outbreaks vs betweenness *and* vs the ensemble oracle
+($p=8.8\times10^{-5}$, committed `results/real/snap_topologies.json`), and **37/40**
+in a fresh budget-8 replication. So the lead result is a strong-majority,
+large-absolute-margin effect (7.85pp) — exactly the result that does NOT have the
+minority-win-rate problem. H1 is not just defensible; the flagship is the right
+thing to lead with.
+
+**Action taken:** added the win-rate fact to the flagship paragraph and reordered
+the intro contribution bullets to lead with the empirical finding (completing H1).
+No new existential holes; the Round-4 reframes hold. The remaining honest gaps are
+unchanged (L1 real host-level data; the synthetic-regime margins are small — now
+correctly framed as regime analysis, not the headline).
+
+**Verdict:** Rounds 1–5 exhausted the reachable criticisms. The paper is honest,
+leads with its strongest real evidence, and the one irreducible limitation (L1) is
+stated up front. Further grilling yields diminishing returns; the highest-value
+remaining work is external (a real host-level inventory), not more self-review.

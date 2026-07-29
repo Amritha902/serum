@@ -5,3 +5,5 @@ matplotlib>=3.8
 pyyaml>=6.0
 tqdm>=4.66
 pytest>=8.0
+python-pptx>=1.0    # for scripts/make_slides.py (presentation generator)
+python-docx>=1.1    # for scripts/make_faculty_doc.py

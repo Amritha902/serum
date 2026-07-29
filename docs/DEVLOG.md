@@ -979,9 +979,37 @@ body now leads with the four core claims.
 (+ 4 new tests total this pass, +8 across the round). Reframes/acks for the rest.
 The paper is materially more honest and, on G1/G6, materially stronger. 134 green.
 
+## Round 4 grill + mitigation (2026-07-29)
+
+Fresh hostile pass after Round 3, then mitigated it. The key finding was
+**meta**: the honest Round-3 walk-backs (inference near-inert, theorem
+definitional, tiny synthetic margins, null robustness) had collectively hollowed
+the headline. The constructive fix (H1) is to **lead with the one substantial
+real result** — the real-topology flagship (−28.4%, 5.9pp, p=1.7e-7) — and demote
+the rest to machinery/scope.
+
+**Verified first (honest-check):** homophily=0 genuinely decorrelates zone from
+vulnerability (same-seg vuln Jaccard 0.139 vs diff-seg 0.144, ratio 0.96), so the
+Round-3 G6 refutation is sound, not a generator artifact.
+
+**Mitigations (framing/honesty only — no numbers changed, suite 134 green):**
+- H1: abstract + intro + CONTRIBUTIONS.md reframed to lead with content-awareness
+  on real topology; online inference explicitly a refinement.
+- H2/H7: relabelled the closest-baselines as reimplementations of each system's
+  *stance* ("in the spirit of CyGym", "DAVA-style"); DAVA proxy called a
+  conservative lower bound; claim softened to "of this class."
+- H3: G6 paragraph now rebuts the monoculture-knob artifact but not L1/L3.
+- H4: misleading prior framed as a deliberately-constructed worst-case.
+- H5: C4 robustness demoted to a note (null result, not a headline).
+- H6: C2 recast as characterization + measured rate (real correlation bends it
+  toward the i.i.d. bound), singleton condition owned as definitional.
+
+Round 4 was a framing round — exactly what a paper needs pre-submission. The
+result is a more honest paper that leads with its strongest real evidence.
+
 ## Open / next
-- Round-3 fully mitigated. A fresh grill (Round 4) is the natural next check.
-- The one irreducible gap remains L1: real host-level enterprise validation
-  (blocked by proprietary scan data).
-- SR5 done; Path A prune done.
+- Round 4 mitigated. A Round-5 sanity grill on the reframes is the natural check.
+- The one irreducible gap remains **L1**: real host-level enterprise validation
+  (blocked by proprietary scan data) — the single most valuable future work.
+- SR5 done; Path A prune done; Rounds 1–4 all mitigated.
 

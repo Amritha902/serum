@@ -491,11 +491,31 @@ framing/honesty round, which is exactly what a paper needs before submission.
 
 ## Mitigation status (Round 4)
 
-- [ ] H1 — reframe abstract/intro/CONTRIBUTIONS to lead with the real-topology flagship
-- [ ] H2 — relabel CyGym-static/DAVA as "in the spirit of / of this class"
-- [ ] H3 — G6 paragraph: rebuts the knob, not the semi-synthetic limitation
-- [ ] H4 — frame the misleading prior as "adversarially-misleading intel"
-- [ ] H5 — demote C4 to a robustness note
-- [ ] H6 — reframe C2 as characterization + measured rate that bends off the i.i.d. bound
-- [ ] H7 — ACK the DAVA proxy is a conservative lower bound
-- [ ] H8 — (cosmetic) appendix summary table
+- [x] **H1 — DONE (REFRAME).** Abstract + intro now lead with content-awareness on
+  real topology (−28.4%, 5.9pp, p=1.7e-7) and explicitly call online inference a
+  refinement "that matters most under misleading intel." CONTRIBUTIONS.md revised:
+  new lead sentence + lead order C3→C2→C1→robustness note.
+- [x] **H2 — DONE (REFRAME/ACK).** Head-to-head retitled "defenders in the spirit of
+  the closest systems"; relabelled a "static-prior defender in the spirit of CyGym"
+  and a "DAVA-style data-aware allocator"; claim softened to "beats a defender of
+  this class," with the released-code port named as the fair follow-up.
+- [x] **H3 — DONE (ACK).** G6 paragraph now states homophily-invariance rebuts the
+  monoculture-knob artifact but leaves L1/L3 (semi-synthetic assignment) intact.
+- [x] **H4 — DONE (ACK).** Misleading-prior paragraph flags the prior as
+  deliberately constructed (worst-case intel), not evidence inference is generally
+  important.
+- [x] **H5 — DONE (REFRAME).** C4 demoted to a "robustness note" in CONTRIBUTIONS.md
+  with an explicit "why demoted: null result" banner.
+- [x] **H6 — DONE (REFRAME).** C2 recast as "characterization + measured
+  sample-complexity rate" (real correlation bends the rate toward the i.i.d. bound,
+  ~1.02·log₂K vs ~2.0 on a Zipf toy); singleton condition owned as definitional /
+  1960s separating-systems combinatorics.
+- [x] **H7 — DONE (ACK).** Head-to-head scope note calls the DAVA-style allocator a
+  conservative lower bound on DAVA's strength.
+- [ ] H8 — (cosmetic) appendix summary table — deferred (low value).
+
+**Round-4 net:** all substantive findings (H1–H7) addressed; framing/honesty only,
+no numbers changed, suite 134 green. The paper now leads with its one strong,
+real-data result and is honest that the rest is machinery, scope, and a null
+robustness result. Verified en route: homophily=0 truly decorrelates zone from
+vulnerability (Jaccard ratio 0.96), so the G6 refutation is sound.

@@ -44,9 +44,13 @@ organisational topology the absolute gap widens to $5.9$ points
 ($17.6\%\!\to\!11.7\%$). We are careful to report absolute magnitudes and
 per-trial win rates alongside relative reductions, since the absolute infection
 numbers are small. We are explicit about scope: it does not beat an oracle ensemble on
-synthetic data, and the gated-propagation model itself is not novel; the
-contribution is the coupling of \emph{observable-attribute identifiability} with
-\emph{online, budgeted, content-aware containment}, grounded in real data.
+synthetic data, and the gated-propagation model itself is not novel. The central
+finding is \emph{content-aware containment on real network structure}: defending
+the payload-specific vulnerable subgraph substantially outperforms structure-only
+immunization precisely when vulnerable zones diverge from topological hubs (real
+org departments: $-28.4\%$, $p{=}1.7\times10^{-7}$), whereas on hub-aligned
+synthetic regimes the edge is small. Online exploit inference is a refinement on
+top---it matters most under misleading threat intel---not the driver of the win.
 Notably, effective containment does \emph{not} require identifying the exploit:
 defending the observation-\emph{consistent} vulnerable subgraph suffices, because
 confusable exploits share victims---which is precisely why the agent is robust to
@@ -107,8 +111,11 @@ software-diversity worm models; classical worm models already gate on a
 vulnerable population \citep{chen2003aawp,staniford2002own}. Learning-based
 immunization is established \citep{meirom2021rlgn,fan2020finder}. We claim none of
 these. The closest system, CyGym \citep{cygym2025}, has vulnerability-gated spread
-and budgeted defense but uses a \emph{static} prior over zero-days; we make the
-\emph{online inference of the exploit from the spread} the centerpiece.
+and budgeted defense but uses a \emph{static} prior over zero-days. Our lead claim
+is \emph{content-awareness on real topology}---defending the inferred vulnerable
+subgraph where it diverges from the hubs---not online inference \emph{per se},
+which we find buys little over a good static prior (\S\ref{sec:exp}) and matters
+mainly under misleading intel.
 
 \section{Problem formulation}\label{sec:formulation}
 A host graph $G=(V,E)$; each host $v$ carries a vulnerability profile
@@ -254,17 +261,20 @@ reflects the paired design (identical outbreak per policy), not separated margin
 distributions. The claim is a consistent \emph{relative} improvement per outbreak,
 not a low-variance absolute guarantee.
 
-\paragraph{Head-to-head vs the closest prior systems.} The two nearest systems
-are the fairest test of the contribution, so we run both on identical paired
-outbreaks (real NVD, $n{=}500$, $K{=}40$, 40 trials): \textbf{CyGym} (a static,
-common-knowledge exploit prior with \emph{no} online belief update) and
-\textbf{DAVA} (data-aware allocation conditioned on the observed-infected
-subgraph, but \emph{exploit-blind}). Against DAVA the content-aware agent wins by
-$+0.74$pp ($+43.8\%$ rel., paired Wilcoxon $p=2.8\times10^{-4}$): defending the
-\emph{inferred} vulnerable subgraph beats vaccinating the observed-infection
-frontier---indeed DAVA underperforms even degree immunization ($1.70\%$ vs
-$1.52\%$), because vaccinating exposed-but-non-exploitable hosts wastes budget,
-which is precisely the thesis. Against CyGym-static the edge is smaller but
+\paragraph{Head-to-head vs defenders in the spirit of the closest systems.} The
+two nearest systems occupy epistemic stances we can reproduce on our substrate, so
+we compare against faithful reimplementations of those \emph{stances} (not the full
+original systems) on identical paired outbreaks (real NVD, $n{=}500$, $K{=}40$, 40
+trials): a \textbf{static-prior defender in the spirit of CyGym} (a static,
+common-knowledge exploit prior with \emph{no} online belief update) and a
+\textbf{DAVA-style data-aware allocator} (allocation conditioned on the
+observed-infected subgraph, but \emph{exploit-blind}). Against the DAVA-style
+allocator the content-aware agent wins by $+0.74$pp ($+43.8\%$ rel., paired
+Wilcoxon $p=2.8\times10^{-4}$): defending the \emph{inferred} vulnerable subgraph
+beats vaccinating the observed-infection frontier---indeed it underperforms even
+degree immunization ($1.70\%$ vs $1.52\%$), because vaccinating
+exposed-but-non-exploitable hosts wastes budget, which is precisely the thesis.
+Against the static-prior defender the edge is smaller but
 significant: $+0.19$pp ($+16.6\%$ rel., $p=1.1\times10^{-2}$), and content-aware
 wins only $8/40$ \emph{individual} outbreaks---online inference changes the
 outcome in a minority of trials (those where the prevalence prior is wrong enough
@@ -273,9 +283,14 @@ to matter) and is a wash otherwise, consistent with the belief-freezing ablation
 subgraph---is the dominant source of the advantage; online inference of the
 exploit adds a small, significant, minority-of-trials refinement on top. Artifact:
 \texttt{results/closest\_baselines.json}, baselines: \texttt{serum/baselines/closest.py}.
-\emph{Scope.} CyGym-static reproduces CyGym's static-prior epistemic stance on our
-substrate, not its full offline PSRO game; DAVA is a per-step greedy shield-value
-proxy for its dominator-tree allocation.
+\emph{Scope (important).} These are reimplementations of each system's
+\emph{epistemic stance}, not the systems themselves: the static-prior defender is
+our own agent with the belief frozen (an ablation), not CyGym's offline PSRO game;
+the DAVA-style allocator is a per-step greedy shield-value proxy, a
+\emph{conservative lower bound} on DAVA's dominator-tree strength (a stronger
+implementation could narrow the gap). So the honest claim is "content-awareness
+beats a static-prior / data-aware defender \emph{of this class}," not "beats CyGym
+/ DAVA"; a port of the released systems is the fair follow-up.
 
 \paragraph{Pareto dominance (infection vs availability).} Sweeping the budget
 ($2$--$12$), content-aware occupies the low-infection, high-availability corner:
@@ -630,8 +645,11 @@ $p=6.5\times10^{-4}$), and is \emph{non-monotonic}, peaking mid-range
 ($+0.60$pp at homophily $0.2$). So the advantage is \textbf{not} an artifact of
 the monoculture assumption: homophily controls only how spatially \emph{clustered}
 the vulnerable set is; content-awareness helps whenever that set diverges from the
-topological hubs, which holds even when it is scattered. Artifact:
-\texttt{results/homophily\_sensitivity.json}.
+topological hubs, which holds even when it is scattered. \emph{This rebuts the
+monoculture-\emph{knob} artifact worry, not the semi-synthetic-assignment
+limitation:} even at homophily $0$ the host$\leftrightarrow$CVE mapping is a
+popularity \emph{model}, not a measured inventory, so L1/L3 stand in full.
+Artifact: \texttt{results/homophily\_sensitivity.json}.
 
 \paragraph{When is online inference load-bearing?}
 The head-to-head against CyGym-static (a static prior with no online update) shows
@@ -643,9 +661,12 @@ loudest, most-prevalent CVE, which is usually not the one loose), the
 content-aware agent's edge over the frozen-prior defender roughly \textbf{doubles
 to $+0.44$pp} ($p=1.8\times10^{-2}$, 40 paired real-NVD outbreaks) because it
 corrects the prior online while the static defender stays committed to the wrong
-subgraph. The effect is real but modest even here, so we do not claim online
-inference as the driver of the containment win; it is a refinement that matters
-most under bad threat intel. Artifact: \texttt{results/inference\_value.json}.
+subgraph. \emph{This misleading prior is deliberately constructed (a worst-case
+intel regime), so this is not evidence online inference is generally important} --
+under a good prior it is nearly inert. The effect is real but modest even in this
+adversarial case, so we do not claim online inference as the driver of the
+containment win; it is a refinement that matters most under bad threat intel.
+Artifact: \texttt{results/inference\_value.json}.
 
 \paragraph{Detection-noise robustness.}
 Beyond inventory noise on host \emph{vulnerabilities}, the defender's sensor on

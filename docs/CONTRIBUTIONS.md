@@ -8,11 +8,19 @@ its own case and hands reviewers twelve attack surfaces. This is the pruned set:
 **four claims we lead with**, each with its single strongest result and its
 honest scope, and an explicit triage of every N-item into *lead* or *appendix*.
 
-**The one defensible sentence.** *Online inference of an unobserved exploit from
-the shape of a vulnerability-gated outbreak — with an exact identifiability
-condition on observable host attributes — driving budgeted, content-aware
-containment, validated on real NVD/CVE data.* That is the cell CyGym (2025)
-leaves open (it uses a static prior with no online belief update).
+**The one defensible sentence (revised after Round 4, H1).** *On real network
+structure, defending the payload-specific vulnerable subgraph substantially
+outperforms structure-only immunization precisely when vulnerable zones diverge
+from the topological hubs — a regime real organisational networks exhibit and
+hub-dominated backbones do not.* Online exploit inference and the identifiability
+characterization are the enabling machinery and honest scope, **not** the headline:
+the Round-2/3 grills showed online inference buys little over a good static prior,
+so the paper leads with **content-awareness on real topology (C3)**, with C1/C2 as
+support and C4 demoted to a robustness note.
+
+**Lead order (post-H1):** C3 (real-data content-aware win) → C2 (the
+characterization that explains *when* it works: zone/hub divergence) → C1 (the
+online-inference machinery, a refinement) → robustness note (former C4).
 
 ---
 
@@ -42,14 +50,20 @@ leaves open (it uses a static prior with no online belief update).
   set-containment condition on *observable* node attributes that a defender can
   check in advance from its asset inventory. Confusability is exactly the subset
   order on carrier sets. Formally: online, graph-induced, adversarial group testing.
-- **Strongest single result.** The Bayesian belief recovers the true CVE exactly
-  when and only when the theorem predicts it: **116/116 = 100% agreement** on
-  real-data networks; ~54% of real CVEs are identifiable. Artifact:
-  `scripts/identifiability.py`, `docs/THEORY.md`.
-- **Honest scope.** Distinct from cascade-mixture identifiability (Hoffmann et
-  al. 2020), whose condition is on *latent* edge structure; ours is on observable
-  attributes and holds online per cascade. The theorem *characterizes* when full
-  identification is possible — it is not itself the empirical win.
+- **Strongest single result (revised, H6).** The genuinely non-trivial content is
+  not the singleton condition itself (that is a restatement of the observation
+  model, and the "116/116 agreement" is a consistency check on the code, not a
+  prediction) — it is the **empirically-measured sample-complexity rate**: on real
+  NVD profiles the median is ~1.02·log₂K infections, essentially the i.i.d.
+  group-testing bound, whereas a Zipf toy needs ~2.0·log₂K. Real profile
+  correlation *bends the rate* toward the information-theoretic optimum. Artifact:
+  `results/sample_complexity.json`, `docs/THEORY.md`.
+- **Honest scope (H6).** After grilling, C2 is a **characterization + a measured
+  rate**, not a headline theorem: the singleton condition is definitional, and the
+  separating-system view makes it 1960s combinatorics; the novelty is the *online,
+  graph-induced, contagion-realized* instantiation and the real-data rate. Distinct
+  from Hoffmann et al. (2020) (latent edge structure) but in an *easier* setting
+  (observable attributes), not a strictly stronger theorem.
 
 ### C3 — Content-aware containment Pareto-dominates structure-only, on real data
 *(absorbs N1, N5, N6, N11, N12)*
@@ -71,8 +85,14 @@ leaves open (it uses a static prior with no online belief update).
   proprietary scan data. On synthetic data content-aware does not beat an oracle
   ensemble (p≈0.84); on near-universal exploits, structure-only can win.
 
-### C4 — Robust to adversaries that attack the inference, within stated bounds
-*(absorbs N8; adds the poison-robust agent and the SR5 adaptive adversary)*
+### Robustness note (formerly C4 — demoted per Round 4, H5)
+*(absorbs N8; the poison-robust agent and the SR5 adaptive adversary)*
+
+> **Why demoted.** "Graceful degradation, never worse than degree under
+> poisoning" is a *null result*, not a superiority claim, so it is not a headline
+> contribution. It belongs as a robustness note: it shows attacking the inference
+> does not make content-awareness *counterproductive*, which is worth stating but
+> is not evidence the method wins under attack.
 
 - **Claim.** An attacker cannot defeat the defense by attacking the belief.
   Inference-*evasion* backfires (a confusable payload's victims are a subset of

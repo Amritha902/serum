@@ -401,3 +401,101 @@ numbers you already have more honestly. G8–G12 are positioning/cleanup.
 *refuted* its own premise); G3/G7/G8/G9/G10/G12 reframes; G4/G5 honesty edits;
 G11 provenance. Suite 134 green. The paper is materially more honest and, on G1
 and G6, materially *stronger*.
+
+---
+
+# Round 4 — post-mitigation grill (2026-07-29)
+
+The Round-3 mitigations were individually honest; a fresh hostile pass asks what
+they *cost*. Second-round penalties dominate. The verified fact carried in:
+homophily=0 genuinely decorrelates zone from vulnerability (same-seg vuln
+Jaccard 0.139 vs diff-seg 0.144, ratio 0.96), so the G6 refutation is sound.
+
+## Existential (meta)
+
+**H1 — The honest walk-backs have hollowed out the headline.** Tally after Round 3:
+C1 online inference buys ~0.19pp on a minority of trials (G2); C2's "theorem" is
+self-described as definitional with a circular check (G3); C3's synthetic-CVE win
+is 0.6pp absolute with a 16/40 minority win rate and outcome SD > effect (G4/G5);
+C4 robustness is "no worse than degree" (G7). A PC skimming the now-honest paper
+sees a method that wins a minority of outbreaks by a fraction of a point, whose
+theory is a definition, whose inference is nearly inert, and whose robustness is a
+null result. **Each mitigation was right, but collectively the paper has argued
+itself out of every headline.** → **[REFRAME]** There IS one substantial, real
+result left: the real-topology flagship (SNAP email-Eu-core, real departments,
+real CVEs) where structure-only barely helps (17.6% vs 20.1% no-defense) and
+content-aware cuts to 11.7% — **−28.4%, 5.9pp absolute, p=1.7e-7**. Lead the paper
+unambiguously with THAT; state in the abstract that the synthetic-CVE edge is
+small and the value shows up when vulnerable zones diverge from hubs (real org
+structure). Reframe the thesis from "online inference" to "content-awareness on
+real topology."
+
+## Major (second-round penalties)
+
+**H2 — The "closest systems" are self-defined proxies, not the real systems (penalty
+of G1).** CyGym-static is literally our own agent with `update_belief=False` — an
+ablation of ourselves relabeled as the competitor; DAVA is a per-step shield-value
+proxy, not the dominator-tree algorithm. "Beats CyGym and DAVA" rests on our own
+reimplementations of their *stance*. → **[REFRAME/ACK]** relabel throughout as "a
+static-prior defender in the spirit of CyGym" and "a DAVA-style data-aware
+allocator"; soften "beats CyGym/DAVA" to "beats a static-prior / data-aware
+defender of this class." Note the originals' released code as the fair follow-up.
+
+**H3 — G6 rebuts the knob-artifact worry but NOT the semi-synthetic critique.**
+homophily=0 removes spatial zone-correlation (verified), but the assignment is
+still MODELED (popularity-weighted), not a measured host inventory. Risk: reading
+G6 as escaping L1/L3. → **[ACK]** state in the G6 paragraph that homophily-
+invariance rebuts the monoculture-knob artifact but leaves the semi-synthetic-
+assignment limitation (L1/L3) fully intact.
+
+**H4 — The misleading prior (G2) is itself a manufactured regime (penalty of G2).**
+We invented a prior peaked on the wrong CVE to show inference helps — and even
+then it is +0.44pp. A reviewer: "manufactured a bad prior to rescue the inference
+contribution." → **[ACK]** frame explicitly as "under adversarially-misleading
+intel," not as evidence online inference is generally important.
+
+## Moderate
+
+**H5 — C4 robustness is a null result presented as a contribution.** "Graceful
+degradation, never worse than degree" is, at a top venue, a non-result. →
+**[REFRAME]** demote C4 from the four headline claims to a robustness *note*;
+state honestly it shows poisoning does not make content-awareness counterproductive
+— not that the method is robustly superior under attack.
+
+**H6 — The theory contribution (C2) is thin after G3.** C2 now = a definition + the
+observation that ID takes ~log₂K infections (a standard group-testing bound). →
+**[REFRAME]** the genuinely non-trivial empirical content is that REAL profile
+correlation makes the rate deviate from the i.i.d. bound (median hosts/log₂K ≈
+1.02 on real NVD vs ≈2.0 on a Zipf toy). Reframe C2 as "a characterization plus an
+empirically-measured sample-complexity rate that real correlation bends away from
+the i.i.d. group-testing bound," not a headline theorem.
+
+**H7 — DAVA underperforming degree (1.70 vs 1.52) hints my DAVA proxy may be weak
+(compounds H2).** If DAVA is under-implemented, "content-aware beats DAVA" is
+hollow. → **[ACK]** note the DAVA proxy is a conservative lower bound on DAVA's
+strength; a stronger allocator might narrow the gap.
+
+## Cosmetic
+
+**H8 — Experiment sprawl (~30 scripts, large appendix).** Reinforces G12; the
+appendix is now very long. → cosmetic; consider a one-table summary of appendix
+results.
+
+## Ranked verdict
+
+H1 is the real issue and is constructive, not fatal: the mitigations exposed that
+the paper must **lead with its one strong, real-data result** and honestly demote
+the rest. H2–H4 are honesty relabels of the Round-3 fixes. H5/H6 right-size two
+over-sold contributions. None require new experiments — Round 4 is a
+framing/honesty round, which is exactly what a paper needs before submission.
+
+## Mitigation status (Round 4)
+
+- [ ] H1 — reframe abstract/intro/CONTRIBUTIONS to lead with the real-topology flagship
+- [ ] H2 — relabel CyGym-static/DAVA as "in the spirit of / of this class"
+- [ ] H3 — G6 paragraph: rebuts the knob, not the semi-synthetic limitation
+- [ ] H4 — frame the misleading prior as "adversarially-misleading intel"
+- [ ] H5 — demote C4 to a robustness note
+- [ ] H6 — reframe C2 as characterization + measured rate that bends off the i.i.d. bound
+- [ ] H7 — ACK the DAVA proxy is a conservative lower bound
+- [ ] H8 — (cosmetic) appendix summary table

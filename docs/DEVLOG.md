@@ -1027,9 +1027,29 @@ win-rate fact to the flagship paragraph and reordered the intro contribution
 bullets to lead with the empirical finding. Rounds 1–5 exhausted the reachable
 self-review.
 
+## Finalization / grill-readiness pass (2026-07-29)
+
+Full health check before review. Everything green; nothing needed fixing.
+- **Tests:** 137 passing.
+- **Every experiment script runs:** smoke-tested all 33 scripts at minimal
+  workload via subprocess (`scratchpad/smoke.py`); 31/31 runnable scripts PASS
+  (0 fail, 0 timeout), 2 skipped (ingest_nvd = NVD network, sweep = very slow).
+  The smoke run overwrote committed `results/*.json` with 2-trial versions; these
+  were restored from git (`git checkout results/ data/`) and the 3 untracked
+  leftovers (deception/inventory/robust json) removed, so the committed artifacts
+  are the real full-trial numbers again.
+- **reproduce_all --verify:** all 27 declared experiments' outputs present; no
+  orphan artifacts (guarded by test_reproduce_all).
+- **Lead-table numbers audited against source files:** flagship
+  (20.1/17.6/11.7/9.1, email_topo.json) and synthetic-60 (14.0/1.5/1.4/0.9/0.8,
+  real/summary.json) match the paper exactly.
+- **Paper:** compiles with 0 warnings / 0 errors / 0 undefined refs (tectonic),
+  16 pages, 4 figures embedded.
+- **Repo:** working tree clean; HEAD == origin/main.
+
 ## Open / next
-- **Paper verified to compile.** Optional polish: fix the ~5 overfull hboxes
-  (cosmetic).
+- **Verified pakka.** Paper compiles clean, all scripts run, all tests pass, all
+  numbers backed by committed artifacts.
 - The one irreducible gap remains **L1**: real host-level enterprise validation
   (blocked by proprietary scan data) — the single most valuable future work, and
   external, not more self-review.

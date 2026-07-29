@@ -114,6 +114,45 @@ def test_iot_botnet_claims(tex: str) -> None:
     assert "$-2.09$pp" in tex and "$12/20$" in tex
 
 
+def test_closest_baselines_claims(tex: str) -> None:
+    # G1 head-to-head vs the closest prior systems (CyGym-static, DAVA-style).
+    d = _load("closest_baselines.json")
+    dava = d["content_aware_vs_dava"]
+    cyg = d["content_aware_vs_cygym_static"]
+    assert round(dava["abs_reduction"] * 100, 2) == 0.74
+    assert round(dava["rel_reduction"] * 100, 1) == 43.8
+    assert dava["wins_of_n"] == "17/40"
+    assert round(cyg["abs_reduction"] * 100, 2) == 0.19
+    assert round(cyg["rel_reduction"] * 100, 1) == 16.6
+    assert cyg["wins_of_n"] == "8/40"
+    assert round(d["means_infected"]["dava"] * 100, 2) == 1.70
+    assert round(d["means_infected"]["degree"] * 100, 2) == 1.52
+    for s in ("$+0.74$pp", "$+43.8\\%$", "$+0.19$pp", "$+16.6\\%$", "$8/40$"):
+        assert s in tex, f"closest-baselines claim missing: {s}"
+
+
+def test_inference_value_claims(tex: str) -> None:
+    # G2 when is online inference load-bearing (good vs misleading prior).
+    d = _load("inference_value.json")
+    assert round(d["good_prior"]["abs_reduction"] * 100, 2) == 0.19
+    assert round(d["misleading_prior"]["abs_reduction"] * 100, 2) == 0.44
+    assert round(d["misleading_prior"]["p"], 3) == 0.018
+    for s in ("$+0.19$pp", "$+0.44$pp", "p=1.8\\times10^{-2}"):
+        assert s in tex, f"inference-value claim missing: {s}"
+
+
+def test_homophily_sensitivity_claims(tex: str) -> None:
+    # G6 the advantage survives at homophily 0 (not a manufactured-regime artifact).
+    d = _load("homophily_sensitivity.json")
+    r0 = [r for r in d["grid"] if r["homophily"] == 0.0][0]
+    peak = max(d["grid"], key=lambda r: r["edge_pp"])
+    assert round(r0["edge_pp"] * 100, 2) == 0.26
+    assert round(r0["p"], 5) == 0.00065
+    assert peak["homophily"] == 0.2 and round(peak["edge_pp"] * 100, 2) == 0.60
+    for s in ("$+0.26$pp", "p=6.5\\times10^{-4}", "$+0.60$pp"):
+        assert s in tex, f"homophily-sensitivity claim missing: {s}"
+
+
 def test_group_testing_framing_in_intro(tex: str) -> None:
     intro_start = tex.index("\\section{Introduction}")
     formulation_start = tex.index("\\section{Problem formulation}")

@@ -138,28 +138,38 @@ def figure(title, img, howto, kicker="Results", note="", max_h=Inches(3.9)):
 
 def table(title, headers, rows, note_line, kicker="Results", hi=None, col_w=None,
           speaker=""):
+    # Shape-based grid (NOT a pptx table) — Keynote rejects python-pptx tables,
+    # so we draw every cell as a rectangle + textbox, which every app accepts.
     s = prs.slides.add_slide(BLANK); heading(s, title, kicker)
-    nr, nc = len(rows) + 1, len(headers)
-    tw = Inches(11.9); th = Inches(0.5 * nr)
-    left = Emu(int((SW - tw) / 2)); top = Inches(1.95)
-    t = s.shapes.add_table(nr, nc, left, top, tw, th).table
-    if col_w:
-        for j, w in enumerate(col_w): t.columns[j].width = Inches(w)
+    nc = len(headers); TW = 11.9
+    if not col_w:
+        col_w = [TW / nc] * nc
+    scale = TW / sum(col_w); col_w = [w * scale for w in col_w]
+    left0 = (13.333 - TW) / 2; rowh = 0.5; top0 = 1.95
+    LINE = RGBColor(0xD9, 0xE0, 0xE8)
+
+    def cell(xin, yin, win, text, fill, color, bold, align):
+        rect(s, Inches(xin), Inches(yin), Inches(win), Inches(rowh), fill, line=LINE)
+        txt(s, text, Inches(xin + 0.12), Inches(yin), Inches(win - 0.22), Inches(rowh),
+            size=14, color=color, bold=bold, align=align, anchor=MSO_ANCHOR.MIDDLE)
+
+    x = left0
     for j, hh in enumerate(headers):
-        c = t.cell(0, j); c.text = hh; c.fill.solid(); c.fill.fore_color.rgb = NAVY
-        pr = c.text_frame.paragraphs[0]; pr.alignment = PP_ALIGN.CENTER if j else PP_ALIGN.LEFT
-        rn = pr.runs[0]; rn.font.size = Pt(15); rn.font.bold = True; rn.font.color.rgb = WHITE
-    for i, row in enumerate(rows, 1):
-        h = (hi is not None and i - 1 == hi)
+        cell(x, top0, col_w[j], hh, NAVY, WHITE, True, PP_ALIGN.CENTER if j else PP_ALIGN.LEFT)
+        x += col_w[j]
+    for i, row in enumerate(rows):
+        y = top0 + rowh * (i + 1)
+        h = (hi is not None and i == hi)
+        fill = RGBColor(0xE3, 0xF1, 0xE8) if h else (LIGHT if (i + 1) % 2 else WHITE)
+        color = GREEN if h else DARK
+        x = left0
         for j, v in enumerate(row):
-            c = t.cell(i, j); c.text = str(v); c.fill.solid()
-            c.fill.fore_color.rgb = (RGBColor(0xE3,0xF1,0xE8) if h else (LIGHT if i % 2 else WHITE))
-            pr = c.text_frame.paragraphs[0]; pr.alignment = PP_ALIGN.CENTER if j else PP_ALIGN.LEFT
-            rn = pr.runs[0]; rn.font.size = Pt(14); rn.font.bold = h
-            rn.font.color.rgb = GREEN if h else DARK
-    rect(s, Inches(0.7), top + th + Inches(0.2), Inches(11.9), Inches(1.25), BOX)
-    txt(s, "What it means:  " + note_line, Inches(0.95), top + th + Inches(0.3),
-        Inches(11.4), Inches(1.1), size=14.5, color=DARK, anchor=MSO_ANCHOR.MIDDLE)
+            cell(x, y, col_w[j], str(v), fill, color, h, PP_ALIGN.CENTER if j else PP_ALIGN.LEFT)
+            x += col_w[j]
+    by = top0 + rowh * (len(rows) + 1) + 0.22
+    rect(s, Inches(0.7), Inches(by), Inches(11.9), Inches(1.2), BOX)
+    txt(s, "What it means:  " + note_line, Inches(0.95), Inches(by + 0.08),
+        Inches(11.4), Inches(1.02), size=14.5, color=DARK, anchor=MSO_ANCHOR.MIDDLE)
     notes(s, speaker); return s
 
 def twocol(title, left_head, left_items, right_head, right_items, kicker=None, note=""):

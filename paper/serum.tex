@@ -19,6 +19,9 @@
 \emergencystretch=2em
 \hbadness=10000
 
+% Figures live in paper/figures/ (copied from results/ so they travel with the tex).
+\graphicspath{{figures/}}
+
 \title{\textbf{SERUM}: Content-Aware Agentic Containment of Malware\\
 Under an Unobserved Payload}
 \author{Amritha S.}
@@ -259,6 +262,16 @@ content-aware oracle (bound) & 9.1\% & 100.0\% \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[t]\centering
+\includegraphics[width=0.82\linewidth]{flagship_infection_curves.png}
+\caption{Flagship, real topology (SNAP email-Eu-core, real departments as software
+zones, real NVD CVEs). Mean infected fraction over time. Structure-only
+immunization barely separates from no-defense because the vulnerable zones do not
+coincide with the topological hubs; the content-aware agent tracks close to the
+full-observability oracle. This is the regime where content-awareness matters.}
+\label{fig:flagship}
+\end{figure}
+
 Content-aware cuts infection by $28.4\%$ vs the best fixed baseline
 ($p=1.7\times10^{-7}$) and beats the ensemble oracle ($p=1.9\times10^{-7}$). The
 result is significant across BA/WS/RGG topologies (rel.\ reductions
@@ -312,7 +325,17 @@ beats a static-prior / data-aware defender \emph{of this class}," not "beats CyG
 at every budget it is simultaneously lower-infection and higher-availability than
 every structural baseline (e.g.\ at budget $2$: $3.7\%/99\%$ vs degree
 $9.6\%/96\%$). It patches precisely once its belief sharpens; structure-only
-defenders must isolate blindly. See \texttt{results/pareto.png}.
+defenders must isolate blindly (Fig.~\ref{fig:pareto}).
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.72\linewidth]{pareto.png}
+\caption{Infection vs availability as the budget sweeps $2$--$12$. The
+content-aware agent occupies the low-infection, high-availability corner at every
+budget---simultaneously below and to the right of every structure-only baseline---
+because it patches precisely (availability-preserving) once its belief sharpens
+rather than isolating blindly.}
+\label{fig:pareto}
+\end{figure}
 
 \paragraph{Identifiability, as a characterization.} The belief's support equals
 the profile intersection by construction, so its agreement with
@@ -504,6 +527,16 @@ Thm.~\ref{thm:id}). Artifact: \texttt{results/sample\_complexity.json}, script
 synthetic the ratio is $\approx\!2.0\log_2 K$; real product-based profiles are
 more informative than the toy.
 
+\begin{figure}[t]\centering
+\includegraphics[width=0.85\linewidth]{sample_complexity.png}
+\caption{Sample complexity of exploit identification on real-NVD networks: number
+of propagation infections until the belief support collapses to a single CVE. The
+median lands essentially on the information-theoretic group-testing bound
+($\approx\!1.02\log_2 K$); real profile correlation bends the rate toward the
+i.i.d.\ optimum (vs $\approx\!2.0\log_2 K$ on a Zipf toy).}
+\label{fig:samplecomplexity}
+\end{figure}
+
 \paragraph{Confusability decays with $K$.}
 We measure per-CVE confuser counts and identifiable fractions as $K$ grows on
 real NVD-derived networks ($n{=}400$, homophily $0.4$, 8 nets, 240 live CVEs at
@@ -526,6 +559,15 @@ $K$ & live CVEs & op.\ ident. & global ident. \\
 \end{center}
 Identifiable fraction decays monotonically in $K$ --- more CVEs mean more
 subset-order dominators. Artifact: \texttt{results/confusability.\{json,png\}}.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\linewidth]{confusability.png}
+\caption{Confusability structure on real-NVD networks: per-CVE confuser-count
+distribution, identifiable fraction as the CVE universe $K$ grows, and a drawn
+slice of the subset-order confusability graph. Most CVEs have zero confusers; the
+identifiable fraction decays monotonically in $K$.}
+\label{fig:confusability}
+\end{figure}
 
 \paragraph{Polymorphic (multi-exploit) payloads.}
 A polymorphic worm carries a set $S\subseteq C$ and infects any host whose

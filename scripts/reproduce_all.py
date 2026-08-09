@@ -134,6 +134,16 @@ MANIFEST: List[Experiment] = [
              "gracefully vs structure-only across a sensor-noise grid.",
     ),
     Experiment(
+        name="catalog_game",
+        script="catalog_game.py",
+        outputs=("catalog_game.json",),
+        tags=frozenset({"slow"}),
+        note="The inventory-allocation game. Sweeps the defender's asset-coverage "
+             "budget against a blind-spot attacker that best-responds to the "
+             "allocation, and compares allocating by popularity vs by carrier-set "
+             "proxy coverage at equal budget.",
+    ),
+    Experiment(
         name="open_world",
         script="open_world.py",
         outputs=("open_world.json",),

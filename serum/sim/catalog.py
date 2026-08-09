@@ -144,6 +144,25 @@ def withhold_confusable(g, cve: int, j: int = 0):
     return withheld, float(residual)
 
 
+def restrict_catalog(g, covered):
+    """Set the defender's catalog to exactly ``covered``, in place.
+
+    Where :func:`withhold_confusable` models "one unknown thing", this models the
+    standing condition of every real security organisation: asset coverage is a
+    *budget*, not a boolean. No CMDB inventories every product, so the catalog is
+    always a strict subset of what is actually running, and the interesting
+    question is not whether there are gaps but **which** gaps you choose to have.
+    Ground truth is untouched; only the defender's view narrows.
+    """
+    covered = frozenset(int(c) for c in covered)
+    for v in g.nodes():
+        g.nodes[v]["vuln_observed"] = frozenset(g.nodes[v]["vuln"] & covered)
+    g.graph["defender_catalog"] = covered
+    g.graph.pop("withheld_cve", None)
+    g.graph.pop("withheld_set", None)
+    return g
+
+
 def catalog(g) -> frozenset:
     """The CVEs the defender's catalog knows about (all of them by default)."""
     c = g.graph.get("defender_catalog")

@@ -134,6 +134,17 @@ MANIFEST: List[Experiment] = [
              "gracefully vs structure-only across a sensor-noise grid.",
     ),
     Experiment(
+        name="open_world",
+        script="open_world.py",
+        outputs=("open_world.json",),
+        tags=frozenset({"medium"}),
+        note="Drops the closed-world assumption: the payload's CVE is withheld "
+             "from the defender's catalog, together with j of its nearest "
+             "carrier-set proxies. Yields the degradation curve of the "
+             "content-aware advantage against residual proxy overlap, and the "
+             "calibrated misspecification monitor's alarm/false-alarm rates.",
+    ),
+    Experiment(
         name="closest_baselines",
         script="closest_baselines.py",
         outputs=("closest_baselines.json",),
@@ -167,6 +178,13 @@ MANIFEST: List[Experiment] = [
         script="run_experiment.py",
         outputs=("summary.json", "infection_curves.png"),
         tags=frozenset({"medium"}),
+    ),
+    Experiment(
+        name="real_inventory",
+        script="validate_real_inventory.py",
+        outputs=("real_inventory.json",),
+        tags=frozenset({"medium"}),
+        note="Measured host-level inventory validation path using a scan+topology input.",
     ),
     Experiment(
         name="pareto",

@@ -70,15 +70,20 @@ def run(g, trials, budget, horizon, band):
         gen = np.random.default_rng(s + 12345)
         payload = sample_payload(g, beta=0.35, strategy="band", band=band, rng=gen)
         carriers = [v for v in g.nodes() if payload.cve in g.nodes[v]["vuln"]]
-        if len(carriers) < 3:
+        if len(carriers) < 1:
             continue
-        seeds = [str(x) for x in gen.choice(carriers, size=3, replace=False)]
+        seed_count = min(3, len(carriers))
+        seeds = [str(x) for x in gen.choice(carriers, size=seed_count, replace=False)]
         for name, mk in policies.items():
             dyn = np.random.default_rng(s + 777)      # shared coin-flips -> paired
             env = ContainmentEnv(g=g, payload=payload, seeds=seeds,
                                  budget_per_step=budget, horizon=horizon, rng=dyn)
             inf[name].append(env.run(mk()).infected_fraction)
-    return {k: np.array(v, dtype=float) for k, v in inf.items()}
+    arrays = {k: np.array(v, dtype=float) for k, v in inf.items()}
+    if not any(len(v) > 0 for v in arrays.values()):
+        raise RuntimeError("No valid outbreaks could be generated from the provided inventory; "
+                           "ensure the scan contains at least one CVE with multiple carriers")
+    return arrays
 
 
 def main(argv=None):

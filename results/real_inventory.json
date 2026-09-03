@@ -1,0 +1,21 @@
+{
+  "n_hosts": 10,
+  "n_edges": 9,
+  "n_cves": 9,
+  "trials": 8,
+  "budget": 3,
+  "means_infected": {
+    "no-defense": 0.2,
+    "degree": 0.2,
+    "betweenness": 0.2,
+    "content-aware": 0.2,
+    "content-aware-oracle": 0.2
+  },
+  "content_aware_vs_best_structural": {
+    "best_structural": "degree",
+    "abs_reduction": 0.0,
+    "wins_of_n": "0/8",
+    "paired_wilcoxon_p": 1.0
+  },
+  "data_source": "measured-scan"
+}

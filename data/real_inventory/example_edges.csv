@@ -1,0 +1,10 @@
+host_a,host_b
+srv-01,app-01
+srv-01,db-01
+app-01,web-01
+web-01,mail-01
+mail-01,ws-01
+ws-01,vpn-01
+vpn-01,backup-01
+db-01,app-01
+app-01,db-01
